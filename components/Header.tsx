@@ -36,16 +36,24 @@ export default function Header() {
         </div>
 
         <nav className="flex items-center gap-4 md:gap-6">
-          <div className="hidden gap-4 md:flex">
-            <Button variant="ghost" size="sm">
+          <div className="hidden gap-4 md:flex ">
+            <Button
+              variant="link"
+              size="sm"
+              className="text-myColor2 font-medium"
+            >
               Sinhala
             </Button>
-            <Button variant="ghost" size="sm">
+            <Button
+              variant="link"
+              size="sm"
+              className="text-myColor2 font-medium"
+            >
               Help
             </Button>
           </div>
 
-          <DropdownMenu>
+          {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
@@ -64,7 +72,7 @@ export default function Header() {
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Logout</DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
 
           {/* Mobile Menu Items */}
           <div className="flex md:hidden">

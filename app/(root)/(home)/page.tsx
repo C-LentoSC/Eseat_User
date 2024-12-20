@@ -4,6 +4,7 @@ import TebSection from "./tab-section";
 import Header from "@/components/Header";
 import OnlineBookingSection from "./online-booking-section";
 import Footer from "@/components/footer";
+import BusCarousel from "./bus-carousel";
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
       <Header />
       <HeroSection />
       <TebSection />
+      <BusCarousel />
       <OnlineBookingSection />
       <Footer />
     </>

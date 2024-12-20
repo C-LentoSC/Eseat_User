@@ -8,7 +8,7 @@ body {
 
 @layer utilities {
   .my-container {
-    @apply mx-auto container p-3 md:p-0 lg:p-0;
+    @apply mx-auto container px-3;
   }
 }
 
