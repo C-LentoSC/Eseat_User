@@ -10,6 +10,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        myColor1: "#D91B5C", // Changed from my-color1 to myColor1
+        myColor2: "#434A50", // Changed from my-color2 to myColor2
+        myColor3: "#0D95F6", // Changed from my-color3 to myColor3
+        myColor4: "#C1E5FF", // Changed from my-color4 to myColor4
+        myColor5: "#838F9A", // Changed from my-color5 to myColor5
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -57,10 +62,11 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       backgroundImage: {
-        "hero-bg": "url('/assets/bg1.png')",
+        "hero-bg": "url('/assets/bg2.png')",
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
 };
+
 export default config;
