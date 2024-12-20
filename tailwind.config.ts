@@ -15,6 +15,8 @@ const config: Config = {
         myColor3: "#0D95F6", // Changed from my-color3 to myColor3
         myColor4: "#C1E5FF", // Changed from my-color4 to myColor4
         myColor5: "#838F9A", // Changed from my-color5 to myColor5
+        bgMyColor6: "#F0FBFE", // Changed from my-color6 to myColor6
+        bgMyColor7: "#E9F5FF", // Changed from my-color7 to myColor7
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

@@ -4,7 +4,7 @@ import HomeTabContent from "@/components/home-tab-content";
 const TebSection = () => {
   return (
     <div className=" w-full my-container my-24">
-      <Tabs defaultValue="most-popular-bus-routes" className=" w-full border-2">
+      <Tabs defaultValue="most-popular-bus-routes" className=" w-full">
         <ScrollArea className="w-full">
           <TabsList className="flex flex-wrap lg:flex-nowrap gap-3 pb-3 md:pb-0">
             <TabsTrigger
@@ -61,9 +61,9 @@ const TebSection = () => {
         </TabsContent>
         <TabsContent value="price-information">
           <HomeTabContent
-            title="Top Travelled Bus"
-            span="Destinations"
-            p="Discover the most popular bus destinations in Sri Lanka, including Colombo, Kandy, Galle, and Jaffna. Explore the top attractions in each city and plan your trip with ease. Book your bus tickets to your favorite destination today!"
+            title="Price"
+            span="Information"
+            p="Get all the information you need about bus ticket prices in Sri Lanka. Find out the cost of bus tickets for popular routes, including Colombo to Kandy and Galle to Jaffna. Plan your journey and book your tickets with ease."
           />
         </TabsContent>
       </Tabs>
