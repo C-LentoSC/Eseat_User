@@ -1,11 +1,14 @@
 import React from "react";
 import { HeroSection } from "./hero-section";
+import TebSection from "./tab-section";
+import Header from "@/components/Header";
 
 const Home = () => {
   return (
     <>
-      <header>Header</header>
+      <Header />
       <HeroSection />
+      <TebSection />
     </>
   );
 };

@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
+import { Label } from "@/components/ui/label";
 
 export function HeroSection() {
   const [showPassword, setShowPassword] = useState(false);
@@ -34,10 +35,10 @@ export function HeroSection() {
   }
 
   return (
-    <section className="relative min-h-dvh w-full overflow-hidden bg-hero-bg px-4 py-16">
-      <div className="mx-auto grid max-w-screen-xl gap-8 lg:grid-cols-2 lg:gap-16 justify-center">
+    <section className="relative min-h-[calc(100dvh-100px)] w-full overflow-hidden bg-hero-bg bg-cover bg-center py-24 flex">
+      <div className=" grid my-container gap-8 lg:grid-cols-2 lg:gap-16 self-center">
         <div className="flex flex-col justify-center">
-          <h1 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+          <h1 className="mb-4 text-4xl font-bold tracking-tight text-myColor2 sm:text-5xl">
             Best Bus Ticket Service
             <br />
             In Sri Lanka
@@ -48,10 +49,12 @@ export function HeroSection() {
           </p>
         </div>
 
-        <div className="flex items-center justify-center">
-          <Card className="w-full max-w-md">
+        <div className="flex items-center justify-center lg:justify-end">
+          <Card className="w-full max-w-md xl:max-w-lg shadow-lg border-0">
             <CardHeader>
-              <CardTitle className="text-xl">Login to your account</CardTitle>
+              <CardTitle className="text-xl text-center text-myColor2">
+                Login to your account
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <Form {...form}>
@@ -64,9 +67,13 @@ export function HeroSection() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
+                        <Label htmlFor="email" className=" text-myColor2">
+                          Email
+                        </Label>
                         <FormControl>
                           <Input
                             placeholder="example@gmail.com"
+                            className="py-5"
                             type="email"
                             {...field}
                           />
@@ -80,10 +87,14 @@ export function HeroSection() {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
+                        <Label htmlFor="password" className=" text-myColor2">
+                          Password
+                        </Label>
                         <div className="relative">
                           <FormControl>
                             <Input
                               placeholder="Enter your password"
+                              className="py-5"
                               type={showPassword ? "text" : "password"}
                               {...field}
                             />
@@ -110,18 +121,12 @@ export function HeroSection() {
                     )}
                   />
                   <div className="flex items-center justify-between">
-                    <Button
-                      type="submit"
-                      className="w-full bg-rose-600 hover:bg-rose-700"
-                    >
+                    <Button type="submit" className="w-full py-5 mt-5">
                       Login now
                     </Button>
                   </div>
                   <div className="text-right">
-                    <Button
-                      variant="link"
-                      className="p-0 text-rose-600 hover:text-rose-700"
-                    >
+                    <Button variant="link" className="p-0">
                       Forgot?
                     </Button>
                   </div>
