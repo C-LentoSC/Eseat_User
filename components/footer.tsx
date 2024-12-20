@@ -1,39 +1,40 @@
 import { Separator } from "@/components/ui/separator";
 import { Facebook, Instagram, Twitter } from "lucide-react";
+import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-bgMyColor7">
-      <div className="my-container md:py-12 border-2">
+    <footer className="bg-bgMyColor7 pt-24 pb-8 md:pb-12">
+      <div className="my-container">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Links Section */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold uppercase">Links</h3>
             <nav className="flex flex-col space-y-2">
-              <a
+              <Link
                 href="#"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Login
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Send Ticket
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Transfer Ticket
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Contact Us
-              </a>
+              </Link>
             </nav>
           </div>
 
@@ -41,34 +42,30 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-sm font-semibold uppercase">Contact</h3>
             <nav className="flex flex-col space-y-2">
-              <a
+              <Link
                 href="#"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 FAQ
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 T&C
-              </a>
-              <a
+              </Link>
+              <Link
                 href="#"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Privacy Policy
-              </a>
+              </Link>
             </nav>
           </div>
 
           {/* Company Info */}
           <div className="space-y-4">
-            <img
-              src="/placeholder.svg?height=40&width=150"
-              alt="SLTB eSeat"
-              className="h-10"
-            />
+            <img src="/logos/sltb.svg" alt="SLTB eSeat" className="h-10" />
             <div className="space-y-2 text-sm text-muted-foreground">
               <p className="font-medium">Hands Global Holdings (Pvt) Ltd.</p>
               <p>
@@ -83,7 +80,7 @@ export default function Footer() {
           {/* SLTB Info */}
           <div className="space-y-4">
             <img
-              src="/placeholder.svg?height=40&width=40"
+              src="/logos/sltb_logo2.svg"
               alt="Sri Lanka Transport Board"
               className="h-10"
             />
@@ -98,34 +95,46 @@ export default function Footer() {
         {/* Social Links & App Downloads */}
         <div className="mt-8 flex flex-col items-center justify-between gap-4 pt-8 md:flex-row">
           <div className="flex space-x-4">
-            <a href="#" className="text-muted-foreground hover:text-primary">
+            <Link
+              href="#"
+              target="_blank"
+              className="text-muted-foreground hover:text-primary"
+            >
               <Instagram className="h-5 w-5" />
               <span className="sr-only">Instagram</span>
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary">
+            </Link>
+            <Link
+              href="#"
+              target="_blank"
+              className="text-muted-foreground hover:text-primary"
+            >
               <Facebook className="h-5 w-5" />
               <span className="sr-only">Facebook</span>
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary">
+            </Link>
+            <Link
+              href="#"
+              target="_blank"
+              className="text-muted-foreground hover:text-primary"
+            >
               <Twitter className="h-5 w-5" />
               <span className="sr-only">Twitter</span>
-            </a>
+            </Link>
           </div>
           <div className="flex space-x-4">
-            <a href="#" className="block">
+            <Link href="#" target="_blank" className="block">
               <img
-                src="/placeholder.svg?height=40&width=120"
+                src="/assets/applestore.png"
                 alt="Download on the App Store"
                 className="h-10"
               />
-            </a>
-            <a href="#" className="block">
+            </Link>
+            <Link href="#" target="_blank" className="block">
               <img
-                src="/placeholder.svg?height=40&width=120"
+                src="/assets/playstore.png"
                 alt="Get it on Google Play"
                 className="h-10"
               />
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -134,17 +143,17 @@ export default function Footer() {
           <div className="flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground md:flex-row">
             <p>© 2024 eseat.lk. All rights reserved</p>
             <div className="flex items-center space-x-4">
-              <a href="#" className="hover:text-primary">
+              <Link href="#" className="hover:text-primary">
                 Terms of use
-              </a>
+              </Link>
               <Separator orientation="vertical" className="h-4" />
-              <a href="#" className="hover:text-primary">
+              <Link href="#" className="hover:text-primary">
                 Privacy
-              </a>
+              </Link>
               <Separator orientation="vertical" className="h-4" />
-              <a href="#" className="hover:text-primary">
+              <Link href="#" className="hover:text-primary">
                 Refund policy
-              </a>
+              </Link>
             </div>
           </div>
         </div>
