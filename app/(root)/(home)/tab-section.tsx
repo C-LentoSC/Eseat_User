@@ -71,7 +71,13 @@ const TebSection = () => {
             p="Discover the most popular bus destinations in Sri Lanka, including Colombo, Kandy, Galle, and Jaffna. Explore the top attractions in each city and plan your trip with ease. Book your bus tickets to your favorite destination today!"
           />
         </TabsContent>
-        <TabsContent value="price-information">pice-information</TabsContent>
+        <TabsContent value="price-information">
+          <HomeTabContent
+            title="Top Travelled Bus"
+            span="Destinations"
+            p="Discover the most popular bus destinations in Sri Lanka, including Colombo, Kandy, Galle, and Jaffna. Explore the top attractions in each city and plan your trip with ease. Book your bus tickets to your favorite destination today!"
+          />
+        </TabsContent>
       </Tabs>
     </div>
   );
