@@ -1,7 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import HomeTabContent from "@/components/home-tab-content";
-
 const TebSection = () => {
   return (
     <div className=" w-full my-container my-24">
