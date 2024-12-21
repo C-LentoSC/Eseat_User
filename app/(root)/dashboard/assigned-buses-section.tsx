@@ -71,9 +71,16 @@ export function AssignedBusesSection() {
   return (
     <section className="my-container my-24">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-        <h2 className="text-2xl font-semibold text-gray-800">
-          Assigned Busses
-        </h2>
+        <div className=" flex flex-col gap-3">
+          <h2 className="text-2xl font-semibold text-myColor2">
+            Assigned Busses
+          </h2>
+          <div className=" flex gap-5">
+            <div className="border-[3px] rounded-full border-myColor1 w-32"></div>
+            <div className="border-[3px] rounded-full border-myColor1 w-12"></div>
+          </div>
+        </div>
+
         <div className="relative w-full sm:w-auto min-w-[240px]">
           <Input
             type="search"
