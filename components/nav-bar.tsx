@@ -49,20 +49,20 @@ export function NavBar() {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-[#F8FAFB] w-full">
-      <div className="max-w-screen-xl mx-auto">
-        <div className="flex items-center justify-center gap-4 px-4 py-3 overflow-x-auto">
+    <nav className="bg-[#F0FBFE] w-full">
+      <div className="my-container">
+        <div className="flex items-center justify-end gap-4 py-3 overflow-x-auto">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex flex-col items-center min-w-[80px] gap-2 group"
+                className="flex items-center min-w-[80px] gap-2 group"
               >
                 <div
                   className={cn(
-                    "flex items-center justify-center w-12 h-12 rounded-full transition-colors",
+                    "flex items-center justify-center w-8 h-8 rounded-full transition-colors",
                     isActive
                       ? "bg-[#FF4A6C]"
                       : "bg-white border-2 border-gray-200 group-hover:border-[#FF4A6C]"
@@ -70,7 +70,7 @@ export function NavBar() {
                 >
                   <item.icon
                     className={cn(
-                      "h-5 w-5",
+                      "h-3 w-3",
                       isActive
                         ? "text-white"
                         : "text-gray-500 group-hover:text-[#FF4A6C]"
