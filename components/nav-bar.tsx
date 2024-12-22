@@ -49,7 +49,7 @@ export function NavBar() {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-[#F0FBFE] w-full">
+    <nav className="bg-[#F0FBFE] w-full border-b">
       <div className="my-container">
         <div className="flex items-center justify-end gap-4 py-3 overflow-x-auto">
           {navItems.map((item) => {
