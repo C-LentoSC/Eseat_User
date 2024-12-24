@@ -51,7 +51,7 @@ export function NavBar() {
   return (
     <nav className="bg-[#F0FBFE] w-full border-b">
       <div className="my-container">
-        <div className="flex items-center justify-end gap-4 py-3 overflow-x-auto">
+        <div className="flex flex-wrap items-center justify-end gap-4 py-3 overflow-x-auto">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
