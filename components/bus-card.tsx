@@ -16,6 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import Link from "next/link";
 
 interface BusCardProps {
   image: string;
@@ -51,7 +52,7 @@ export function BusCard({
   availableSeats,
 }: BusCardProps) {
   return (
-    <div className="flex flex-col md:flex-row bg-white rounded-lg overflow-hidden border">
+    <div className="flex flex-col md:flex-row bg-bgMyColor6 rounded-lg overflow-hidden border">
       {/* Bus Image */}
       <div className="w-full md:w-72 h-auto relative">
         <Image src={image} alt="Bus" fill className="object-cover" />
@@ -182,7 +183,9 @@ export function BusCard({
             <span>{availableSeats} Seats Available</span>
           </div>
         </div>
-        <Button className="w-full mt-4">Book Now</Button>
+        <Button className="w-full mt-4" asChild>
+          <Link href="/booking/listing/checkout">Book Now</Link>
+        </Button>
       </div>
     </div>
   );
