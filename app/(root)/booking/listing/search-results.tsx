@@ -64,7 +64,7 @@ export function SearchResults() {
 
         {/* Results list will be added here when we have the data structure */}
         <div className="space-y-4 py-8">
-          {Array.from({ length: 3 }).map((_, i) => (
+          {Array.from({ length: 3 }).map(() => (
             <BusCard
               image="/assets/bus.png"
               arrival={{

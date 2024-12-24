@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { TripSummary } from "@/components/trip-summary";
+// import { TripSummary } from "@/components/trip-summary";
 import { Seat } from "@/components/seat";
 import { SeatLegend } from "@/components/seat-legend";
 import { FareSummary } from "@/components/fare-summary";

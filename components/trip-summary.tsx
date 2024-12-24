@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Clock, Users } from "lucide-react";
 
 interface TripSummaryProps {
@@ -16,10 +16,10 @@ interface TripSummaryProps {
 }
 
 export function TripSummary({
-  departure,
-  arrival,
-  departureLocation,
-  arrivalLocation,
+  //   departure,
+  //   arrival,
+  //   departureLocation,
+  //   arrivalLocation,
   bookingDate,
   closingTime,
   depotName,
