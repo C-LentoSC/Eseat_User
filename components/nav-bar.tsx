@@ -64,8 +64,8 @@ export function NavBar() {
                   className={cn(
                     "flex items-center justify-center w-8 h-8 rounded-full transition-colors",
                     isActive
-                      ? "bg-[#FF4A6C]"
-                      : "bg-white border-2 border-gray-200 group-hover:border-[#FF4A6C]"
+                      ? "bg-primary"
+                      : "bg-white border-2 border-gray-200 group-hover:border-primary"
                   )}
                 >
                   <item.icon
@@ -73,7 +73,7 @@ export function NavBar() {
                       "h-3 w-3",
                       isActive
                         ? "text-white"
-                        : "text-gray-500 group-hover:text-[#FF4A6C]"
+                        : "text-gray-500 group-hover:text-primary"
                     )}
                   />
                 </div>
@@ -81,8 +81,8 @@ export function NavBar() {
                   className={cn(
                     "text-xs font-medium whitespace-nowrap",
                     isActive
-                      ? "text-[#FF4A6C]"
-                      : "text-gray-500 group-hover:text-[#FF4A6C]"
+                      ? "text-primary"
+                      : "text-gray-500 group-hover:text-primary"
                   )}
                 >
                   {item.title}

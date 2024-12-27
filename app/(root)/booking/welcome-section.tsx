@@ -39,9 +39,9 @@ export function WelcomeSection() {
             </div>
 
             <Button
-              variant="ghost"
+              // variant="ghost"
               size="icon"
-              className="hidden md:flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#FF4A6C] hover:bg-[#FF4A6C]/90"
+              className="hidden md:flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
             >
               <ArrowLeftRight className="h-4 w-4 text-white" />
             </Button>
@@ -80,7 +80,7 @@ export function WelcomeSection() {
             </Popover>
           </div>
 
-          <Button className="bg-[#FF4A6C] hover:bg-[#FF4A6C]/90 text-white h-10 px-8">
+          <Button className=" h-10 px-8">
             <Search className="h-4 w-4 mr-2" />
             Search
           </Button>
