@@ -39,7 +39,6 @@ export function WelcomeSection() {
             </div>
 
             <Button
-              // variant="ghost"
               size="icon"
               className="hidden md:flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
             >

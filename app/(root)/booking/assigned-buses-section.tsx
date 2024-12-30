@@ -100,12 +100,7 @@ export function AssignedBusesSection() {
       </div>
 
       <div className="flex justify-center mt-8">
-        <Button
-          variant="outline"
-          className="text-[#FF4A6C] border-[#FF4A6C] hover:bg-[#FF4A6C] hover:text-white"
-        >
-          Load More
-        </Button>
+        <Button>Load More</Button>
       </div>
     </section>
   );

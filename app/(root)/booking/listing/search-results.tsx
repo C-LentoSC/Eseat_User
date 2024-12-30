@@ -40,7 +40,7 @@ export function SearchResults() {
             <p className="text-sm text-gray-500">24 Results</p>
           </div>
 
-          <div className="flex items-center gap-4 mt-3 lg:mt-0">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-3 lg:mt-0">
             <span className="text-sm text-gray-500 text-nowrap">Sort By:</span>
             <div className="flex flex-wrap gap-4">
               {sortOptions.map((option) => (
