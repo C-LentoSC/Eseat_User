@@ -20,9 +20,18 @@ import TripSelection from "@/components/TripSelection";
 import BookingTable from "./BookingTable";
 import PassengerForm from "./PassengerForm";
 import { ArrowLeft } from "lucide-react";
+import { BusSeatLayout } from "@/components/bus-seat-layout";
 
 export default function BookingPage() {
   const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
+
+  const seatData = Array.from({ length: 40 }, (_, i) => ({
+    number: i + 1,
+    status: Math.random() > 0.7 ? "booked" : "available",
+  })) as Array<{
+    number: number;
+    status: "available" | "processing" | "booked" | "selected";
+  }>;
 
   const handleSeatClick = (seatNumber: number) => {
     setSelectedSeats((prev) =>
@@ -109,9 +118,9 @@ export default function BookingPage() {
               </div>
             </div>
 
-            <SeatLegend />
+            {/* <SeatLegend /> */}
 
-            <div className="grid grid-cols-5 gap-2">
+            {/* <div className="grid grid-cols-5 gap-2">
               {Array.from({ length: 40 }, (_, i) => (
                 <Seat
                   key={i + 1}
@@ -126,7 +135,13 @@ export default function BookingPage() {
                   onClick={() => handleSeatClick(i + 1)}
                 />
               ))}
-            </div>
+            </div> */}
+            <BusSeatLayout
+              seats={seatData}
+              onSeatClick={(seatNumber) => {
+                console.log(`Clicked seat ${seatNumber}`);
+              }}
+            />
 
             <div className="space-y-4">
               <Label>Ticket Type</Label>
