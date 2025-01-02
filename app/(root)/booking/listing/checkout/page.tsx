@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 // import { TripSummary } from "@/components/trip-summary";
-import { Seat } from "@/components/seat";
-import { SeatLegend } from "@/components/seat-legend";
+// import { Seat } from "@/components/seat";
+// import { SeatLegend } from "@/components/seat-legend";
 import { FareSummary } from "@/components/fare-summary";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,7 +23,7 @@ import { ArrowLeft } from "lucide-react";
 import { BusSeatLayout } from "@/components/bus-seat-layout";
 
 export default function BookingPage() {
-  const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
+  // const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
 
   const seatData = Array.from({ length: 40 }, (_, i) => ({
     number: i + 1,
@@ -33,13 +33,13 @@ export default function BookingPage() {
     status: "available" | "processing" | "booked" | "selected";
   }>;
 
-  const handleSeatClick = (seatNumber: number) => {
-    setSelectedSeats((prev) =>
-      prev.includes(seatNumber)
-        ? prev.filter((n) => n !== seatNumber)
-        : [...prev, seatNumber]
-    );
-  };
+  // const handleSeatClick = (seatNumber: number) => {
+  //   setSelectedSeats((prev) =>
+  //     prev.includes(seatNumber)
+  //       ? prev.filter((n) => n !== seatNumber)
+  //       : [...prev, seatNumber]
+  //   );
+  // };
 
   return (
     <>
