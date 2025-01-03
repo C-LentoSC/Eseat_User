@@ -24,7 +24,7 @@ function SeatIcon({ isVisible = true }: { isVisible?: boolean }) {
       <svg
         viewBox="0 0 100 100"
         className={cn(
-          "w-12 h-12 transition-colors duration-200",
+          "w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 transition-colors duration-200",
           isVisible ? "visible" : "invisible"
         )}
       >
@@ -43,7 +43,7 @@ function Seat({ number, status = "available", onClick, className }: SeatProps) {
   return (
     <div
       className={cn(
-        "relative m-1 cursor-pointer transition-all",
+        "relative m-0.5 md:m-1 cursor-pointer transition-all",
         status === "available" && "text-gray-500 hover:text-gray-700",
         status === "processing" && "text-yellow-500",
         status === "booked" && "text-red-500",
@@ -56,7 +56,7 @@ function Seat({ number, status = "available", onClick, className }: SeatProps) {
       aria-label={`Seat ${number} - ${status}`}
     >
       <SeatIcon />
-      <span className="absolute left-1/2 bottom-4 -translate-x-1/2 text-xs font-medium text-white">
+      <span className="absolute left-1/2 bottom-2 md:bottom-4 -translate-x-1/2 text-[10px] md:text-xs font-medium text-white">
         {number}
       </span>
     </div>
@@ -91,7 +91,7 @@ export function BusSeatLayout({
       } else {
         // Empty space
         row.push(
-          <div key={`empty-${i}-${j}`} className="m-1">
+          <div key={`empty-${i}-${j}`} className="m-0.5 md:m-1">
             <SeatIcon isVisible={false} />
           </div>
         );
@@ -105,29 +105,33 @@ export function BusSeatLayout({
   }
 
   return (
-    <div className={cn("w-full", className)}>
+    <div
+      className={cn("w-full max-w-screen-lg mx-auto px-2 md:px-4", className)}
+    >
       {/* Legend */}
-      <div className="flex items-center gap-4 mb-6 text-sm">
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-gray-500 rounded" />
-          <span>Available Seats</span>
+      <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-4 md:mb-6 text-xs md:text-sm">
+        <div className="flex items-center gap-1 md:gap-2">
+          <div className="w-3 h-3 md:w-4 md:h-4 bg-gray-500 rounded" />
+          <span>Available</span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-yellow-500 rounded" />
-          <span>Processing Seats</span>
+        <div className="flex items-center gap-1 md:gap-2">
+          <div className="w-3 h-3 md:w-4 md:h-4 bg-yellow-500 rounded" />
+          <span>Processing</span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-red-500 rounded" />
-          <span>Booked Seats</span>
+        <div className="flex items-center gap-1 md:gap-2">
+          <div className="w-3 h-3 md:w-4 md:h-4 bg-red-500 rounded" />
+          <span>Booked</span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 bg-green-500 rounded" />
-          <span>Selected Seats</span>
+        <div className="flex items-center gap-1 md:gap-2">
+          <div className="w-3 h-3 md:w-4 md:h-4 bg-green-500 rounded" />
+          <span>Selected</span>
         </div>
       </div>
 
       {/* Seat Grid */}
-      <div className="space-y-2">{grid}</div>
+      <div className="space-y-1 md:space-y-2 overflow-x-auto">
+        <div className="min-w-[320px]">{grid}</div>
+      </div>
     </div>
   );
 }

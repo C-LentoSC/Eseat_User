@@ -184,7 +184,7 @@ export function BusCard({
           </div>
         </div>
         <Button className="w-full mt-4" asChild>
-          <Link href="/booking/listing/checkout">Book Now</Link>
+          <Link href="/booking/listing/1">Book Now</Link>
         </Button>
       </div>
     </div>
