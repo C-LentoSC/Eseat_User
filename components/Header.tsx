@@ -1,4 +1,4 @@
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"; 
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 // import {
 //   DropdownMenu,
@@ -24,6 +24,15 @@ export default function Header() {
               className="h-10 w-auto"
             />
           </Link>
+          <div className="hidden items-center gap-2 text-sm text-muted-foreground md:flex">
+            <Image
+              src="/logos/sltb_logo2.svg"
+              alt="SLTB eSeat"
+              width={120}
+              height={40}
+              className="h-10 w-auto"
+            />
+          </div>
           <div className="hidden items-center gap-2 text-sm text-muted-foreground md:flex">
             <Image
               src="/logos/1315.svg"

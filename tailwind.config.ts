@@ -64,7 +64,7 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       backgroundImage: {
-        "hero-bg": "url('/assets/bg2.png')",
+        "hero-bg": "url('/assets/bg3.png')",
       },
     },
   },
