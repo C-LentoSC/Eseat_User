@@ -63,51 +63,91 @@ function Seat({ number, status = "available", onClick, className }: SeatProps) {
   );
 }
 
-export function BusSeatLayout({
-  seats,
-  onSeatClick,
-  className,
-}: BusSeatLayoutProps) {
-  const rows = 5;
-  const cols = 8;
-  const grid = [];
+export function BusSeatLayout({ seats, onSeatClick }: BusSeatLayoutProps) {
+  const seatLayout = [
+    ["5", "10", "15", "20", "25", "30", "35", "40", "45", "48", "54"],
+    ["4", "9", "14", "19", "24", "29", "34", "39", "44", "47", "53"],
+    ["3", "8", "13", "18", "23", "28", "33", "38", "43", "46", "52"],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "51",
+    ],
 
-  // Create the grid layout
-  for (let i = 0; i < rows; i++) {
-    const row = [];
-    for (let j = 0; j < cols; j++) {
-      const index = i * cols + j;
-      const seat = seats?.[index];
-
-      if (seat) {
-        row.push(
-          <Seat
-            key={`seat-${i}-${j}`}
-            number={seat.number}
-            status={seat.status}
-            onClick={() => onSeatClick?.(seat.number)}
-          />
-        );
-      } else {
-        // Empty space
-        row.push(
-          <div key={`empty-${i}-${j}`} className="m-0.5 md:m-1">
-            <SeatIcon isVisible={false} />
-          </div>
-        );
-      }
-    }
-    grid.push(
-      <div key={`row-${i}`} className="flex justify-center">
-        {row}
-      </div>
-    );
-  }
+    ["02", "7", "12", "17", "22", "27", "32", "37", "42",null, null,null,null,null,null,null, "50"],
+    ["01", "6", "11", "16", "21", "26", "31", "36", "41",null, null,null,null,null,null,null, "49"],
+  ];
 
   return (
-    <div
-      className={cn("w-full max-w-screen-lg mx-auto px-2 md:px-4", className)}
-    >
+    <>
       {/* Legend */}
       <div className="flex flex-wrap items-center gap-2 md:gap-4 mb-4 md:mb-6 text-xs md:text-sm">
         <div className="flex items-center gap-1 md:gap-2">
@@ -128,9 +168,108 @@ export function BusSeatLayout({
         </div>
       </div>
 
-      {/* Seat Grid */}
-      <div className="space-y-1 md:space-y-2 overflow-x-auto">
-        <div className="min-w-[320px]">{grid}</div>
+      <div className="space-y-2">
+        {seatLayout.map((row, rowIndex) => (
+          <div key={rowIndex} className="flex">
+            {row.map((seatNumber, colIndex) => {
+              const seat = seats.find((s) => s.number === Number(seatNumber));
+              if (seat) {
+                return (
+                  <Seat
+                    key={colIndex}
+                    number={seat.number}
+                    status={seat.status}
+                    onClick={() => onSeatClick?.(seat.number)}
+                  />
+                );
+              }
+              return <div key={colIndex} className="m-1" />;
+            })}
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+export function BusSeatLayoutSM({ seats, onSeatClick }: BusSeatLayoutProps) {
+  const seatLayout = [
+    ["01", "2", null, null, null, null, "3", "4", "5"],
+    ["06", "07", null, null, null, null, "8", "9", "10"],
+    ["11", "12", null, null, null, null, "13", "14", "15"],
+    ["16", "17", null, null, null, null, "18", "19", "20"],
+    ["21", "22", null, null, null, null, "23", "24", "25"],
+    ["26", "27", null, null, null, null, "28", "29", "30"],
+    ["31", "32", null, null, null, null, "33", "34", "35"],
+    ["36", "37", null, null, null, null, "38", "39", "40"],
+    ["41", "42", null, null, null, null, "43", "44", "45"],
+    [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "46",
+      "47",
+      "48",
+    ],
+    ["49", "50", "51", "52", "53", "54"],
+
+  ];
+
+  return (
+    <div className="w-full flex flex-col  justify-center items-center ">
+      {/* Legend */}
+      <div className="flex flex-row items-center gap-2 md:gap-4 mb-4 md:mb-6 text-xs md:text-sm bg-[#e9f5ff] p-6">
+        <div className="flex flex-col">
+          <div className="flex items-center gap-1 md:gap-2">
+            <div className="w-3 h-3 md:w-4 md:h-4 bg-gray-500 rounded" />
+            <span>Available Seats</span>
+          </div>
+          <div className="flex items-center gap-1 md:gap-2">
+            <div className="w-3 h-3 md:w-4 md:h-4 bg-green-500 rounded" />
+            <span>Processing Seats</span>
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <div className="flex items-center gap-1 md:gap-2">
+            <div className="w-3 h-3 md:w-4 md:h-4 bg-yellow-500 rounded" />
+            <span>Counter Seats</span>
+          </div>
+          <div className="flex items-center gap-1 md:gap-2">
+            <div className="w-3 h-3 md:w-4 md:h-4 bg-red-500 rounded" />
+            <span>Booked Seats</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-2 w-full flex flex-col justify-center items-center">
+        {seatLayout.map((row, rowIndex) => (
+          <div key={rowIndex} className="flex">
+            {row.map((seatNumber, colIndex) => {
+              const seat = seats.find((s) => s.number === Number(seatNumber));
+              if (seat) {
+                return (
+                  <Seat
+                    key={colIndex}
+                    number={seat.number}
+                    status={seat.status}
+                    onClick={() => onSeatClick?.(seat.number)}
+                  />
+                );
+              }
+              return <div key={colIndex} className="m-1" />;
+            })}
+          </div>
+        ))}
       </div>
     </div>
   );

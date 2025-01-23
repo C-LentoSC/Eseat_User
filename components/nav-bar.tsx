@@ -41,7 +41,7 @@ const navItems: NavItem[] = [
   },
   {
     title: "Send Tickets",
-    href: "/cb-report",
+    href: "/send-ticket",
     icon: LogOut,
   },
   {

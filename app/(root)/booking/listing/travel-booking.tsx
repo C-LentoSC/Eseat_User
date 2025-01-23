@@ -81,7 +81,7 @@ export default function TravelBooking({
           </div>
         </div>
 
-        {!isVisible && (
+        {isVisible && (
           <>
             <div>
               <form

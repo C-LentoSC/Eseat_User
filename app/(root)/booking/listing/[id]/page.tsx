@@ -16,7 +16,7 @@ import TripSelection from "@/components/TripSelection";
 import BookingTable from "./BookingTable";
 import PassengerForm from "./PassengerForm";
 import { ArrowLeft } from "lucide-react";
-import { BusSeatLayout } from "@/components/bus-seat-layout";
+import { BusSeatLayout, BusSeatLayoutSM } from "@/components/bus-seat-layout";
 import axios from "axios";
 import { FareSummary } from "@/components/fare-summary";
 
@@ -65,6 +65,31 @@ export default function BookingPage({
 
   const [alldata, setAlldata] = useState<Alldata | null>(null);
 
+  console.error(alldata?.allSeats?.length);
+
+  const [seats, setSeats] = useState(
+    Array(54)
+      .fill(null)
+      .map((_, index) => ({
+        number: index + 1,
+        status: (index % 4 === 0 ? "booked" : "available") as
+          | "booked"
+          | "available"
+          | "processing"
+          | "selected",
+      }))
+  );
+
+  const seatData: SeatData[] =
+    alldata?.allSeats?.map((seat) => ({
+      number: parseInt(seat.seat_no, 10),
+      status: seat.isBooked
+        ? "booked"
+        : seat.isBlocked
+        ? "processing"
+        : "available",
+    })) || [];
+
   useEffect(() => {
     const loaddata = async () => {
       const res = await axios.get(
@@ -82,17 +107,26 @@ export default function BookingPage({
     loaddata();
   }, [sheduleId]);
 
-  const seatData: SeatData[] =
-    alldata?.allSeats?.map((seat) => ({
-      number: parseInt(seat.seat_no, 10),
-      status: seat.isBooked
-        ? "booked"
-        : seat.isBlocked
-        ? "processing"
-        : "available",
-    })) || [];
+  const handleSeatClick = (seatNumber: number | string) => {
+    setSeats((prevSeats) =>
+      prevSeats.map((seat) =>
+        seat.number === seatNumber
+          ? {
+              ...seat,
+              status:
+                seat.status === "available"
+                  ? "selected"
+                  : seat.status === "selected"
+                  ? "available"
+                  : seat.status,
+            }
+          : seat
+      )
+    );
+    console.log();
+  };
 
-  console.log(seatData);
+  console.log(seats);
 
   return (
     <>
@@ -130,12 +164,22 @@ export default function BookingPage({
             price={10000}
             duration={alldata?.duration}
             availableSeats={alldata.allSeats?.length}
-            fasility={alldata?.bus?.facilities} boardingDropping={[]}          />
+            fasility={alldata?.bus?.facilities}
+            boardingDropping={[]}
+            bookbtnst={false}
+          />
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 space-y-6">
-            <div className="grid grid-cols-2 gap-4 border p-5 rounded-lg bg-slate-50">
+          <div className="md:col-span-2 space-y-6 p-10">
+            <div className="hidden lg:block">
+              <BusSeatLayout seats={seats} onSeatClick={handleSeatClick} />
+            </div>
+            <div className="block md:block lg:hidden">
+              <BusSeatLayoutSM seats={seats} onSeatClick={handleSeatClick} />
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 border p-5 rounded-lg bg-slate-50">
               <div>
                 <Label>Boarding Point</Label>
                 <Select>
@@ -171,26 +215,33 @@ export default function BookingPage({
                 </Select>
               </div>
             </div>
-
-            <BusSeatLayout
-              seats={seatData}
-              onSeatClick={(seatNumber) => {
-                console.log(`Clicked seat ${seatNumber}`);
-              }}
-            />
-
-            <div className="space-y-4">
-              <Label>Ticket Type</Label>
-              <RadioGroup defaultValue="full" className="flex gap-4">
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="full" id="full" />
-                  <Label htmlFor="full">Full Ticket</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="half" id="half" />
-                  <Label htmlFor="half">Half Ticket</Label>
-                </div>
-              </RadioGroup>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 border p-5 rounded-lg bg-slate-50">
+              <div className="space-y-4">
+                <Label>Ticket Type</Label>
+                <RadioGroup defaultValue="full" className="flex gap-4">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="full" id="full" />
+                    <Label htmlFor="full">Full Ticket</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="half" id="half" />
+                    <Label htmlFor="half">Half Ticket</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+              <div className="space-y-1">
+                <Label>
+                  Price Catergory <span className="text-red-500">*</span>{" "}
+                </Label>
+                <Select>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select Price Catergory" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={"Normal"}>Normal</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             <PassengerForm />

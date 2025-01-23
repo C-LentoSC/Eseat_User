@@ -55,6 +55,7 @@ interface BusCardProps {
   availableSeats: number;
   fasility: Facility[];
   boardingDropping: BoardingDropping[];
+  bookbtnst: boolean;
 }
 
 export function BusCard({
@@ -70,6 +71,7 @@ export function BusCard({
   availableSeats,
   fasility,
   boardingDropping,
+  bookbtnst,
 }: BusCardProps) {
   const [bdpoint, setbdpoint] = useState("Boarding / Dropping points");
 
@@ -234,9 +236,13 @@ export function BusCard({
             <span>{availableSeats} Seats Available</span>
           </div>
         </div>
-        <Button className="w-full mt-4" asChild>
-          <Link href={`/booking/listing/${id}`}>Book Now</Link>
-        </Button>
+        {bookbtnst && (
+          <>
+            <Button className="w-full mt-4" asChild>
+              <Link href={`/booking/listing/${id}`}>Book Now</Link>
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

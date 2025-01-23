@@ -15,7 +15,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Eseat",
+  title: "Eseat | Agentme",
   description: "Eseat Client App",
 };
 
