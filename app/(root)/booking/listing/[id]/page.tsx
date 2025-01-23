@@ -126,8 +126,6 @@ export default function BookingPage({
     console.log();
   };
 
-  console.log(seats);
-
   return (
     <>
       <div className="my-container py-5">

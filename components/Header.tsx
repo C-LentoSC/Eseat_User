@@ -65,7 +65,11 @@ export default function Header() {
               size="sm"
               className="text-myColor2 font-medium"
             >
-              <img src="/assets/auser.jpg" alt="" className="w-7 h-7 rounded-full" />
+              <img
+                src="/assets/auser.jpg"
+                alt=""
+                className="w-7 h-7 rounded-full"
+              />
               Sithija
             </Button>
           </div>

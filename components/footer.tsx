@@ -78,7 +78,7 @@ export default function Footer() {
           </div>
 
           {/* SLTB Info */}
-          <div className="space-y-4 flex justify-center">
+          <div className="space-y-4 flex lg:justify-center">
             <div className="space-y-4">
               <img
                 src="/logos/sltb_logo2.svg"
@@ -94,7 +94,7 @@ export default function Footer() {
           </div>
 
           {/* Social Info */}
-          <div className="space-y-4 flex justify-center">
+          <div className="space-y-4 flex lg:justify-center">
             <div className="flex flex-col">
               <Link
                 href="#"
