@@ -17,38 +17,49 @@ import toast from "react-hot-toast";
 
 export function WelcomeSection() {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState<Date | undefined>(undefined);
 
-  const [name, setname] = useState("");
-  const [from, setfrom] = useState("");
-  const [to, setto] = useState("");
-  const [passenger, setpassenger] = useState("");
+  const [name, setName] = useState<string>("");
+  const [from, setFrom] = useState<string>("");
+  const [to, setTo] = useState<string>("");
+  const [passenger, setPassenger] = useState<string>("1");
 
   useEffect(() => {
-    const toekn = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-    if (!toekn) {
+    if (!token) {
       window.location.href = "/";
       return;
     }
 
-    const getdata = async () => {
+    const getData = async () => {
       try {
         const res = await axios.get(`${BASE_URL}info`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${toekn}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 
-        // console.log(res);
-        setname(res?.data?.name);
+        setName(res?.data?.name || "");
       } catch (error) {
         console.error(error);
       }
     };
-    getdata();
+    getData();
   }, []);
+
+  const handleSearch = () => {
+    if (!from) {
+      toast.error("Please enter from location");
+    } else if (!to) {
+      toast.error("Please enter to location");
+    } else if (!date) {
+      toast.error("Please select date");
+    } else {
+      window.location.href = `/booking/listing?from=${from}&to=${to}&date=${date.toISOString()}&passenger=${passenger}`;
+    }
+  };
 
   return (
     <div className="w-full bg-[#F0FBFE] basic_search_bg py-24">
@@ -74,7 +85,7 @@ export function WelcomeSection() {
                 <Input
                   placeholder="Leaving from.."
                   className="bg-transparent border-0 shadow-none mt-0 pt-0 px-0 w-32 text-black placeholder:text-black"
-                  onChange={(e) => setfrom(e.target.value)}
+                  onChange={(e) => setFrom(e.target.value)}
                 />
               </div>
 
@@ -92,7 +103,7 @@ export function WelcomeSection() {
                 <Input
                   placeholder="Going to.."
                   className="bg-transparent border-0 shadow-none mt-0 pt-0 text-black placeholder:text-black px-0 w-32 outline-none focus:ring-0"
-                  onChange={(e) => setto(e.target.value)}
+                  onChange={(e) => setTo(e.target.value)}
                 />
               </div>
             </div>
@@ -130,7 +141,7 @@ export function WelcomeSection() {
                 </label>
                 <select
                   className="flex w-full p-2 px-0 bg-transparent text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-                  onChange={(e) => setpassenger(e.target.value)}
+                  onChange={(e) => setPassenger(e.target.value)}
                   value={passenger}
                 >
                   <option value="1" className="bg-white">
@@ -143,20 +154,7 @@ export function WelcomeSection() {
               </div>
             </div>
 
-            <Button
-              className=" h-10 px-8"
-              onClick={() => {
-                if (from == "") {
-                  toast.error("Please enter from location");
-                } else if (to == "") {
-                  toast.error("Please enter to location");
-                } else if (date == "" || date == null) {
-                  toast.error("Please select date");
-                } else {
-                  window.location.href = `/booking/listing?from=${from}&to=${to}&date=${date}&passenger=${passenger}`;
-                }
-              }}
-            >
+            <Button className=" h-10 px-8" onClick={handleSearch}>
               <Search className="h-4 w-4 mr-2" />
               Search
             </Button>

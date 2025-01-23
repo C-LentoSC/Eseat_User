@@ -26,7 +26,7 @@ export default function TravelBooking({
   setTo,
   setpassenger,
   search,
-}) {
+}:any) {
   // const [date, setDate] = React.useState<Date>(new Date(date1));
   // const [from, setFrom] = React.useState(from1);
   // const [to, setTo] = React.useState(to1);

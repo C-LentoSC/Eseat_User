@@ -1,11 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-// import { useState } from "react";
-// import { TripSummary } from "@/components/trip-summary";
-// import { Seat } from "@/components/seat";
-// import { SeatLegend } from "@/components/seat-legend";
-import { FareSummary } from "@/components/fare-summary";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -23,13 +18,52 @@ import PassengerForm from "./PassengerForm";
 import { ArrowLeft } from "lucide-react";
 import { BusSeatLayout } from "@/components/bus-seat-layout";
 import axios from "axios";
+import { FareSummary } from "@/components/fare-summary";
 
-export default function BookingPage({ params }) {
+// Define types for data structures
+interface SeatData {
+  number: number;
+  status: "available" | "processing" | "booked" | "selected";
+}
+
+interface BoardingAndDropping {
+  Boarding: { point: { name: string } }[];
+  Dropping: { point: { name: string } }[];
+}
+
+interface Alldata {
+  id: number;
+  bus: {
+    mainImage: string;
+    type: string;
+    depot: { name: string };
+    facilities: [];
+  };
+  start_time: string;
+  end_time: string;
+  startDate: string;
+  duration: number;
+  allSeats: { seat_no: string; isBooked: boolean; isBlocked: boolean }[];
+  boardingAndDropping: BoardingAndDropping;
+  to: {
+    id: number;
+    name: string;
+  };
+  from: {
+    id: number;
+    name: string;
+  };
+}
+
+export default function BookingPage({
+  params,
+}: {
+  params: Record<string, string | undefined>;
+}) {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-  // const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
   const sheduleId = params?.id;
 
-  const [alldata, setalldata] = useState<any[]>([]);
+  const [alldata, setAlldata] = useState<Alldata | null>(null);
 
   useEffect(() => {
     const loaddata = async () => {
@@ -42,46 +76,30 @@ export default function BookingPage({ params }) {
         }
       );
       console.log(res);
-      setalldata(res.data);
+      setAlldata(res.data);
     };
 
     loaddata();
-  }, []);
+  }, [sheduleId]);
 
-  // const seatData = Array.from({ length: 40 }, (_, i) => ({
-  //   number: i + 1,
-  //   status: Math.random() > 0.7 ? "booked" : "available",
-  // })) as Array<{
-  //   number: number;
-  //   status: "available" | "processing" | "booked" | "selected";
-  // }>;
-
-  const seatData = alldata?.allSeats?.map((seat) => ({
-    number: parseInt(seat.seat_no, 10), // Convert seat_no to number
-    status: seat.isBooked
-      ? "booked"
-      : seat.isBlocked
-      ? "processing"
-      : "available",
-  }));
+  const seatData: SeatData[] =
+    alldata?.allSeats?.map((seat) => ({
+      number: parseInt(seat.seat_no, 10),
+      status: seat.isBooked
+        ? "booked"
+        : seat.isBlocked
+        ? "processing"
+        : "available",
+    })) || [];
 
   console.log(seatData);
 
-  // const handleSeatClick = (seatNumber: number) => {
-  //   setSelectedSeats((prev) =>
-  //     prev.includes(seatNumber)
-  //       ? prev.filter((n) => n !== seatNumber)
-  //       : [...prev, seatNumber]
-  //   );
-  // };
-
   return (
     <>
-      {/*beautifull working back buttonin the top left corner */}
-      <div className=" my-container py-5">
+      <div className="my-container py-5">
         <Button
           variant={"secondary"}
-          className=" flex space-x-3"
+          className="flex space-x-3"
           onClick={() => history.back()}
         >
           <ArrowLeft className="w-6 h-6" />
@@ -89,43 +107,31 @@ export default function BookingPage({ params }) {
         </Button>
       </div>
       <div className="my-container pb-16 space-y-12">
-        {/* <TripSummary
-        departure="15:00 PM"
-        arrival="01:00 AM"
-        departureLocation="Colombo"
-        arrivalLocation="Jaffna"
-        bookingDate="2024-12-17"
-        closingTime="14:00"
-        depotName="Welisara"
-        price={1350.5}
-        duration={10}
-        availableSeats={42}
-      /> */}
-
-        <BusCard
-          key={alldata.id}
-          id={alldata.id}
-          image={alldata?.bus?.mainImage}
-          arrival={{
-            time: alldata?.end_time,
-            location: alldata.to?.name,
-          }}
-          departure={{
-            time: alldata?.start_time,
-            location: alldata.from?.name,
-          }}
-          booking={{
-            startDate: alldata?.startDate,
-            startTime: alldata?.start_time,
-            endTime: alldata?.end_time,
-          }}
-          busType={alldata?.bus?.type}
-          depotName={alldata?.bus?.depot?.name}
-          price={10000}
-          duration={alldata?.duration}
-          availableSeats={alldata.allSeats?.length}
-          fasility={alldata?.bus?.facilities}
-        />
+        {alldata && (
+          <BusCard
+            // key={alldata.id}
+            id={alldata.id}
+            image={alldata?.bus?.mainImage}
+            arrival={{
+              time: alldata?.end_time,
+              name: alldata.to?.name,
+            }}
+            departure={{
+              time: alldata?.start_time,
+              name: alldata.from?.name,
+            }}
+            booking={{
+              startDate: alldata?.startDate,
+              startTime: alldata?.start_time,
+              endTime: alldata?.end_time,
+            }}
+            busType={alldata?.bus?.type}
+            depotName={alldata?.bus?.depot?.name}
+            price={10000}
+            duration={alldata?.duration}
+            availableSeats={alldata.allSeats?.length}
+            fasility={alldata?.bus?.facilities} boardingDropping={[]}          />
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2 space-y-6">
@@ -144,8 +150,6 @@ export default function BookingPage({ params }) {
                         </SelectItem>
                       )
                     )}
-                    {/* <SelectItem value="colombo">Colombo Central</SelectItem>
-                    <SelectItem value="kadawatha">Kadawatha</SelectItem> */}
                   </SelectContent>
                 </Select>
               </div>
@@ -163,30 +167,11 @@ export default function BookingPage({ params }) {
                         </SelectItem>
                       )
                     )}
-                    {/* <SelectItem value="jaffna">Jaffna Bus Stand</SelectItem> */}
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
-            {/* <SeatLegend /> */}
-
-            {/* <div className="grid grid-cols-5 gap-2">
-              {Array.from({ length: 40 }, (_, i) => (
-                <Seat
-                  key={i + 1}
-                  number={i + 1}
-                  status={
-                    selectedSeats.includes(i + 1)
-                      ? "selected"
-                      : Math.random() > 0.7
-                      ? "booked"
-                      : "available"
-                  }
-                  onClick={() => handleSeatClick(i + 1)}
-                />
-              ))}
-            </div> */}
             <BusSeatLayout
               seats={seatData}
               onSeatClick={(seatNumber) => {

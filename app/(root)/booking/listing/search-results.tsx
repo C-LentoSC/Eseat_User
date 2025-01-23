@@ -3,10 +3,35 @@
 import { BusCard } from "@/components/bus-card";
 import { Button } from "@/components/ui/button";
 import LoadingAnimation from "@/components/ui/Loading";
-import axios from "axios";
-import { format } from "date-fns";
 import { Clock, Users, DollarSign } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+// Define the structure of the data you expect to receive in alldata
+interface ScheduleData {
+  start_time: string;
+  end_time: string;
+  price: number;
+  duration: number;
+  startDate: string;
+}
+
+interface BusData {
+  id: number;
+  main_image: string;
+  scheduleData: ScheduleData;
+  availableSeats: any[]; // You can replace 'any' with a more specific type if you know the structure
+  facilities: [];
+  fare_point: [];
+  depot: { name: string };
+  type: string;
+  from: { name: string };
+  to: { name: string };
+}
+
+interface SearchResultsProps {
+  alldata: BusData[]; // Array of bus data
+  isloading: boolean; // Whether the data is loading
+}
 
 interface SortOption {
   id: string;
@@ -29,19 +54,17 @@ const sortOptions: SortOption[] = [
   { id: "rate", label: "Rate", icon: <DollarSign className="w-4 h-4" /> },
 ];
 
-export function SearchResults({ alldata , isloading }) {
-  const [activeSort, setActiveSort] = useState("departure");
+export function SearchResults({ alldata, isloading }: SearchResultsProps) {
+  const [activeSort, setActiveSort] = useState<string>("departure");
 
   return (
     <div className="w-full my-container">
       <div className="space-y-4">
         <div className="flex flex-col items-start justify-between lg:flex-row lg:items-center border-b py-4">
           <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-semibold text-gray-900">
-              SELECT YOUR TRIP
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-900">SELECT YOUR TRIP</h2>
             {alldata?.length > 0 && (
-              <p className="text-sm text-gray-500">{alldata?.length} Results</p>
+              <p className="text-sm text-gray-500">{alldata.length} Results</p>
             )}
           </div>
 
@@ -67,7 +90,6 @@ export function SearchResults({ alldata , isloading }) {
           </div>
         </div>
 
-        {/* Results list will be added here when we have the data structure */}
         <div className="space-y-4 py-8">
           {isloading ? (
             <LoadingAnimation />
@@ -76,24 +98,22 @@ export function SearchResults({ alldata , isloading }) {
               {alldata?.length > 0 ? (
                 <>
                   {alldata
-                    ?.sort((a, b) => {
+                    .sort((a, b) => {
                       const formatTime = (time: string) => {
-                        const defaultDate = "2025-01-01"; // Ensure valid date format
+                        const defaultDate = "2025-01-01";
                         return new Date(`${defaultDate} ${time}`).getTime();
                       };
 
                       switch (activeSort) {
                         case "departure":
                           return (
-                            formatTime(
-                              a.scheduleData?.start_time || "00:00:00"
-                            ) -
-                            formatTime(b.scheduleData?.start_time || "00:00:00")
+                            formatTime(a.scheduleData.start_time || "00:00:00") -
+                            formatTime(b.scheduleData.start_time || "00:00:00")
                           );
                         case "arrival":
                           return (
-                            formatTime(a.scheduleData?.end_time || "00:00:00") -
-                            formatTime(b.scheduleData?.end_time || "00:00:00")
+                            formatTime(a.scheduleData.end_time || "00:00:00") -
+                            formatTime(b.scheduleData.end_time || "00:00:00")
                           );
                         case "seats":
                           return (
@@ -102,8 +122,8 @@ export function SearchResults({ alldata , isloading }) {
                           );
                         case "rate":
                           return (
-                            (a.scheduleData?.price || 0) -
-                            (b.scheduleData?.price || 0)
+                            (a.scheduleData.price || 0) -
+                            (b.scheduleData.price || 0)
                           );
                         default:
                           return 0;
@@ -115,23 +135,23 @@ export function SearchResults({ alldata , isloading }) {
                         id={data.id}
                         image={data.main_image}
                         arrival={{
-                          time: data.scheduleData?.end_time,
-                          location: data.to?.name,
+                          time: data.scheduleData.end_time,
+                          name: data.to.name,
                         }}
                         departure={{
-                          time: data.scheduleData?.start_time,
-                          location: data.from?.name,
+                          time: data.scheduleData.start_time,
+                          name: data.from.name,
                         }}
                         booking={{
-                          startDate: data.scheduleData?.startDate,
-                          startTime: data.scheduleData?.start_time,
-                          endTime: data.scheduleData?.end_time,
+                          startDate: data.scheduleData.startDate,
+                          startTime: data.scheduleData.start_time,
+                          endTime: data.scheduleData.end_time,
                         }}
                         busType={data.type}
-                        depotName={data.depot?.name}
-                        price={data.scheduleData?.price}
-                        duration={data.scheduleData?.duration}
-                        availableSeats={data.availableSeats?.length}
+                        depotName={data.depot.name}
+                        price={data.scheduleData.price}
+                        duration={data.scheduleData.duration}
+                        availableSeats={data.availableSeats.length}
                         fasility={data.facilities}
                         boardingDropping={data.fare_point}
                       />
@@ -139,9 +159,7 @@ export function SearchResults({ alldata , isloading }) {
                 </>
               ) : (
                 <div>
-                  <h2 className="text-lg font-medium text-gray-400">
-                    No results found
-                  </h2>
+                  <h2 className="text-lg font-medium text-gray-400">No results found</h2>
                 </div>
               )}
             </>

@@ -1,9 +1,13 @@
 import Image from "next/image";
-import { MapPin,
+import {
+  MapPin,
   //  Clock,
-    Code, Bus, Building2 } from "lucide-react";
+  Code,
+  Bus,
+  Building2,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Route } from "@/types/route";
+// import { Route } from "@/types/route";
 import { cn } from "@/lib/utils";
 
 interface RouteInfoItemProps {
@@ -20,6 +24,17 @@ const RouteInfoItem = ({ icon, text }: RouteInfoItemProps) => (
   </div>
 );
 
+export interface Route {
+  id: string;
+  schedule_number: string;
+  route: string;
+  datetime: string;
+  code: string;
+  number: string;
+  depot: string;
+  main_image: string;
+}
+
 interface RouteCardProps {
   route: Route;
   className?: string;
@@ -29,7 +44,10 @@ export function RouteCard({ route, className }: RouteCardProps) {
   const routeInfo = [
     { icon: <MapPin className="h-4 w-4 text-myColor1" />, text: route?.route },
     // { icon: <Clock className="h-4 w-4 text-myColor1" />, text: route.datetime },
-    { icon: <Code className="h-4 w-4 text-myColor1" />, text: route?.schedule_number },
+    {
+      icon: <Code className="h-4 w-4 text-myColor1" />,
+      text: route?.schedule_number,
+    },
     { icon: <Bus className="h-4 w-4 text-myColor1" />, text: route?.number },
     {
       icon: <Building2 className="h-4 w-4 text-myColor1" />,

@@ -1,22 +1,48 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import TravelBooking from "./travel-booking";
 import { SearchResults } from "./search-results";
 import axios from "axios";
 import { format } from "date-fns";
 
+interface BusData {
+  id: number;
+  main_image: string;
+  scheduleData: {
+    start_time: string;
+    end_time: string;
+    price: number;
+    duration: number;
+    startDate: string;
+  };
+  availableSeats: any[];
+  facilities: [];
+  fare_point: [];
+  depot: { name: string };
+  type: string;
+  from: { name: string };
+  to: { name: string };
+}
+
+interface Params {
+  from?: string;
+  to?: string;
+  date?: string;
+  passenger?: string;
+}
+
 const BookingListing = () => {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-  const [params, setParams] = useState<{ [key: string]: string }>({});
-
-  const [isloading, setisLoading] = useState(false);
-  const [alldata, setalldata] = useState<unknown[]>([]);
+  const [params, setParams] = useState<Params>({});
+  const [isloading, setIsLoading] = useState<boolean>(false);
+  const [alldata, setAlldata] = useState<BusData[]>([]);
 
   const [date, setDate] = React.useState<Date>(new Date());
-  const [from, setFrom] = React.useState("");
-  const [to, setTo] = React.useState("");
-  const [passenger, setpassenger] = useState("");
+  const [from, setFrom] = React.useState<string>("");
+  const [to, setTo] = React.useState<string>("");
+  const [passenger, setPassenger] = useState<string>("");
 
   useEffect(() => {
     try {
@@ -34,18 +60,6 @@ const BookingListing = () => {
     }
   }, []);
 
-  // const currentUrl = window.location.href; // Get the current URL
-  // const url = new URL(currentUrl); // Create a URL object
-  // const searchParams = url.searchParams; // Get query parameters
-
-  // // Extract query parameters
-  // const fromParam = searchParams.get("from") || "";
-  // const toParam = searchParams.get("to") || "";
-  // const dateParam = searchParams.get("date") || "";
-  // const passengerParam = searchParams.get("passenger") || "";
-
-  console.log("from", params.from, "to", params.to, "date", params.date);
-
   useEffect(() => {
     if (
       params.date &&
@@ -53,12 +67,12 @@ const BookingListing = () => {
       params.from &&
       params.to
     ) {
-      setisLoading(true);
+      setIsLoading(true);
       const loaddata = async () => {
         const form = new FormData();
-        form.append("from", params.from);
-        form.append("to", params.to);
-        form.append("start_date", format(params.date, "yyyy-MM-dd"));
+        form.append("from", params.from || "");
+        form.append("to", params.to || "");
+        form.append("start_date", format(new Date(params.date || ""), "yyyy-MM-dd"));
 
         try {
           const res = await axios.post(`${BASE_URL}basic-search`, form, {
@@ -69,30 +83,24 @@ const BookingListing = () => {
           });
 
           console.log(res);
-          setalldata(res?.data);
-          setisLoading(false);
+          setAlldata(res?.data || []);
+          setIsLoading(false);
         } catch (error) {
           console.error(error);
-          setisLoading(false);
+          setIsLoading(false);
         }
       };
       loaddata();
     }
-  }, []);
+  }, [params]);
 
   const search = async () => {
-    // console.log(from ? from : fromParam);
-    // console.log(to ? to : toParam);
-    // console.log(date ? date : dateParam);
     try {
-      setisLoading(true);
+      setIsLoading(true);
       const form = new FormData();
-      form.append("from", from ? from : params.from);
-      form.append("to", to ? to : params.to);
-      form.append(
-        "start_date",
-        format(date ? date : params.date, "yyyy-MM-dd")
-      );
+      form.append("from", from || params.from || "");
+      form.append("to", to || params.to || "");
+      form.append("start_date", format(date || new Date(params.date || ""), "yyyy-MM-dd"));
 
       try {
         const res = await axios.post(`${BASE_URL}basic-search`, form, {
@@ -103,11 +111,11 @@ const BookingListing = () => {
         });
 
         console.log(res);
-        setalldata(res?.data);
-        setisLoading(false);
+        setAlldata(res?.data || []);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
-        setisLoading(false);
+        setIsLoading(false);
       }
     } catch (error) {
       console.error(error);
@@ -120,14 +128,14 @@ const BookingListing = () => {
         from1={params.from}
         to1={params.to}
         date1={params.date}
-        from={from ? from : params.from}
-        to={to ? to : params.to}
-        passenger={passenger ? passenger : params.passenger}
-        date={date ? date : params.date}
+        from={from || params.from || ""}
+        to={to || params.to || ""}
+        passenger={passenger || params.passenger || ""}
+        date={date || new Date(params.date || "")}
         setDate={setDate}
         setFrom={setFrom}
         setTo={setTo}
-        setpassenger={setpassenger}
+        setPassenger={setPassenger}
         search={search}
       />
       <SearchResults alldata={alldata} isloading={isloading} />

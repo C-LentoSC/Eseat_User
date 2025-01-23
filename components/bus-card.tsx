@@ -37,11 +37,11 @@ interface BusCardProps {
   image: string;
   arrival: {
     time: string;
-    location: string;
+    name: string;
   };
   departure: {
     time: string;
-    location: string;
+    name: string;
   };
   booking: {
     startDate: string;
@@ -87,7 +87,7 @@ export function BusCard({
           <div>
             <p className="text-sm text-gray-500 mb-1">Arrival</p>
             <p className="text-2xl font-semibold mb-1">{arrival.time}</p>
-            <p className="text-gray-600">{arrival.location}</p>
+            <p className="text-gray-600">{arrival.name}</p>
           </div>
 
           {/* Arrow Icon */}
@@ -115,7 +115,7 @@ export function BusCard({
           <div>
             <p className="text-sm text-gray-500 mb-1">Departure</p>
             <p className="text-2xl font-semibold mb-1">{departure.time}</p>
-            <p className="text-gray-600">{departure.location}</p>
+            <p className="text-gray-600">{departure.name}</p>
           </div>
         </div>
 

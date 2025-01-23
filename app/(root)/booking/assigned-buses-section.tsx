@@ -21,11 +21,22 @@ import LoadingAnimation from "@/components/ui/Loading";
 //   },
 // ];
 
+interface Route {
+  id: string;
+  schedule_number: string;
+  route: string;
+  datetime: string;
+  code: string;
+  number: string;
+  depot: string;
+  main_image: string;
+}
+
 export function AssignedBusesSection() {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [routes, setroutes] = useState<unknown[]>([]);
+  const [routes, setroutes] = useState<Route[]>([]);
   const [loadmorecount, setloadmorecount] = useState(9);
 
   const [isLoading, setisLoading] = useState(false);
@@ -59,6 +70,8 @@ export function AssignedBusesSection() {
     };
     getdata();
   }, []);
+
+  console.log(routes);
 
   return (
     <section className="my-container my-24">
@@ -118,9 +131,7 @@ export function AssignedBusesSection() {
                       <RouteCard key={route?.id} route={route} />
                     ))
                 ) : (
-                  <div className="grid grid-cols-1">
-                    Data Not Found!..
-                  </div>
+                  <div className="grid grid-cols-1">Data Not Found!..</div>
                 )}
               </div>
 
