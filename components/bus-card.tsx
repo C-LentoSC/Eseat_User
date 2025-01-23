@@ -387,7 +387,7 @@ export function BusCard({
             {busType}
           </Badge>
 
-            <p className="text-gray-600 lg:mt-20 mt-10 pt-2">Depot Name</p>
+            <p className="text-gray-600 lg:mt-14 mt-10 pt-2">Depot Name</p>
             <p className="text-xl">Welisara</p>
           </div>
         </div>
