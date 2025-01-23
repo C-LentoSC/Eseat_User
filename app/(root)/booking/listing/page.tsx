@@ -14,6 +14,7 @@ const BookingListing = () => {
   const [date, setDate] = React.useState<Date>(new Date());
   const [from, setFrom] = React.useState("");
   const [to, setTo] = React.useState("");
+  const [passenger, setpassenger] = useState("");
 
   const currentUrl = window.location.href; // Get the current URL
   const url = new URL(currentUrl); // Create a URL object
@@ -23,6 +24,7 @@ const BookingListing = () => {
   const fromParam = searchParams.get("from") || "";
   const toParam = searchParams.get("to") || "";
   const dateParam = searchParams.get("date") || "";
+  const passengerParam = searchParams.get("passenger") || "";
 
   // console.log("from", fromParam, "to", toParam, "date", dateParam);
 
@@ -93,10 +95,12 @@ const BookingListing = () => {
         date1={dateParam}
         from={from ? from : fromParam}
         to={to ? to : toParam}
+        passenger={passenger ? passenger : passengerParam}
         date={date ? date : dateParam}
         setDate={setDate}
         setFrom={setFrom}
         setTo={setTo}
+        setpassenger={setpassenger}
         search={search}
       />
       <SearchResults alldata={alldata} isloading={isloading} />

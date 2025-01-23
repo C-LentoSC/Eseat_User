@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export function WelcomeSection() {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -21,6 +22,7 @@ export function WelcomeSection() {
   const [name, setname] = useState("");
   const [from, setfrom] = useState("");
   const [to, setto] = useState("");
+  const [passenger, setpassenger] = useState("");
 
   useEffect(() => {
     const toekn = localStorage.getItem("token");
@@ -49,9 +51,9 @@ export function WelcomeSection() {
   }, []);
 
   return (
-    <div className="w-full bg-[#F0FBFE] py-24">
+    <div className="w-full bg-[#F0FBFE] basic_search_bg py-24">
       <div className="my-container">
-        <h1 className="text-2xl font-semibold text-myColor2 mb-4">
+        <h1 className="text-3xl font-medium text-myColor2 mb-4">
           Hi, {name ? name : "__"}
         </h1>
         <p className="text-myColor2 mb-8 max-w-3xl">
@@ -63,8 +65,8 @@ export function WelcomeSection() {
         </p>
 
         <div className="flex flex-col md:flex-row md:items-end justify-center">
-          <div className="flex flex-col gap-10 md:flex-row md:items-end bg-white p-8">
-            <div className="flex gap-5 items-center border-e-2 border-[#a4b1bd] h-full">
+          <div className="flex flex-col gap-10 md:flex-row md:items-end lg:items-center bg-white p-8 rounded-[9px]">
+            <div className="flex gap-5 items-center lg:border-e-2 border-[#a4b1bd] h-full">
               <div className="text-left">
                 <label className="text-sm font-medium text-gray-500">
                   From / සිට / ஒரு
@@ -83,7 +85,7 @@ export function WelcomeSection() {
                 <ArrowLeftRight className="h-4 w-4 text-white" />
               </Button>
 
-              <div className="text-left ml-0 lg:ml-8">
+              <div className="text-left ml-0 lg:ml-8 pr-2">
                 <label className="text-sm font-medium text-gray-500">
                   To / දක්වා /வரை
                 </label>
@@ -95,7 +97,7 @@ export function WelcomeSection() {
               </div>
             </div>
 
-            <div className="flex flex-col border-e-2 border-[#a4b1bd] h-full">
+            <div className="flex flex-col lg:border-e-2 border-[#a4b1bd] h-full">
               <label className="text-sm font-medium text-gray-500">
                 Date / දිනය / தேதி
               </label>
@@ -104,8 +106,8 @@ export function WelcomeSection() {
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-full md:w-[200px] justify-start mt-0 pt-0 px-0 text-left font-normal bg-transparent border-0 shadow-none hover:bg-transparent hover:text-black",
-                      !date && "text-muted-foreground"
+                      "w-full md:w-[200px] justify-start mt-0 pt-2 px-0 text-left font-normal bg-transparent border-0 shadow-none hover:bg-transparent hover:text-black",
+                      !date && "text-black"
                     )}
                   >
                     {date ? format(date, "EEE, MMM dd") : "Select date"}
@@ -121,27 +123,37 @@ export function WelcomeSection() {
                 </PopoverContent>
               </Popover>
             </div>
-            <div className="flex flex-col h-full justify-start">
-              <label className="text-sm font-medium text-gray-500">
-                Passengers / මගීන් /பயணிகள்
-              </label>
-              <select className="flex h-9 w-full bg-transparent py-1 text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
-                <option value="" className="bg-white hover:bg-[#dd3170]">1 Passenger</option>
-                <option value="" className="bg-white hover:bg-[#dd3170]">2 Passenger</option>
-              </select>
+            <div className="flex gap-5 items-center h-full">
+              <div className="text-left">
+                <label className="text-sm font-medium text-gray-500">
+                  Passengers / මගීන් /பயணிகள்
+                </label>
+                <select
+                  className="flex w-full p-2 px-0 bg-transparent text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                  onChange={(e) => setpassenger(e.target.value)}
+                  value={passenger}
+                >
+                  <option value="1" className="bg-white">
+                    1 Passenger
+                  </option>
+                  <option value="2" className="bg-white">
+                    2 Passenger
+                  </option>
+                </select>
+              </div>
             </div>
 
             <Button
               className=" h-10 px-8"
               onClick={() => {
                 if (from == "") {
-                  alert("Please enter from location");
+                  toast.error("Please enter from location");
                 } else if (to == "") {
-                  alert("Please enter to location");
+                  toast.error("Please enter to location");
                 } else if (date == "" || date == null) {
-                  alert("Please select date");
+                  toast.error("Please select date");
                 } else {
-                  window.location.href = `/booking/listing?from=${from}&to=${to}&date=${date}`;
+                  window.location.href = `/booking/listing?from=${from}&to=${to}&date=${date}&passenger=${passenger}`;
                 }
               }}
             >

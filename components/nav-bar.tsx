@@ -8,6 +8,7 @@ import {
   Bus,
   FileBarChart,
   XCircle,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -39,6 +40,11 @@ const navItems: NavItem[] = [
     icon: FileBarChart,
   },
   {
+    title: "Send Tickets",
+    href: "/cb-report",
+    icon: LogOut,
+  },
+  {
     title: "Cancel Tickets",
     href: "/cancel-tickets",
     icon: XCircle,
@@ -51,7 +57,7 @@ export function NavBar() {
   return (
     <nav className="bg-[#F0FBFE] w-full border-b">
       <div className="my-container">
-        <div className="flex flex-wrap items-center justify-end gap-4 py-3 overflow-x-auto">
+        <div className="flex flex-wrap items-center justify-end gap-10 py-3 overflow-x-auto">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (

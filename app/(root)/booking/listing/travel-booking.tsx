@@ -20,9 +20,11 @@ export default function TravelBooking({
   date,
   from,
   to,
+  passenger,
   setDate,
   setFrom,
   setTo,
+  setpassenger,
   search,
 }) {
   // const [date, setDate] = React.useState<Date>(new Date(date1));
@@ -43,7 +45,7 @@ export default function TravelBooking({
   };
 
   return (
-    <div className="bg-bgMyColor6 py-24">
+    <div className="bg-bgMyColor6 basic_search_bg py-24">
       <div className="w-full my-container">
         <div className="bg-gray-700 text-white p-4 rounded-t-lg flex items-center justify-between max-w-3xl mx-auto">
           <div className="flex items-center gap-4">
@@ -79,76 +81,106 @@ export default function TravelBooking({
           </div>
         </div>
 
-        {isVisible && (
+        {!isVisible && (
           <>
-            <div className="bg-white p-6 rounded-lg shadow-lg transform duration-150">
-              <form onSubmit={handleSearch} className="flex gap-4">
-                <div className="flex-1 relative">
-                  <Input
-                    placeholder="Leaving from..."
-                    value={from}
-                    onChange={(e) => setFrom(e.target.value)}
-                    // value={from}
-                    // onChange={(e) => setFrom(e.target.value)}
-                    className="pl-4 h-full"
-                  />
+            <div>
+              <form
+                onSubmit={handleSearch}
+                className="flex gap-5 justify-center"
+              >
+                <div className="flex gap-10 bg-white p-6 rounded-lg shadow-lg transform duration-150">
+                  <div className="flex gap-5 items-center lg:border-e-2 border-[#a4b1bd] h-full">
+                    <div className="text-left">
+                      <label className="text-sm font-medium text-gray-500">
+                        From / සිට / ஒரு
+                      </label>
+                      <Input
+                        placeholder="Leaving from.."
+                        className="bg-transparent border-0 shadow-none mt-0 pt-0 px-0 w-32 text-black placeholder:text-black"
+                        onChange={(e) => setFrom(e.target.value)}
+                        value={from}
+                      />
+                    </div>
+
+                    <Button
+                      size="icon"
+                      className="hidden md:flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
+                      onClick={handleSwapLocations}
+                    >
+                      <ArrowLeftRight className="h-4 w-4 text-white" />
+                    </Button>
+
+                    <div className="text-left ml-0 lg:ml-8 pr-2">
+                      <label className="text-sm font-medium text-gray-500">
+                        To / දක්වා /வரை
+                      </label>
+                      <Input
+                        placeholder="Going to.."
+                        className="bg-transparent border-0 shadow-none mt-0 pt-0 text-black placeholder:text-black px-0 w-32 outline-none focus:ring-0"
+                        onChange={(e) => setTo(e.target.value)}
+                        value={to}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col lg:border-e-2 border-[#a4b1bd] h-full">
+                    <label className="text-sm font-medium text-gray-500">
+                      Date / දිනය / தேதி
+                    </label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "w-full md:w-[200px] justify-start mt-0 pt-2 px-0 text-left font-normal bg-transparent border-0 shadow-none hover:bg-transparent hover:text-black",
+                            !date && "text-black"
+                          )}
+                        >
+                          {date ? format(date, "EEE, MMM dd") : "Select date"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={date}
+                          onSelect={setDate}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <div className="flex gap-5 items-center h-full">
+                    <div className="text-left">
+                      <label className="text-sm font-medium text-gray-500">
+                        Passengers / මගීන් /பயணிகள்
+                      </label>
+                      <select
+                        className="flex w-full p-2 px-0 bg-transparent text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                        onChange={(e) => setpassenger(e.target.value)}
+                        value={passenger}
+                      >
+                        <option value="1" className="bg-white">
+                          1 Passenger
+                        </option>
+                        <option value="2" className="bg-white">
+                          2 Passenger
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
                   <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-0 top-0 text-primary h-full hover:text-white"
-                    onClick={handleSwapLocations}
+                    type="submit"
+                    className="py-6"
+                    onClick={() => {
+                      search();
+                      setisVisible(false);
+                    }}
                   >
-                    <ArrowLeftRight className="w-4 h-4" />
+                    <Search className="w-4 h-4 mr-2" />
+                    Search
                   </Button>
                 </div>
-
-                <div className="flex-1">
-                  <Input
-                    placeholder="Going to..."
-                    value={to}
-                    onChange={(e) => setTo(e.target.value)}
-                    // value={to}
-                    // onChange={(e) => setTo(e.target.value)}
-                    className="h-full"
-                  />
-                </div>
-
-                <div className="flex-1">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full justify-start text-left font-normal h-full",
-                          !date && "text-muted-foreground"
-                        )}
-                      >
-                        {date ? format(date, "EEE, MMM dd") : "Pick a date"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={(date) => date && setDate(date)}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-
-                <Button
-                  type="submit"
-                  className=" py-6"
-                  onClick={() => {
-                    search();
-                    setisVisible(false);
-                  }}
-                >
-                  <Search className="w-4 h-4 mr-2" />
-                  Search
-                </Button>
               </form>
             </div>
           </>
