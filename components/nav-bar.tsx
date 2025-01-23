@@ -85,10 +85,10 @@ export function NavBar() {
                 </div>
                 <span
                   className={cn(
-                    "text-xs font-medium whitespace-nowrap",
+                    "text-[13px] font-medium whitespace-nowrap",
                     isActive
                       ? "text-primary"
-                      : "text-gray-500 group-hover:text-primary"
+                      : "text-[#434A50] group-hover:text-primary"
                   )}
                 >
                   {item.title}

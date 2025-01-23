@@ -49,9 +49,9 @@ export default function TravelBooking({
       <div className="w-full my-container">
         <div className="bg-gray-700 text-white p-4 rounded-t-lg flex items-center justify-between max-w-3xl mx-auto">
           <div className="flex items-center gap-4">
-            <span>{from}</span>
+            <span>{from ? from : "__"}</span>
             <ArrowLeftRight className="w-4 h-4" />
-            <span>{to}</span>
+            <span>{to ? to : "__"}</span>
           </div>
           <div className="flex items-center gap-4">
             <span>{format(date, "yyyy-MM-dd")}</span>

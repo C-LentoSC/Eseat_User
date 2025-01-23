@@ -5,6 +5,7 @@ import TravelBooking from "./travel-booking";
 import { SearchResults } from "./search-results";
 import axios from "axios";
 import { format } from "date-fns";
+import toast from "react-hot-toast";
 
 interface BusData {
   id: number;
@@ -53,7 +54,14 @@ const BookingListing = () => {
         const date = searchParams.get("date") || "";
         const passenger = searchParams.get("passenger") || "";
 
-        setParams({ from, to, date, passenger });
+        if(from && to && date && passenger){
+          setParams({ from, to, date, passenger });
+        }else{
+          toast.error("Somthing Went Wrong.");
+          window.location.href = "/booking"
+        }
+
+        
       }
     } catch (error) {
       console.log(error);

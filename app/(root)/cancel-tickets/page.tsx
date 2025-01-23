@@ -19,7 +19,7 @@ const CancelTickets = () => {
     <div className="h-full w-full bg-hero-bg bg-contain flex flex-col py-10">
       {/* Main Container */}
       <div className="flex justify-center items-center w-full z-10 text-center my-container">
-        <div className="flex flex-row w-full items-start justify-center gap-5">
+        <div className="flex flex-col lg:flex-row w-full items-start justify-center gap-5">
           <div className="flex flex-col w-full">
             <form
               onSubmit={handleSubmit}
@@ -133,7 +133,7 @@ const CancelTickets = () => {
             </form>
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg p-8 w-[55%]  border border-gray-200">
+          <div className="bg-white rounded-lg shadow-lg p-8 w-[100%] lg:w-[55%]  border border-gray-200">
             <h2 className="text-xl font-medium font-sans text-left text-[#434a50] mb-4">
               Cancellation Policy
             </h2>

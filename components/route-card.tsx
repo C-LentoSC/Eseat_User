@@ -42,15 +42,29 @@ interface RouteCardProps {
 
 export function RouteCard({ route, className }: RouteCardProps) {
   const routeInfo = [
-    { icon: <MapPin className="h-4 w-4 text-myColor1" />, text: route?.route },
+    {
+      icon: (
+        <img src="/assets/location.svg" alt="location" className="w-4 h-4" />
+      ),
+      text: route?.route,
+    },
     // { icon: <Clock className="h-4 w-4 text-myColor1" />, text: route.datetime },
     {
-      icon: <Code className="h-4 w-4 text-myColor1" />,
+      icon: (
+        <img
+          src="/assets/shedulenumber.svg"
+          alt="location"
+          className="w-4 h-4"
+        />
+      ),
       text: route?.schedule_number,
     },
-    { icon: <Bus className="h-4 w-4 text-myColor1" />, text: route?.number },
     {
-      icon: <Building2 className="h-4 w-4 text-myColor1" />,
+      icon: <img src="/assets/number.svg" alt="location" className="w-4 h-4" />,
+      text: route?.number,
+    },
+    {
+      icon: <img src="/assets/depot.svg" alt="location" className="w-4 h-4" />,
       text: route.depot,
     },
   ];

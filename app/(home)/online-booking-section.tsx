@@ -10,14 +10,14 @@ export default function OnlineBookingSection() {
         <div className="grid gap-8 md:grid-cols-2 md:gap-12 lg:gap-16 items-center">
           <div className="space-y-6">
             <div className="space-y-4">
-              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl text-myColor2">
+              <h2 className="text-2xl font-medium tracking-tight md:text-3xl text-myColor2">
                 Why join Online Booking?
               </h2>
               <ul className="space-y-2 text-sm text-muted-foreground md:text-base">
-                <li>Faster booking and checkout</li>
+                <li className="text-lg">Faster booking and checkout</li>
                 <li>Manage and cancel your trips with ease</li>
-                <li>Get access to your booking information</li>
-                <li>Save up to 3 passengers to your account!</li>
+                <li>Save your payment method and billing information</li>
+                <li>Save up to 5 passengers to your account!</li>
               </ul>
             </div>
             <Button size="lg"><Link href={"/booking"}>Join With Us</Link></Button>

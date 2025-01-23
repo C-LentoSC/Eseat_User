@@ -1,5 +1,7 @@
+"use client";
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 // import {
 //   DropdownMenu,
 //   DropdownMenuContent,
@@ -9,10 +11,37 @@ import { Button } from "@/components/ui/button";
 // import { Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Header() {
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+  const [name, setName] = useState<string>("");
+  const [namest, setNamest] = useState<boolean>(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setNamest(localStorage.getItem("token") ? true : false);
+
+    const getData = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}info`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setName(res?.data?.name || "");
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getData();
+  }, []);
+
   return (
-    <header className="w-full bg-white">
+    <header className="w-full bg-[#f0fbfe]">
       <div className="my-container flex items-center justify-between px-4 min-h-[100px]">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2">
@@ -45,33 +74,47 @@ export default function Header() {
         </div>
 
         <nav className="flex items-center gap-4 md:gap-6">
-          <div className="hidden gap-4 md:flex ">
+          <div className="hidden gap-4 md:flex">
             <Button
               variant="link"
               size="sm"
-              className="text-myColor2 font-medium"
+              className="text-myColor2 font-medium text-[14px]"
             >
               Sinhala
             </Button>
             <Button
               variant="link"
               size="sm"
-              className="text-myColor2 font-medium"
+              className="text-myColor2 font-medium text-[14px]"
             >
               Help
             </Button>
-            <Button
-              variant="link"
-              size="sm"
-              className="text-myColor2 font-medium"
-            >
-              <img
-                src="/assets/auser.jpg"
-                alt=""
-                className="w-7 h-7 rounded-full"
-              />
-              Sithija
-            </Button>
+            {namest ? (
+              <>
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="text-myColor2 font-medium text-[14px]"
+                >
+                  <img
+                    src="/assets/auser.jpg"
+                    alt=""
+                    className="w-7 h-7 rounded-full"
+                  />
+                  {name ? name : "__"}
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="text-myColor2 font-medium text-[14px]"
+                >
+                  Sign In
+                </Button>
+              </>
+            )}
           </div>
 
           {/* <DropdownMenu>

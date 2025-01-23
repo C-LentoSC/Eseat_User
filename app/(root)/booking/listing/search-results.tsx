@@ -42,8 +42,8 @@ export function SearchResults({ alldata, isloading }: any) {
             <h2 className="text-lg font-semibold text-gray-900">
               SELECT YOUR TRIP
             </h2>
-            {alldata?.length > 0 && (
-              <p className="text-sm text-gray-500">{alldata?.length} Results</p>
+            {Array.isArray(alldata) ? alldata : Object.values(alldata)?.length > 0 && (
+              <p className="text-sm text-gray-500">{Array.isArray(alldata) ? alldata : Object.values(alldata)?.length} Results</p>
             )}
           </div>
 

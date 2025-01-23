@@ -204,7 +204,11 @@ export default function BusCarousel() {
                             <div className="space-y-2.5 p-3">
                               <div className="flex items-center gap-2 text-sm">
                                 <div className=" bg-bgMyColor7 h-8 w-8 flex items-center justify-center rounded-full overflow-hidden">
-                                  <MapPin className="h-4 w-4 text-myColor1" />
+                                  <img
+                                    src="/assets/location.svg"
+                                    alt="location"
+                                    className="w-4 h-4"
+                                  />
                                 </div>
                                 <span className="font-medium text-myColor2">
                                   {route.route}
@@ -212,7 +216,11 @@ export default function BusCarousel() {
                               </div>
                               <div className="flex items-center gap-2 text-sm">
                                 <div className=" bg-bgMyColor7 h-8 w-8 flex items-center justify-center rounded-full overflow-hidden">
-                                  <Code className="h-4 w-4 text-myColor1" />
+                                  <img
+                                    src="/assets/shedulenumber.svg"
+                                    alt="location"
+                                    className="w-4 h-4"
+                                  />
                                 </div>
                                 <span className="text-myColor2">
                                   {route.schedule_number}
@@ -220,7 +228,11 @@ export default function BusCarousel() {
                               </div>
                               <div className="flex items-center gap-2 text-sm">
                                 <div className=" bg-bgMyColor7 h-8 w-8 flex items-center justify-center rounded-full overflow-hidden">
-                                  <Bus className="h-4 w-4 text-myColor1" />
+                                  <img
+                                    src="/assets/number.svg"
+                                    alt="location"
+                                    className="w-4 h-4"
+                                  />
                                 </div>
                                 <span className="text-myColor2">
                                   {route.number}
@@ -228,7 +240,11 @@ export default function BusCarousel() {
                               </div>
                               <div className="flex items-center gap-2 text-sm">
                                 <div className=" bg-bgMyColor7 h-8 w-8 flex items-center justify-center rounded-full overflow-hidden">
-                                  <Building2 className="h-4 w-4 text-myColor1" />
+                                  <img
+                                    src="/assets/depot.svg"
+                                    alt="location"
+                                    className="w-4 h-4"
+                                  />
                                 </div>
                                 <span className="text-myColor2">
                                   {route.depot}

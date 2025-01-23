@@ -108,7 +108,8 @@ export function AssignedBusesSection() {
         <>
           {routes.length > 0 ? (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <span className="text-[#d91b5c] font-medium text-base flex gap-2 items-center">Drag and Drop 6 Busses <img src="/assets/download.svg" alt="download" className="w-4 h-4" /></span>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
                 {routes
                   ?.slice(0, loadmorecount)
                   ?.filter((route) =>

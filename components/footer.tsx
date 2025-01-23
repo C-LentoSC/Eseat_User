@@ -109,7 +109,7 @@ export default function Footer() {
                 target="_blank"
                 className="text-muted-foreground hover:text-primary flex items-center gap-1"
               >
-                <Facebook className="h-5 w-5" />
+                <Facebook className="h-5 w-5 border-2 rounded-md border-gray-500 hover:border-[#da1b8f]" />
                 <span className="">Facebook</span>
               </Link>
               <Link
@@ -117,7 +117,7 @@ export default function Footer() {
                 target="_blank"
                 className="text-muted-foreground hover:text-primary flex items-center gap-1"
               >
-                <Twitter className="h-5 w-5" />
+                <Twitter className="h-5 w-5 border-2 rounded-md border-gray-500 hover:border-[#da1b8f]" />
                 <span className="">Twitter</span>
               </Link>
             </div>

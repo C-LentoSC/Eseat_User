@@ -56,7 +56,7 @@ function Seat({ number, status = "available", onClick, className }: SeatProps) {
       aria-label={`Seat ${number} - ${status}`}
     >
       <SeatIcon />
-      <span className="absolute left-1/2 bottom-2 md:bottom-4 -translate-x-1/2 text-[10px] md:text-xs font-medium text-white">
+      <span className="absolute left-1/3 bottom-2 md:bottom-4 -translate-x-1/2 text-[10px] md:text-xs font-medium text-white">
         {number}
       </span>
     </div>
