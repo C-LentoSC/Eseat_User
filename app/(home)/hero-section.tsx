@@ -59,7 +59,7 @@ export function HeroSection() {
       }
     } catch (error) {
       console.error(error);
-      toast.error(error?.response?.data?.message);
+      // toast.error(error?.response?.data?.message);
       setIsloading(false);
     }
   }
@@ -80,7 +80,7 @@ export function HeroSection() {
         </div>
 
         <div className="flex items-center justify-center lg:justify-end">
-          <Card className="w-full max-w-md xl:max-w-lg shadow-lg border-0 p-5">
+          <Card className="w-full max-w-md xl:max-w-lg shadow-lg border-0 p-">
             <CardHeader>
               <CardTitle className="text-xl text-center text-myColor2">
                 Login to your account

@@ -25,7 +25,7 @@ export function AssignedBusesSection() {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [routes, setroutes] = useState<any[]>([]);
+  const [routes, setroutes] = useState<unknown[]>([]);
   const [loadmorecount, setloadmorecount] = useState(9);
 
   const [isLoading, setisLoading] = useState(false);
