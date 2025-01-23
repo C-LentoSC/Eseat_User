@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function OnlineBookingSection() {
   return (
@@ -19,7 +20,7 @@ export default function OnlineBookingSection() {
                 <li>Save up to 3 passengers to your account!</li>
               </ul>
             </div>
-            <Button size="lg">Join With Us</Button>
+            <Button size="lg"><Link href={"/booking"}>Join With Us</Link></Button>
           </div>
           <div className="relative flex items-center justify-center">
             <div className="relative aspect-square w-full max-w-[400px]">

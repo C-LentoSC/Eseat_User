@@ -77,7 +77,7 @@ export function BusSeatLayout({
     const row = [];
     for (let j = 0; j < cols; j++) {
       const index = i * cols + j;
-      const seat = seats[index];
+      const seat = seats?.[index];
 
       if (seat) {
         row.push(

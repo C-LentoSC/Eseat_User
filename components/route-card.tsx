@@ -1,5 +1,7 @@
 import Image from "next/image";
-import { MapPin, Clock, Code, Bus, Building2 } from "lucide-react";
+import { MapPin,
+  //  Clock,
+    Code, Bus, Building2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Route } from "@/types/route";
 import { cn } from "@/lib/utils";
@@ -25,15 +27,17 @@ interface RouteCardProps {
 
 export function RouteCard({ route, className }: RouteCardProps) {
   const routeInfo = [
-    { icon: <MapPin className="h-4 w-4 text-myColor1" />, text: route.route },
-    { icon: <Clock className="h-4 w-4 text-myColor1" />, text: route.datetime },
-    { icon: <Code className="h-4 w-4 text-myColor1" />, text: route.code },
-    { icon: <Bus className="h-4 w-4 text-myColor1" />, text: route.busNumber },
+    { icon: <MapPin className="h-4 w-4 text-myColor1" />, text: route?.route },
+    // { icon: <Clock className="h-4 w-4 text-myColor1" />, text: route.datetime },
+    { icon: <Code className="h-4 w-4 text-myColor1" />, text: route?.schedule_number },
+    { icon: <Bus className="h-4 w-4 text-myColor1" />, text: route?.number },
     {
       icon: <Building2 className="h-4 w-4 text-myColor1" />,
       text: route.depot,
     },
   ];
+
+  // console.log(route);
 
   return (
     <Card className={cn("shadow-none border", className)}>
@@ -41,7 +45,7 @@ export function RouteCard({ route, className }: RouteCardProps) {
         <div className="space-y-4">
           <div className="relative aspect-[4/3] overflow-hidden rounded-t-lg">
             <Image
-              src={route.image}
+              src={route?.main_image}
               alt={route.route}
               fill
               className="object-cover"

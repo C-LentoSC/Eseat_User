@@ -2,8 +2,11 @@
 
 import { BusCard } from "@/components/bus-card";
 import { Button } from "@/components/ui/button";
+import LoadingAnimation from "@/components/ui/Loading";
+import axios from "axios";
+import { format } from "date-fns";
 import { Clock, Users, DollarSign } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface SortOption {
   id: string;
@@ -26,7 +29,7 @@ const sortOptions: SortOption[] = [
   { id: "rate", label: "Rate", icon: <DollarSign className="w-4 h-4" /> },
 ];
 
-export function SearchResults() {
+export function SearchResults({ alldata , isloading }) {
   const [activeSort, setActiveSort] = useState("departure");
 
   return (
@@ -37,7 +40,9 @@ export function SearchResults() {
             <h2 className="text-lg font-semibold text-gray-900">
               SELECT YOUR TRIP
             </h2>
-            <p className="text-sm text-gray-500">24 Results</p>
+            {alldata?.length > 0 && (
+              <p className="text-sm text-gray-500">{alldata?.length} Results</p>
+            )}
           </div>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-3 lg:mt-0">
@@ -64,30 +69,83 @@ export function SearchResults() {
 
         {/* Results list will be added here when we have the data structure */}
         <div className="space-y-4 py-8">
-          {Array.from({ length: 3 }).map((_, index) => (
-            <BusCard
-              key={index}
-              image="/assets/bus.png"
-              arrival={{
-                time: "15.00 PM",
-                location: "Colombo",
-              }}
-              departure={{
-                time: "01.00 AM",
-                location: "Jaffna",
-              }}
-              booking={{
-                startDate: "2024-12-17",
-                startTime: "15:00",
-                endTime: "14:00",
-              }}
-              busType="Normal"
-              depotName="Welisara"
-              price={1350.5}
-              duration={10}
-              availableSeats={42}
-            />
-          ))}
+          {isloading ? (
+            <LoadingAnimation />
+          ) : (
+            <>
+              {alldata?.length > 0 ? (
+                <>
+                  {alldata
+                    ?.sort((a, b) => {
+                      const formatTime = (time: string) => {
+                        const defaultDate = "2025-01-01"; // Ensure valid date format
+                        return new Date(`${defaultDate} ${time}`).getTime();
+                      };
+
+                      switch (activeSort) {
+                        case "departure":
+                          return (
+                            formatTime(
+                              a.scheduleData?.start_time || "00:00:00"
+                            ) -
+                            formatTime(b.scheduleData?.start_time || "00:00:00")
+                          );
+                        case "arrival":
+                          return (
+                            formatTime(a.scheduleData?.end_time || "00:00:00") -
+                            formatTime(b.scheduleData?.end_time || "00:00:00")
+                          );
+                        case "seats":
+                          return (
+                            (b.availableSeats?.length || 0) -
+                            (a.availableSeats?.length || 0)
+                          );
+                        case "rate":
+                          return (
+                            (a.scheduleData?.price || 0) -
+                            (b.scheduleData?.price || 0)
+                          );
+                        default:
+                          return 0;
+                      }
+                    })
+                    .map((data) => (
+                      <BusCard
+                        key={data.id}
+                        id={data.id}
+                        image={data.main_image}
+                        arrival={{
+                          time: data.scheduleData?.end_time,
+                          location: data.to?.name,
+                        }}
+                        departure={{
+                          time: data.scheduleData?.start_time,
+                          location: data.from?.name,
+                        }}
+                        booking={{
+                          startDate: data.scheduleData?.startDate,
+                          startTime: data.scheduleData?.start_time,
+                          endTime: data.scheduleData?.end_time,
+                        }}
+                        busType={data.type}
+                        depotName={data.depot?.name}
+                        price={data.scheduleData?.price}
+                        duration={data.scheduleData?.duration}
+                        availableSeats={data.availableSeats?.length}
+                        fasility={data.facilities}
+                        boardingDropping={data.fare_point}
+                      />
+                    ))}
+                </>
+              ) : (
+                <div>
+                  <h2 className="text-lg font-medium text-gray-400">
+                    No results found
+                  </h2>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>

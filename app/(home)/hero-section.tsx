@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
+// import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,9 +19,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
 import { Label } from "@/components/ui/label";
+import axios from "axios";
 
 export function HeroSection() {
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
   const [showPassword, setShowPassword] = useState(false);
+  const [isloading, setIsloading] = useState(false);
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -31,7 +37,31 @@ export function HeroSection() {
 
   async function onSubmit(data: LoginFormData) {
     // Handle login submission here
-    console.log(data);
+
+    setIsloading(true);
+
+    const formdata = new FormData();
+    formdata.append("username", data.email);
+    formdata.append("password", data.password);
+
+    try {
+      const res = await axios.post(`${BASE_URL}sign-in`, formdata, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (res?.data?.token) {
+        // console.log("successful.");
+        localStorage.setItem("token", res?.data?.token);
+
+        window.location.href = "/booking";
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error?.response?.data?.message);
+      setIsloading(false);
+    }
   }
 
   return (
@@ -50,7 +80,7 @@ export function HeroSection() {
         </div>
 
         <div className="flex items-center justify-center lg:justify-end">
-          <Card className="w-full max-w-md xl:max-w-lg shadow-lg border-0">
+          <Card className="w-full max-w-md xl:max-w-lg shadow-lg border-0 p-5">
             <CardHeader>
               <CardTitle className="text-xl text-center text-myColor2">
                 Login to your account
@@ -68,13 +98,13 @@ export function HeroSection() {
                     render={({ field }) => (
                       <FormItem>
                         <Label htmlFor="email" className=" text-myColor2">
-                          Email
+                          Username
                         </Label>
                         <FormControl>
                           <Input
-                            placeholder="example@gmail.com"
+                            placeholder="Enter Your Username"
                             className="py-5"
-                            type="email"
+                            type="text"
                             {...field}
                           />
                         </FormControl>
@@ -87,9 +117,21 @@ export function HeroSection() {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <Label htmlFor="password" className=" text-myColor2">
-                          Password
-                        </Label>
+                        <div className="flex justify-between items-center">
+                          <Label htmlFor="password" className=" text-myColor2">
+                            Password
+                          </Label>
+                          <Button
+                            variant="link"
+                            type="button"
+                            className="p-0"
+                            onClick={() => {
+                              toast.error("Service Not Available.");
+                            }}
+                          >
+                            Forgot?
+                          </Button>
+                        </div>
                         <div className="relative">
                           <FormControl>
                             <Input
@@ -121,14 +163,16 @@ export function HeroSection() {
                     )}
                   />
                   <div className="flex items-center justify-between">
-                    <Button type="submit" className="w-full py-5 mt-5">
-                      Login now
-                    </Button>
-                  </div>
-                  <div className="text-right">
-                    <Button variant="link" className="p-0">
-                      Forgot?
-                    </Button>
+                    {isloading ? (
+                      <Button disabled className="w-full py-5 mt-5">
+                        Login now
+                        <div className="w-5 h-5 border-4 border-t-4 border-gray-300 border-t-blue-500 animate-spin rounded-full"></div>
+                      </Button>
+                    ) : (
+                      <Button type="submit" className="w-full py-5 mt-5">
+                        Login now
+                      </Button>
+                    )}
                   </div>
                 </form>
               </Form>

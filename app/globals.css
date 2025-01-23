@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 /* Custom scrollbar for the navigation */
 .overflow-x-auto {
   scrollbar-width: none;

@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="bg-bgMyColor7 pt-24 pb-8 md:pb-12">
       <div className="my-container">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
           {/* Links Section */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold uppercase">Links</h3>
@@ -78,48 +78,54 @@ export default function Footer() {
           </div>
 
           {/* SLTB Info */}
-          <div className="space-y-4">
-            <img
-              src="/logos/sltb_logo2.svg"
-              alt="Sri Lanka Transport Board"
-              className="h-10"
-            />
-            <div className="space-y-2 text-sm text-muted-foreground">
-              <p className="font-medium">Sri Lanka Transport Board</p>
-              <p>No. 200, Kirula Road, Colombo 5</p>
-              <p>+94 (0) 11 2589683 | info@sltb.lk</p>
+          <div className="space-y-4 flex justify-center">
+            <div className="space-y-4">
+              <img
+                src="/logos/sltb_logo2.svg"
+                alt="Sri Lanka Transport Board"
+                className="h-10"
+              />
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <p className="font-medium">Sri Lanka Transport Board</p>
+                <p>No. 200, Kirula Road, Colombo 5</p>
+                <p>+94 (0) 11 2589683 | info@sltb.lk</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Social Info */}
+          <div className="space-y-4 flex justify-center">
+            <div className="flex flex-col">
+              <Link
+                href="#"
+                target="_blank"
+                className="text-muted-foreground hover:text-primary flex items-center gap-1"
+              >
+                <Instagram className="h-5 w-5" />
+                <span className="">Instagram</span>
+              </Link>
+              <Link
+                href="#"
+                target="_blank"
+                className="text-muted-foreground hover:text-primary flex items-center gap-1"
+              >
+                <Facebook className="h-5 w-5" />
+                <span className="">Facebook</span>
+              </Link>
+              <Link
+                href="#"
+                target="_blank"
+                className="text-muted-foreground hover:text-primary flex items-center gap-1"
+              >
+                <Twitter className="h-5 w-5" />
+                <span className="">Twitter</span>
+              </Link>
             </div>
           </div>
         </div>
 
         {/* Social Links & App Downloads */}
-        <div className="mt-8 flex flex-col items-center justify-between gap-4 pt-8 md:flex-row">
-          <div className="flex space-x-4">
-            <Link
-              href="#"
-              target="_blank"
-              className="text-muted-foreground hover:text-primary"
-            >
-              <Instagram className="h-5 w-5" />
-              <span className="sr-only">Instagram</span>
-            </Link>
-            <Link
-              href="#"
-              target="_blank"
-              className="text-muted-foreground hover:text-primary"
-            >
-              <Facebook className="h-5 w-5" />
-              <span className="sr-only">Facebook</span>
-            </Link>
-            <Link
-              href="#"
-              target="_blank"
-              className="text-muted-foreground hover:text-primary"
-            >
-              <Twitter className="h-5 w-5" />
-              <span className="sr-only">Twitter</span>
-            </Link>
-          </div>
+        {/* <div className="mt-8 flex flex-col items-center justify-between gap-4 pt-8 md:flex-row">
           <div className="flex space-x-4">
             <Link href="#" target="_blank" className="block">
               <img
@@ -136,12 +142,14 @@ export default function Footer() {
               />
             </Link>
           </div>
-        </div>
+        </div> */}
 
         {/* Bottom Bar */}
         <div className="mt-8 border-t pt-8">
           <div className="flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground md:flex-row">
-            <p>© 2024 eseat.lk. All rights reserved</p>
+            <div className="flex items-center space-x-4">
+              <p>© 2024 eseat.lk. All rights reserved</p>
+            </div>
             <div className="flex items-center space-x-4">
               <Link href="#" className="hover:text-primary">
                 Terms of use
@@ -153,6 +161,22 @@ export default function Footer() {
               <Separator orientation="vertical" className="h-4" />
               <Link href="#" className="hover:text-primary">
                 Refund policy
+              </Link>
+            </div>
+            <div className="flex space-x-4">
+              <Link href="#" target="_blank" className="block">
+                <img
+                  src="/assets/applestore.png"
+                  alt="Download on the App Store"
+                  className="h-10"
+                />
+              </Link>
+              <Link href="#" target="_blank" className="block">
+                <img
+                  src="/assets/playstore.png"
+                  alt="Get it on Google Play"
+                  className="h-10"
+                />
               </Link>
             </div>
           </div>

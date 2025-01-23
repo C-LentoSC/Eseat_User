@@ -13,10 +13,23 @@ import {
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
-export default function TravelBooking() {
-  const [date, setDate] = React.useState<Date>(new Date());
-  const [from, setFrom] = React.useState("Colombo");
-  const [to, setTo] = React.useState("Jaffna");
+export default function TravelBooking({
+  from1,
+  to1,
+  date1,
+  date,
+  from,
+  to,
+  setDate,
+  setFrom,
+  setTo,
+  search,
+}) {
+  // const [date, setDate] = React.useState<Date>(new Date(date1));
+  // const [from, setFrom] = React.useState(from1);
+  // const [to, setTo] = React.useState(to1);
+
+  const [isVisible, setisVisible] = React.useState(false);
 
   const handleSwapLocations = () => {
     const temp = from;
@@ -40,69 +53,106 @@ export default function TravelBooking() {
           </div>
           <div className="flex items-center gap-4">
             <span>{format(date, "yyyy-MM-dd")}</span>
-            <Button size="sm">Modify</Button>
+            {isVisible ? (
+              <>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setisVisible(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setisVisible(true);
+                  }}
+                >
+                  Modify
+                </Button>
+              </>
+            )}
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <form onSubmit={handleSearch} className="flex gap-4">
-            <div className="flex-1 relative">
-              <Input
-                placeholder="Leaving from..."
-                value={from}
-                onChange={(e) => setFrom(e.target.value)}
-                className="pl-4 h-full"
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="absolute right-0 top-0 text-primary h-full hover:text-white"
-                onClick={handleSwapLocations}
-              >
-                <ArrowLeftRight className="w-4 h-4" />
-              </Button>
-            </div>
-
-            <div className="flex-1">
-              <Input
-                placeholder="Going to..."
-                value={to}
-                onChange={(e) => setTo(e.target.value)}
-                className="h-full"
-              />
-            </div>
-
-            <div className="flex-1">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal h-full",
-                      !date && "text-muted-foreground"
-                    )}
-                  >
-                    {date ? format(date, "EEE, MMM dd") : "Pick a date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={(date) => date && setDate(date)}
-                    initialFocus
+        {isVisible && (
+          <>
+            <div className="bg-white p-6 rounded-lg shadow-lg transform duration-150">
+              <form onSubmit={handleSearch} className="flex gap-4">
+                <div className="flex-1 relative">
+                  <Input
+                    placeholder="Leaving from..."
+                    value={from}
+                    onChange={(e) => setFrom(e.target.value)}
+                    // value={from}
+                    // onChange={(e) => setFrom(e.target.value)}
+                    className="pl-4 h-full"
                   />
-                </PopoverContent>
-              </Popover>
-            </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-0 top-0 text-primary h-full hover:text-white"
+                    onClick={handleSwapLocations}
+                  >
+                    <ArrowLeftRight className="w-4 h-4" />
+                  </Button>
+                </div>
 
-            <Button type="submit" className=" py-6">
-              <Search className="w-4 h-4 mr-2" />
-              Search
-            </Button>
-          </form>
-        </div>
+                <div className="flex-1">
+                  <Input
+                    placeholder="Going to..."
+                    value={to}
+                    onChange={(e) => setTo(e.target.value)}
+                    // value={to}
+                    // onChange={(e) => setTo(e.target.value)}
+                    className="h-full"
+                  />
+                </div>
+
+                <div className="flex-1">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal h-full",
+                          !date && "text-muted-foreground"
+                        )}
+                      >
+                        {date ? format(date, "EEE, MMM dd") : "Pick a date"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={(date) => date && setDate(date)}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                <Button
+                  type="submit"
+                  className=" py-6"
+                  onClick={() => {
+                    search();
+                    setisVisible(false);
+                  }}
+                >
+                  <Search className="w-4 h-4 mr-2" />
+                  Search
+                </Button>
+              </form>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

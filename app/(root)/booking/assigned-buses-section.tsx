@@ -1,72 +1,64 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RouteCard } from "@/components/route-card";
+// import { get } from "http";
+import axios from "axios";
+import LoadingAnimation from "@/components/ui/Loading";
 
-// Sample data - in a real app this would come from an API
-const routes = [
-  {
-    id: "1",
-    image: "/assets/busimage.jpeg",
-    route: "Colombo to Jaffna",
-    datetime: "2024-12-16 | 10:00 PM",
-    code: "WS15-1800-P",
-    busNumber: "#99 via Matulalum",
-    depot: "Depot Wellawta",
-  },
-  // Duplicate the same route 5 more times for the grid
-  {
-    id: "2",
-    image: "/assets/busimage.jpeg",
-    route: "Colombo to Jaffna",
-    datetime: "2024-12-16 | 10:00 PM",
-    code: "WS15-1800-P",
-    busNumber: "#99 via Matulalum",
-    depot: "Depot Wellawta",
-  },
-  {
-    id: "3",
-    image: "/assets/busimage.jpeg",
-    route: "Colombo to Jaffna",
-    datetime: "2024-12-16 | 10:00 PM",
-    code: "WS15-1800-P",
-    busNumber: "#99 via Matulalum",
-    depot: "Depot Wellawta",
-  },
-  {
-    id: "4",
-    image: "/assets/busimage.jpeg",
-    route: "Colombo to Jaffna",
-    datetime: "2024-12-16 | 10:00 PM",
-    code: "WS15-1800-P",
-    busNumber: "#99 via Matulalum",
-    depot: "Depot Wellawta",
-  },
-  {
-    id: "5",
-    image: "/assets/busimage.jpeg",
-    route: "Colombo to Jaffna",
-    datetime: "2024-12-16 | 10:00 PM",
-    code: "WS15-1800-P",
-    busNumber: "#99 via Matulalum",
-    depot: "Depot Wellawta",
-  },
-  {
-    id: "6",
-    image: "/assets/busimage.jpeg",
-    route: "Colombo to Jaffna",
-    datetime: "2024-12-16 | 10:00 PM",
-    code: "WS15-1800-P",
-    busNumber: "#99 via Matulalum",
-    depot: "Depot Wellawta",
-  },
-];
+// const routes = [
+//   {
+//     id: "1",
+//     image: "/assets/busimage.jpeg",
+//     route: "Colombo to Jaffna",
+//     datetime: "2024-12-16 | 10:00 PM",
+//     code: "WS15-1800-P",
+//     busNumber: "#99 via Matulalum",
+//     depot: "Depot Wellawta",
+//   },
+// ];
 
 export function AssignedBusesSection() {
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [routes, setroutes] = useState<any[]>([]);
+  const [loadmorecount, setloadmorecount] = useState(9);
+
+  const [isLoading, setisLoading] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      window.location.href = "/";
+      return;
+    }
+
+    setisLoading(true);
+
+    const getdata = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}get-available-buses`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        console.log(res);
+        setroutes(res?.data);
+        setisLoading(false);
+      } catch (error) {
+        console.error(error);
+        setisLoading(false);
+      }
+    };
+    getdata();
+  }, []);
 
   return (
     <section className="my-container my-24">
@@ -86,22 +78,67 @@ export function AssignedBusesSection() {
             type="search"
             placeholder="Search Bus Schedule"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+            }}
             className="pl-10"
           />
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {routes.map((route) => (
-          <RouteCard key={route.id} route={route} />
-        ))}
-      </div>
+      {isLoading ? (
+        <>
+          <LoadingAnimation />
+        </>
+      ) : (
+        <>
+          {routes.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {routes
+                  ?.slice(0, loadmorecount)
+                  ?.filter((route) =>
+                    searchQuery
+                      ? route?.schedule_number
+                          ?.toLowerCase()
+                          .includes(searchQuery.toLowerCase())
+                      : true
+                  ).length > 0 ? (
+                  routes
+                    ?.slice(0, loadmorecount)
+                    ?.filter((route) =>
+                      searchQuery
+                        ? route?.schedule_number
+                            ?.toLowerCase()
+                            .includes(searchQuery.toLowerCase())
+                        : true
+                    )
+                    ?.map((route) => (
+                      <RouteCard key={route?.id} route={route} />
+                    ))
+                ) : (
+                  <div className="grid grid-cols-1">
+                    Data Not Found!..
+                  </div>
+                )}
+              </div>
 
-      <div className="flex justify-center mt-8">
-        <Button>Load More</Button>
-      </div>
+              {routes?.length > loadmorecount && (
+                <>
+                  <div className="flex justify-center mt-8">
+                    <Button onClick={() => setloadmorecount(loadmorecount + 9)}>
+                      Load More
+                    </Button>
+                  </div>
+                </>
+              )}
+            </>
+          ) : (
+            <div className="flex justify-center mt-8">Data Not Found!..</div>
+          )}
+        </>
+      )}
     </section>
   );
 }
