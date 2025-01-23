@@ -1,7 +1,13 @@
 "use client";
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@radix-ui/react-popover";
 import axios from "axios";
+import { ChevronDown } from "lucide-react";
 // import {
 //   DropdownMenu,
 //   DropdownMenuContent,
@@ -101,7 +107,30 @@ export default function Header() {
                     alt=""
                     className="w-7 h-7 rounded-full"
                   />
-                  {name ? name : "__"}
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className=" bg-transparent border-none shadow-none hover:bg-transparent hover:text-gray-500 px-0"
+                      >
+                        {name ? name : "__"}
+                        <ChevronDown className="ml-2 h-4 w-4" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="bg-white rounded-lg w-[150px] p-1">
+                      <div className="space-y-2">
+                        <div className="text-sm cursor-pointer hover:bg-[#dd3170] p-1 rounded-lg hover:text-white" onClick={()=>{
+                          localStorage.removeItem("token");
+                        }}>
+                          Log out
+                        </div>
+
+                        {/* <div className="text-sm">Kadawatha</div>
+                <div className="text-sm">Kurunegala</div> */}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </Button>
               </>
             ) : (

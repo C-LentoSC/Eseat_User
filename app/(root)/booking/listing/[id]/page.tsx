@@ -19,6 +19,7 @@ import { ArrowLeft } from "lucide-react";
 import { BusSeatLayout, BusSeatLayoutSM } from "@/components/bus-seat-layout";
 import axios from "axios";
 import { FareSummary } from "@/components/fare-summary";
+import LoadingAnimation from "@/components/ui/Loading";
 
 // Define types for data structures
 interface SeatData {
@@ -65,52 +66,96 @@ export default function BookingPage({
 
   const [alldata, setAlldata] = useState<Alldata | null>(null);
 
-  console.error(alldata?.allSeats?.length);
+  const [seatcount, setseatcount] = useState<number>(0);
 
-  const [seats, setSeats] = useState(
-    Array(54)
-      .fill(null)
-      .map((_, index) => ({
-        number: index + 1,
-        status: (index % 4 === 0 ? "booked" : "available") as
-          | "booked"
-          | "available"
-          | "processing"
-          | "selected",
-      }))
-  );
+  const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
 
-  const seatData: SeatData[] =
-    alldata?.allSeats?.map((seat) => ({
-      number: parseInt(seat.seat_no, 10),
-      status: seat.isBooked
-        ? "booked"
-        : seat.isBlocked
-        ? "processing"
-        : "available",
-    })) || [];
+  const [isLoading, setisLoading] = useState<boolean>(false);
+
+  const [pname, setpname] = useState<string>("");
+  const [pmobile, setpmobile] = useState<string>("");
+  const [pnic, setpnic] = useState<string>("");
+  const [pemail, setpemail] = useState<string>("");
+
+  const [bpoint, setbpoint] = useState<string>("");
+  const [bdoint, setdpoint] = useState<string>("");
+
+  const [halfticket, sethalfticket] = useState<boolean>(false);
 
   useEffect(() => {
-    const loaddata = async () => {
-      const res = await axios.get(
-        `${BASE_URL}schedule-details?id=${sheduleId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      console.log(res);
-      setAlldata(res.data);
-    };
+    setisLoading(true);
 
-    loaddata();
+    if (!isNaN(Number(sheduleId))) {
+      const loaddata = async () => {
+        try {
+          const res = await axios.get(
+            `${BASE_URL}schedule-details?id=${sheduleId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          console.log(res);
+          setAlldata(res.data);
+          setseatcount(res?.data?.allSeats?.length);
+          setisLoading(false);
+        } catch (error: any) {
+          console.error(error);
+          setisLoading(false);
+        }
+      };
+
+      loaddata();
+    } else {
+      window.history.back();
+    }
   }, [sheduleId]);
 
-  const handleSeatClick = (seatNumber: number | string) => {
+  const [seats, setSeats] = useState<SeatData[]>(
+    Array(seatcount)
+      .fill(null)
+      .map((_, index) => {
+        const seat = alldata?.allSeats?.[index];
+        return {
+          number: parseInt(seat?.seat_no || (index + 1).toString(), 10),
+          status: seat?.isBooked
+            ? "booked"
+            : seat?.isBlocked
+            ? "processing"
+            : "available",
+        };
+      })
+  );
+
+  useEffect(() => {
+    setSeats(
+      // Array(seatcount)
+      Array(54)
+        .fill(null)
+        .map((_, index) => {
+          const seat = alldata?.allSeats?.[index];
+          return {
+            number: parseInt(seat?.seat_no || (index + 1).toString(), 10),
+            status: seat?.isBooked
+              ? "booked"
+              : seat?.isBlocked
+              ? "processing"
+              : "available",
+          };
+        })
+    );
+  }, [seatcount]);
+
+  // console.log(seats);
+
+  const handleSeatClick = (seatNumber: number | string): void => {
+    const parsedSeatNumber =
+      typeof seatNumber === "string" ? parseInt(seatNumber, 10) : seatNumber;
+
     setSeats((prevSeats) =>
       prevSeats.map((seat) =>
-        seat.number === seatNumber
+        seat.number === parsedSeatNumber
           ? {
               ...seat,
               status:
@@ -123,8 +168,32 @@ export default function BookingPage({
           : seat
       )
     );
-    console.log();
+
+    setSelectedSeats(
+      (prevSelectedSeats) =>
+        prevSelectedSeats.includes(parsedSeatNumber)
+          ? prevSelectedSeats.filter((seat) => seat !== parsedSeatNumber) // Remove if it exists
+          : [...prevSelectedSeats, parsedSeatNumber] // Add if it doesn't exist
+    );
   };
+
+  const printTicket = () => {
+    console.log("id : ", sheduleId);
+    console.log("name : ", pname);
+    console.log("mobile", pmobile);
+    console.log("NIC", pnic);
+    console.log("email", pemail);
+  };
+
+  if (isLoading) {
+    return (
+      <>
+        <div className="h-[85vh] flex justify-center items-center">
+          <LoadingAnimation />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -218,11 +287,19 @@ export default function BookingPage({
                 <Label>Ticket Type</Label>
                 <RadioGroup defaultValue="full" className="flex gap-4">
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="full" id="full" />
+                    <RadioGroupItem
+                      value="full"
+                      id="full"
+                      onChange={() => sethalfticket(false)}
+                    />
                     <Label htmlFor="full">Full Ticket</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="half" id="half" />
+                    <RadioGroupItem
+                      value="half"
+                      id="half"
+                      onChange={() => sethalfticket(true)}
+                    />
                     <Label htmlFor="half">Half Ticket</Label>
                   </div>
                 </RadioGroup>
@@ -242,7 +319,16 @@ export default function BookingPage({
               </div>
             </div>
 
-            <PassengerForm />
+            <PassengerForm
+              name={pname}
+              mobile={pmobile}
+              nic={pnic}
+              email={pemail}
+              setName={setpname}
+              setMobile={setpmobile}
+              setNic={setpnic}
+              setEmail={setpemail}
+            />
           </div>
 
           <div>
@@ -252,7 +338,10 @@ export default function BookingPage({
               convenienceFee={125.0}
               bankCharges={25.0}
             />
-            <Button className="w-full mt-4 bg-pink-600 hover:bg-pink-700">
+            <Button
+              className="w-full mt-4 bg-pink-600 hover:bg-pink-700"
+              onClick={printTicket}
+            >
               Print Ticket
             </Button>
           </div>
