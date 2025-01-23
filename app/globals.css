@@ -22,6 +22,12 @@
   background-repeat: no-repeat;
   background-size: contain;
 }
+.basic_search_bg1{
+  background-image: url("/assets/buslist_bg.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 
 
 body {

@@ -52,7 +52,6 @@ export function HeroSection() {
       });
 
       if (res?.data?.token) {
-        // console.log("successful.");
         localStorage.setItem("token", res?.data?.token);
 
         window.location.href = "/booking";

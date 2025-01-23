@@ -45,7 +45,7 @@ export default function TravelBooking({
   };
 
   return (
-    <div className="bg-bgMyColor6 basic_search_bg w-full py-24">
+    <div className="bg-bgMyColor6 basic_search_bg1 w-full py-24">
       <div className="w-full my-container">
         <div className="bg-gray-700 text-white p-4 rounded-t-lg flex items-center justify-between max-w-3xl mx-auto">
           <div className="flex items-center gap-4">
