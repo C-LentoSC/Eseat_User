@@ -24,6 +24,7 @@ export default function Header() {
 
   const [name, setName] = useState<string>("");
   const [namest, setNamest] = useState<boolean>(false);
+  const [st, setst] = useState<boolean>(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -112,7 +113,7 @@ export default function Header() {
                       <Button
                         variant="outline"
                         size="sm"
-                        className=" bg-transparent border-none shadow-none hover:bg-transparent hover:text-gray-500 px-0"
+                        className="text-[14px] bg-transparent border-none shadow-none hover:bg-transparent hover:text-gray-500 px-0"
                       >
                         {name ? name : "__"}
                         <ChevronDown className="ml-2 h-4 w-4" />
@@ -120,9 +121,12 @@ export default function Header() {
                     </PopoverTrigger>
                     <PopoverContent className="bg-white rounded-lg w-[150px] p-1">
                       <div className="space-y-2">
-                        <div className="text-sm cursor-pointer hover:bg-[#dd3170] p-1 rounded-lg hover:text-white" onClick={()=>{
-                          localStorage.removeItem("token");
-                        }}>
+                        <div
+                          className="text-sm cursor-pointer hover:bg-[#dd3170] p-1 rounded-lg hover:text-white"
+                          onClick={() => {
+                            localStorage.removeItem("token");
+                          }}
+                        >
                           Log out
                         </div>
 
@@ -169,7 +173,13 @@ export default function Header() {
 
           {/* Mobile Menu Items */}
           <div className="flex md:hidden">
-            <Button variant="ghost" size="icon">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => {
+                setst(!st);
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -190,6 +200,77 @@ export default function Header() {
           </div>
         </nav>
       </div>
+      {st && (
+        <>
+          <div className="w-full p-5 bg-white">
+            <div className="gap-4 flex justify-between">
+              <Button
+                variant="link"
+                size="sm"
+                className="text-myColor2 font-medium text-[14px]"
+              >
+                Sinhala
+              </Button>
+              <Button
+                variant="link"
+                size="sm"
+                className="text-myColor2 font-medium text-[14px]"
+              >
+                Help
+              </Button>
+              {namest ? (
+                <>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="text-myColor2 font-medium text-[14px]"
+                  >
+                    <img
+                      src="/assets/auser.jpg"
+                      alt=""
+                      className="w-7 h-7 rounded-full"
+                    />
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-[14px] bg-transparent border-none shadow-none hover:bg-transparent hover:text-gray-500 px-0"
+                        >
+                          {name ? name : "__"}
+                          <ChevronDown className="ml-2 h-4 w-4" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="bg-white rounded-lg w-[150px] p-1">
+                        <div className="space-y-2">
+                          <div
+                            className="text-sm cursor-pointer hover:bg-[#dd3170] p-1 rounded-lg hover:text-white"
+                            onClick={() => {
+                              localStorage.removeItem("token");
+                            }}
+                          >
+                            Log out
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="text-myColor2 font-medium text-[14px]"
+                  >
+                    Sign In
+                  </Button>
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </header>
   );
 }

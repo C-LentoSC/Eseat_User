@@ -35,7 +35,7 @@ export default function ScheduleSearch() {
                 <Button
                   variant={"outline"}
                   className={cn(
-                    "w-full justify-start text-left font-normal bg-white",
+                    "w-full justify-start text-left font-normal bg-transparent",
                     !date && "text-muted-foreground"
                   )}
                 >
@@ -61,7 +61,7 @@ export default function ScheduleSearch() {
               Schedule ID <span className="text-red-500">*</span>
             </label>
             <Select defaultValue="ht18">
-              <SelectTrigger className="bg-white">
+              <SelectTrigger className="bg-transparent">
                 <SelectValue placeholder="Select Schedule ID" />
               </SelectTrigger>
               <SelectContent>

@@ -45,7 +45,7 @@ export default function TravelBooking({
   };
 
   return (
-    <div className="bg-bgMyColor6 basic_search_bg1 w-full py-24">
+    <div className="bg-bgMyColor6 basic_search_bg1 bg-contain lg:bg-cover w-full py-24">
       <div className="w-full my-container">
         <div className="bg-gray-700 text-white p-4 rounded-t-lg flex items-center justify-between max-w-3xl mx-auto">
           <div className="flex items-center gap-4">
@@ -88,8 +88,8 @@ export default function TravelBooking({
                 onSubmit={handleSearch}
                 className="flex gap-5 justify-center"
               >
-                <div className="flex gap-10 bg-white p-6 rounded-lg shadow-lg transform duration-150">
-                  <div className="flex gap-5 items-center lg:border-e-2 border-[#a4b1bd] h-full">
+                <div className="flex flex-col lg:flex-row gap-10 w-full lg:w-auto bg-white p-6 rounded-lg shadow-lg transform duration-150">
+                  <div className="flex flex-col lg:flex-row gap-5 lg:items-center lg:border-e-2 border-[#a4b1bd] h-full">
                     <div className="text-left">
                       <label className="text-sm font-medium text-gray-500">
                         From / සිට / ஒரு

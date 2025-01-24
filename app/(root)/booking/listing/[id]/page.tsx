@@ -342,7 +342,7 @@ export default function BookingPage({
               className="w-full mt-4 bg-pink-600 hover:bg-pink-700"
               onClick={printTicket}
             >
-              Print Ticket
+              Send IPG link
             </Button>
           </div>
         </div>

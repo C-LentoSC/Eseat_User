@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/app/fonts/OpenSans-VariableFont_wdth,wght.ttf') format('truetype');
+}
+
+
 /* Custom scrollbar for the navigation */
 .overflow-x-auto {
   scrollbar-width: none;
@@ -26,13 +32,8 @@
   background-image: url("/assets/buslist_bg.svg");
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
 }
 
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
 
 @layer utilities {
   .my-container {

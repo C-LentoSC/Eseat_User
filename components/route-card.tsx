@@ -1,11 +1,4 @@
 import Image from "next/image";
-import {
-  MapPin,
-  //  Clock,
-  Code,
-  Bus,
-  Building2,
-} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 // import { Route } from "@/types/route";
 import { cn } from "@/lib/utils";
@@ -48,7 +41,10 @@ export function RouteCard({ route, className }: RouteCardProps) {
       ),
       text: route?.route,
     },
-    // { icon: <Clock className="h-4 w-4 text-myColor1" />, text: route.datetime },
+    {
+      icon: <img src="/assets/date.svg" alt="location" className="w-4 h-4" />,
+      text: route.datetime ? route.datetime : "",
+    },
     {
       icon: (
         <img

@@ -77,14 +77,14 @@ export function WelcomeSection() {
 
         <div className="flex flex-col md:flex-row md:items-end justify-center">
           <div className="flex flex-col gap-10 md:flex-row md:items-end lg:items-center bg-white p-8 rounded-[9px]">
-            <div className="flex gap-5 items-center lg:border-e-2 border-[#a4b1bd] h-full">
+            <div className="flex flex-col lg:flex-row gap-5 lg:items-center lg:border-e-2 border-[#a4b1bd] h-full">
               <div className="text-left">
                 <label className="text-sm font-medium text-gray-500">
                   From / සිට / ஒரு
                 </label>
                 <Input
                   placeholder="Leaving from.."
-                  className="bg-transparent border-0 shadow-none mt-0 pt-0 px-0 w-32 text-black placeholder:text-black"
+                  className="bg-transparent border-0 shadow-none mt-0 pt-0 px-0 lg:w-32 text-black placeholder:text-black"
                   onChange={(e) => setFrom(e.target.value)}
                 />
               </div>
