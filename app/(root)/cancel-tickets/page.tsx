@@ -16,7 +16,7 @@ const CancelTickets = () => {
   };
 
   return (
-    <div className="h-full w-full bg-hero-bg bg-contain flex flex-col py-10">
+    <div className="w-full bg-[#f0fbfe] bg-hero-bg bg-contain bg-no-repeat flex flex-col py-10">
       {/* Main Container */}
       <div className="flex justify-center items-center w-full z-10 text-center my-container">
         <div className="flex flex-col lg:flex-row w-full items-start justify-center gap-5">

@@ -16,7 +16,7 @@ const SendTicket: React.FC = () => {
   };
 
   return (
-    <div className="h-full w-full bg-hero-bg bg-contain flex flex-col justify-between">
+    <div className="h-full w-full bg-hero-bg bg-contain bg-no-repeat flex flex-col justify-between">
 
       {/* Main Container */}
       <div className=" flex flex-col justify-center items-center w-full h-screen z-10 text-center">
