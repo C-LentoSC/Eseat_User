@@ -101,7 +101,7 @@ export default function Header() {
                 <Button
                   variant="link"
                   size="sm"
-                  className="text-myColor2 font-medium text-[14px]"
+                  className="text-myColor2 hover:no-underline font-medium text-[14px]"
                 >
                   <img
                     src="/assets/auser.jpg"
@@ -223,7 +223,7 @@ export default function Header() {
                   <Button
                     variant="link"
                     size="sm"
-                    className="text-myColor2 font-medium text-[14px]"
+                    className="text-myColor2 hover:no-underline font-medium text-[14px]"
                   >
                     <img
                       src="/assets/auser.jpg"
