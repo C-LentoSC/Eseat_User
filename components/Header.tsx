@@ -241,7 +241,7 @@ export default function Header() {
                           <ChevronDown className="ml-2 h-4 w-4" />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="bg-white rounded-lg w-[150px] p-1">
+                      <PopoverContent className="bg-white rounded-lg w-[150px] p-1 border border-[#dd3170]">
                         <div className="space-y-2">
                           <div
                             className="text-sm cursor-pointer hover:bg-[#dd3170] p-1 rounded-lg hover:text-white"
