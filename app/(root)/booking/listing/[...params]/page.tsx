@@ -160,8 +160,8 @@ export default function BookingPage({
 
   useEffect(() => {
     setSeats(
-      // Array(seatcount)
-      Array(54)
+      Array(seatcount)
+      // Array(54)
         .fill(null)
         .map((_, index) => {
           const seat = alldata?.allSeats?.[index];
