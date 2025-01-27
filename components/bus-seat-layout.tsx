@@ -65,85 +65,78 @@ function Seat({ number, status = "available", onClick, className }: SeatProps) {
 
 export function BusSeatLayout({ seats, onSeatClick }: BusSeatLayoutProps) {
   const seatLayout = [
-    ["5", "10", "15", "20", "25", "30", "35", "40", "45", "48", "54"],
-    ["4", "9", "14", "19", "24", "29", "34", "39", "44", "47", "53"],
-    ["3", "8", "13", "18", "23", "28", "33", "38", "43", "46", "52"],
-    [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      "51",
-    ],
-
-    ["02", "7", "12", "17", "22", "27", "32", "37", "42",null, null,null,null,null,null,null, "50"],
-    ["01", "6", "11", "16", "21", "26", "31", "36", "41",null, null,null,null,null,null,null, "49"],
+    "-1",
+    "5",
+    "10",
+    "15",
+    "20",
+    "25",
+    "30",
+    "35",
+    "40",
+    "45",
+    "48",
+    "54",
+    "0",
+    "4",
+    "9",
+    "14",
+    "19",
+    "24",
+    "29",
+    "34",
+    "39",
+    "44",
+    "47",
+    "53",
+    "0",
+    "3",
+    "8",
+    "13",
+    "18",
+    "23",
+    "28",
+    "33",
+    "38",
+    "43",
+    "46",
+    "52",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "51",
+    "0",
+    "02",
+    "7",
+    "12",
+    "17",
+    "22",
+    "27",
+    "32",
+    "37",
+    "42",
+    "0",
+    "50",
+    "0",
+    "01",
+    "6",
+    "11",
+    "16",
+    "21",
+    "26",
+    "31",
+    "36",
+    "41",
+    "0",
+    "49",
   ];
 
   return (
@@ -169,7 +162,55 @@ export function BusSeatLayout({ seats, onSeatClick }: BusSeatLayoutProps) {
       </div>
 
       <div className="space-y-2">
-        {seatLayout.map((row, rowIndex) => (
+        <div className="grid grid-cols-12">
+          {seatLayout.map((seatNo, index) => {
+            if (seatNo == "-1") {
+              return (
+                <>
+                  <div
+                    className="col-span-1 p-1 flex items-center justify-center"
+                    key={index}
+                  >
+                    <img
+                      src="/assets/stering.svg"
+                      alt="stering_wheel"
+                      className="p-1 -rotate-90"
+                    />
+                  </div>
+                </>
+              );
+            } else {
+              return (
+                <>
+                  <div className="col-span-1 p-1" key={index}>
+                    <Seat
+                      className={`${seatNo == "0" ? "hidden" : ""} ${
+                        seats.find((s) => s.number === Number(seatNo))
+                          ? ""
+                          : "hidden"
+                      }`}
+                      number={seatNo}
+                      status={
+                        seats.find((s) => s.number === Number(seatNo))?.status
+                      }
+                      onClick={() => onSeatClick?.(seatNo)}
+                    />
+                  </div>
+                </>
+              );
+            }
+          })}
+
+          {/* <div className="col-span-1 p-2">
+            <Seat
+              number={5}
+              // status={seat.status}
+              onClick={() => onSeatClick?.(1)}
+            />
+          </div> */}
+        </div>
+
+        {/* {seatLayout.map((row, rowIndex) => (
           <div key={rowIndex} className="flex">
             {row.map((seatNumber, colIndex) => {
               const seat = seats.find((s) => s.number === Number(seatNumber));
@@ -186,7 +227,7 @@ export function BusSeatLayout({ seats, onSeatClick }: BusSeatLayoutProps) {
               return <div key={colIndex} className="m-1" />;
             })}
           </div>
-        ))}
+        ))} */}
       </div>
     </>
   );
@@ -194,42 +235,85 @@ export function BusSeatLayout({ seats, onSeatClick }: BusSeatLayoutProps) {
 
 export function BusSeatLayoutSM({ seats, onSeatClick }: BusSeatLayoutProps) {
   const seatLayout = [
-    ["01", "2", null, null, null, null, "3", "4", "5"],
-    ["06", "07", null, null, null, null, "8", "9", "10"],
-    ["11", "12", null, null, null, null, "13", "14", "15"],
-    ["16", "17", null, null, null, null, "18", "19", "20"],
-    ["21", "22", null, null, null, null, "23", "24", "25"],
-    ["26", "27", null, null, null, null, "28", "29", "30"],
-    ["31", "32", null, null, null, null, "33", "34", "35"],
-    ["36", "37", null, null, null, null, "38", "39", "40"],
-    ["41", "42", null, null, null, null, "43", "44", "45"],
-    [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      "46",
-      "47",
-      "48",
-    ],
-    ["49", "50", "51", "52", "53", "54"],
-
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "-1",
+    "01",
+    "2",
+    "0",
+    "3",
+    "4",
+    "5",
+    "06",
+    "07",
+    "0",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "0",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "0",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "0",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "0",
+    "28",
+    "29",
+    "30",
+    "31",
+    "32",
+    "0",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "0",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "0",
+    "43",
+    "44",
+    "45",
+    "0",
+    "0",
+    "0",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50",
+    "51",
+    "52",
+    "53",
+    "54",
   ];
 
   return (
     <div className="w-full flex flex-col  justify-center items-center ">
       {/* Legend */}
-      <div className="flex flex-row items-center gap-2 md:gap-4 mb-4 md:mb-6 text-xs md:text-sm bg-[#e9f5ff] p-6">
-        <div className="flex flex-col">
+      <div className="flex w-full flex-row justify-between items-center gap-2 md:gap-4 mb-4 md:mb-6 text-xs md:text-sm bg-[#e9f5ff] p-6">
+        <div className="flex flex-col space-y-2">
           <div className="flex items-center gap-1 md:gap-2">
             <div className="w-3 h-3 md:w-4 md:h-4 bg-gray-500 rounded" />
             <span>Available Seats</span>
@@ -239,7 +323,7 @@ export function BusSeatLayoutSM({ seats, onSeatClick }: BusSeatLayoutProps) {
             <span>Processing Seats</span>
           </div>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col space-y-2">
           <div className="flex items-center gap-1 md:gap-2">
             <div className="w-3 h-3 md:w-4 md:h-4 bg-yellow-500 rounded" />
             <span>Counter Seats</span>
@@ -252,24 +336,53 @@ export function BusSeatLayoutSM({ seats, onSeatClick }: BusSeatLayoutProps) {
       </div>
 
       <div className="space-y-2 w-full flex flex-col justify-center items-center">
-        {seatLayout.map((row, rowIndex) => (
-          <div key={rowIndex} className="flex">
-            {row.map((seatNumber, colIndex) => {
-              const seat = seats.find((s) => s.number === Number(seatNumber));
-              if (seat) {
-                return (
-                  <Seat
-                    key={colIndex}
-                    number={seat.number}
-                    status={seat.status}
-                    onClick={() => onSeatClick?.(seat.number)}
-                  />
-                );
-              }
-              return <div key={colIndex} className="m-1" />;
-            })}
-          </div>
-        ))}
+        <div className="grid grid-cols-6">
+          {seatLayout.map((seatNo, index) => {
+            if (seatNo == "-1") {
+              return (
+                <>
+                  <div
+                    className="col-span-1 p-1 flex items-center justify-center"
+                    key={index}
+                  >
+                    <img
+                      src="/assets/stering.svg"
+                      alt="stering_wheel"
+                      className="p-1"
+                    />
+                  </div>
+                </>
+              );
+            } else {
+              return (
+                <>
+                  <div className="col-span-1 p-1" key={index}>
+                    <Seat
+                      className={`${seatNo == "0" ? "hidden" : ""} ${
+                        seats.find((s) => s.number === Number(seatNo))
+                          ? ""
+                          : "hidden"
+                      }`}
+                      number={seatNo}
+                      status={
+                        seats.find((s) => s.number === Number(seatNo))?.status
+                      }
+                      onClick={() => onSeatClick?.(seatNo)}
+                    />
+                  </div>
+                </>
+              );
+            }
+          })}
+
+          {/* <div className="col-span-1 p-2">
+            <Seat
+              number={5}
+              // status={seat.status}
+              onClick={() => onSeatClick?.(1)}
+            />
+          </div> */}
+        </div>
       </div>
     </div>
   );

@@ -217,6 +217,18 @@ export default function BusCarousel() {
                               <div className="flex items-center gap-2 text-sm">
                                 <div className=" bg-bgMyColor7 h-8 w-8 flex items-center justify-center rounded-full overflow-hidden">
                                   <img
+                                    src="/assets/date.svg"
+                                    alt="location"
+                                    className="w-4 h-4"
+                                  />
+                                </div>
+                                <span className="font-medium text-myColor2">
+                                  {route.datetime}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2 text-sm">
+                                <div className=" bg-bgMyColor7 h-8 w-8 flex items-center justify-center rounded-full overflow-hidden">
+                                  <img
                                     src="/assets/shedulenumber.svg"
                                     alt="location"
                                     className="w-4 h-4"

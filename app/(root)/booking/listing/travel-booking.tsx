@@ -47,18 +47,20 @@ export default function TravelBooking({
   return (
     <div className="bg-bgMyColor6 basic_search_bg1 bg-contain lg:bg-cover w-full py-24">
       <div className="w-full my-container">
-        <div className="bg-gray-700 text-white p-4 rounded-t-lg flex items-center justify-between max-w-3xl mx-auto">
+        <div className="bg-gray-700 text-white p-4 rounded-t-lg flex flex-wrap lg:flex-nowrap items-center justify-center gap-4 lg:gap-12 lg:w-max mx-auto">
           <div className="flex items-center gap-4">
-            <span>{from ? from : "__"}</span>
-            <ArrowLeftRight className="w-4 h-4" />
+            <span>{from ? from: "__"}</span>
+            {/* <ArrowLeftRight className="w-4 h-4" /> */}
+            <img src="/assets/search_Arrow.svg" alt="search_bar_Arrow" className="w-28"/>
             <span>{to ? to : "__"}</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-10">
             <span>{format(date, "yyyy-MM-dd")}</span>
             {isVisible ? (
               <>
                 <Button
                   size="sm"
+                  className="px-6"
                   onClick={() => {
                     setisVisible(false);
                   }}
@@ -70,6 +72,7 @@ export default function TravelBooking({
               <>
                 <Button
                   size="sm"
+                  className="px-6"
                   onClick={() => {
                     setisVisible(true);
                   }}

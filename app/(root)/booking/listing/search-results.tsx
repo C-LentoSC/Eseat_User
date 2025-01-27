@@ -29,10 +29,11 @@ const sortOptions: SortOption[] = [
   { id: "rate", label: "Rate", icon: <DollarSign className="w-4 h-4" /> },
 ];
 
-export function SearchResults({ alldata, isloading }: any) {
+export function SearchResults({ alldata, isloading , from, to , date, passenger }: any) {
   const [activeSort, setActiveSort] = useState("departure");
 
   console.warn(Array.isArray(alldata));
+  console.warn(alldata);
 
   return (
     <div className="w-full my-container">
@@ -42,8 +43,8 @@ export function SearchResults({ alldata, isloading }: any) {
             <h2 className="text-lg font-semibold text-gray-900">
               SELECT YOUR TRIP
             </h2>
-            {Array.isArray(alldata) ? alldata : Object.values(alldata)?.length > 0 && (
-              <p className="text-sm text-gray-500">{Array.isArray(alldata) ? alldata : Object.values(alldata)?.length} Results</p>
+            {(Array.isArray(alldata) ? alldata : Object.values(alldata))?.length > 0 && (
+              <p className="text-sm text-gray-500">{Array.isArray(alldata) ? alldata?.length : Object.values(alldata)?.length} Results</p>
             )}
           </div>
 
@@ -156,6 +157,10 @@ export function SearchResults({ alldata, isloading }: any) {
                       fasility={data.facilities}
                       boardingDropping={data.fare_point}
                       bookbtnst={true}
+                      from={from}
+                      to={to}
+                      date={date}
+                      passenger={passenger}
                     />
                   ))
               ) : (

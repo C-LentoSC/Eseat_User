@@ -59,8 +59,6 @@ export function AssignedBusesSection() {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-
-        console.log(res);
         setroutes(res?.data);
         setisLoading(false);
       } catch (error) {

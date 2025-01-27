@@ -45,6 +45,8 @@ const BookingListing = () => {
   const [to, setTo] = React.useState<string>("");
   const [passenger, setPassenger] = useState<string>("");
 
+  console.log(passenger);
+
   useEffect(() => {
     try {
       if (typeof window !== "undefined") {
@@ -54,14 +56,21 @@ const BookingListing = () => {
         const date = searchParams.get("date") || "";
         const passenger = searchParams.get("passenger") || "";
 
-        if(from && to && date && passenger){
+        if (from && to && date && passenger) {
           setParams({ from, to, date, passenger });
-        }else{
-          toast.error("Somthing Went Wrong.");
-          window.location.href = "/booking"
-        }
 
-        
+          const originalDate = new Date(String(date).split("T")[0]); // Parse the date string
+          const incrementedDate = new Date(originalDate); // Clone the original date
+          incrementedDate.setDate(originalDate.getDate() + 1); // Add 1 day
+
+          setDate(incrementedDate); // Update the date state
+          setFrom(from);
+          setTo(to);
+          setPassenger(passenger);
+        } else {
+          toast.error("Somthing Went Wrong.");
+          window.location.href = "/booking";
+        }
       }
     } catch (error) {
       console.log(error);
@@ -81,7 +90,10 @@ const BookingListing = () => {
         const form = new FormData();
         form.append("from", params.from || "");
         form.append("to", params.to || "");
-        form.append("start_date", format(new Date(params.date || ""), "yyyy-MM-dd"));
+        form.append(
+          "start_date",
+          format(new Date(params.date || ""), "yyyy-MM-dd")
+        );
         form.append("seatCount", params.passenger || "");
 
         try {
@@ -92,7 +104,6 @@ const BookingListing = () => {
             },
           });
 
-          console.log(res);
           setAlldata(res?.data || []);
           setIsLoading(false);
         } catch (error) {
@@ -105,32 +116,35 @@ const BookingListing = () => {
   }, [params]);
 
   const search = async () => {
-    try {
-      setIsLoading(true);
-      const form = new FormData();
-      form.append("from", from || params.from || "");
-      form.append("to", to || params.to || "");
-      form.append("start_date", format(date || new Date(params.date || ""), "yyyy-MM-dd"));
-      form.append("seatCount", passenger || params.passenger || "");
+    window.location.href = `/booking/listing?from=${from}&to=${to}&date=${date.toISOString()}&passenger=${passenger}`;
+    // try {
+    //   setIsLoading(true);
+    //   const form = new FormData();
+    //   form.append("from", from || params.from || "");
+    //   form.append("to", to || params.to || "");
+    //   form.append(
+    //     "start_date",
+    //     format(date || new Date(params.date || ""), "yyyy-MM-dd")
+    //   );
+    //   form.append("seatCount", passenger || params.passenger || "");
 
-      try {
-        const res = await axios.post(`${BASE_URL}basic-search`, form, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+    //   try {
+    //     const res = await axios.post(`${BASE_URL}basic-search`, form, {
+    //       headers: {
+    //         "Content-Type": "multipart/form-data",
+    //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //       },
+    //     });
 
-        console.log(res);
-        setAlldata(res?.data || []);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-        setIsLoading(false);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    //     setAlldata(res?.data || []);
+    //     setIsLoading(false);
+    //   } catch (error) {
+    //     console.error(error);
+    //     setIsLoading(false);
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
 
   return (
@@ -142,14 +156,21 @@ const BookingListing = () => {
         from={from || params.from || ""}
         to={to || params.to || ""}
         passenger={passenger || params.passenger || ""}
-        date={date || new Date(params.date || "")}
+        date={date || ""}
         setDate={setDate}
         setFrom={setFrom}
         setTo={setTo}
         setPassenger={setPassenger}
         search={search}
       />
-      <SearchResults alldata={alldata} isloading={isloading} />
+      <SearchResults
+        alldata={alldata}
+        isloading={isloading}
+        from={params.from}
+        to={params.to}
+        date={params.date}
+        passenger={params.passenger}
+      />
     </>
   );
 };
