@@ -345,7 +345,7 @@ export default function BookingPage({
                           <Calendar
                             mode="single"
                             selected={date}
-                            onSelect={setDate}
+                            onSelect={(day) => setDate(day || new Date())}
                             initialFocus
                           />
                         </PopoverContent>
@@ -427,8 +427,7 @@ export default function BookingPage({
             availableSeats={alldata.allSeats?.length}
             fasility={alldata?.bus?.facilities}
             boardingDropping={[]}
-            bookbtnst={false}
-          />
+            bookbtnst={false} from={""} to={""} date={""} passenger={0}          />
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
