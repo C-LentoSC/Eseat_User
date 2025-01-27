@@ -22,6 +22,8 @@ import { useEffect, useState } from "react";
 export default function Header() {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
+  const [currentPath, setCurrentPath] = useState("");
+
   const [name, setName] = useState<string>("");
   const [namest, setNamest] = useState<boolean>(false);
   const [st, setst] = useState<boolean>(false);
@@ -47,8 +49,19 @@ export default function Header() {
     getData();
   }, []);
 
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const path = window.location.pathname;    
+        setCurrentPath(path);  
+      }
+    } catch (error) {
+      console.error("Error fetching the path:", error);
+    }
+  }, []);
+
   return (
-    <header className="w-full bg-white">
+    <header className={`w-full ${currentPath === "/" ? "bg-[#f0fbfe]" : "bg-white"}`}>
       <div className="my-container flex items-center justify-between px-4 min-h-[100px]">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2">
