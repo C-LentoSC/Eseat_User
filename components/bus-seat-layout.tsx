@@ -7,6 +7,7 @@ interface SeatProps {
   status?: "available" | "processing" | "booked" | "selected";
   onClick?: () => void;
   className?: string;
+  isVisible: boolean;
 }
 
 interface BusSeatLayoutProps {
@@ -18,7 +19,7 @@ interface BusSeatLayoutProps {
   className?: string;
 }
 
-function SeatIcon({ isVisible = true }: { isVisible?: boolean }) {
+function SeatIcon({ isVisible }: { isVisible?: boolean }) {
   return (
     <div className="relative flex flex-col items-center">
       <svg
@@ -39,7 +40,13 @@ function SeatIcon({ isVisible = true }: { isVisible?: boolean }) {
   );
 }
 
-function Seat({ number, status = "available", onClick, className }: SeatProps) {
+function Seat({
+  number,
+  status = "available",
+  onClick,
+  className,
+  isVisible,
+}: SeatProps) {
   return (
     <div
       className={cn(
@@ -55,7 +62,7 @@ function Seat({ number, status = "available", onClick, className }: SeatProps) {
       tabIndex={0}
       aria-label={`Seat ${number} - ${status}`}
     >
-      <SeatIcon />
+      <SeatIcon isVisible={isVisible} />
       <span className="absolute left-1/3 bottom-2 md:bottom-4 -translate-x-1/2 text-[10px] md:text-xs font-medium text-white">
         {number}
       </span>
@@ -184,12 +191,9 @@ export function BusSeatLayout({ seats, onSeatClick }: BusSeatLayoutProps) {
                 <>
                   <div className="col-span-1 p-1" key={index}>
                     <Seat
-                      className={`${seatNo == "0" ? "hidden" : ""} ${
-                        seats.find((s) => s.number === Number(seatNo))
-                          ? ""
-                          : "hidden"
-                      }`}
+                      className={`${seatNo == "0" ? "hidden" : ""}`}
                       number={seatNo}
+                      isVisible={seats.find((s) => s.number === Number(seatNo)) ? true : false}
                       status={
                         seats.find((s) => s.number === Number(seatNo))?.status
                       }
@@ -200,14 +204,6 @@ export function BusSeatLayout({ seats, onSeatClick }: BusSeatLayoutProps) {
               );
             }
           })}
-
-          {/* <div className="col-span-1 p-2">
-            <Seat
-              number={5}
-              // status={seat.status}
-              onClick={() => onSeatClick?.(1)}
-            />
-          </div> */}
         </div>
 
         {/* {seatLayout.map((row, rowIndex) => (
@@ -374,14 +370,6 @@ export function BusSeatLayoutSM({ seats, onSeatClick }: BusSeatLayoutProps) {
               );
             }
           })}
-
-          {/* <div className="col-span-1 p-2">
-            <Seat
-              number={5}
-              // status={seat.status}
-              onClick={() => onSeatClick?.(1)}
-            />
-          </div> */}
         </div>
       </div>
     </div>
