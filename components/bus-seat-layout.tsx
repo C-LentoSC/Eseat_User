@@ -354,12 +354,9 @@ export function BusSeatLayoutSM({ seats, onSeatClick }: BusSeatLayoutProps) {
                 <>
                   <div className="col-span-1 p-1" key={index}>
                     <Seat
-                      className={`${seatNo == "0" ? "hidden" : ""} ${
-                        seats.find((s) => s.number === Number(seatNo))
-                          ? ""
-                          : "hidden"
-                      }`}
+                      className={`${seatNo == "0" ? "hidden" : ""}`}
                       number={seatNo}
+                      isVisible={seats.find((s) => s.number === Number(seatNo)) ? true : false}
                       status={
                         seats.find((s) => s.number === Number(seatNo))?.status
                       }
