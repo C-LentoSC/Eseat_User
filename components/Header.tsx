@@ -48,7 +48,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="w-full bg-[#f0fbfe]">
+    <header className="w-full bg-white">
       <div className="my-container flex items-center justify-between px-4 min-h-[100px]">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2">

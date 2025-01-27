@@ -23,7 +23,7 @@ export default function ScheduleSearch() {
   const [date, setDate] = useState<Date>();
 
   return (
-    <div className=" bg-bgMyColor6 py-14">
+    <div className=" bg-bgMyColor6 report_bg py-14">
       <div className="w-full my-container">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-4 items-end max-w-4xl mx-auto">
           <div className="space-y-2">

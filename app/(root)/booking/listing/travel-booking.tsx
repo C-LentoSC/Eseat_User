@@ -24,9 +24,9 @@ export default function TravelBooking({
   setDate,
   setFrom,
   setTo,
-  setpassenger,
+  setPassenger,
   search,
-}:any) {
+}: any) {
   // const [date, setDate] = React.useState<Date>(new Date(date1));
   // const [from, setFrom] = React.useState(from1);
   // const [to, setTo] = React.useState(to1);
@@ -156,15 +156,18 @@ export default function TravelBooking({
                       </label>
                       <select
                         className="flex w-full p-2 px-0 bg-transparent text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-                        onChange={(e) => setpassenger(e.target.value)}
+                        onChange={(e) => setPassenger(e.target.value)}
                         value={passenger}
                       >
-                        <option value="1" className="bg-white">
-                          1 Passenger
-                        </option>
-                        <option value="2" className="bg-white">
-                          2 Passenger
-                        </option>
+                        {Array.from({ length: 54 }, (_, i) => (
+                          <option
+                            key={i + 1}
+                            value={i + 1}
+                            className="bg-white"
+                          >
+                            {i + 1} Passenger
+                          </option>
+                        ))}
                       </select>
                     </div>
                   </div>

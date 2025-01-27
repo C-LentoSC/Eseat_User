@@ -73,7 +73,8 @@ const BookingListing = () => {
       params.date &&
       params.date !== "undefined" &&
       params.from &&
-      params.to
+      params.to &&
+      params.passenger
     ) {
       setIsLoading(true);
       const loaddata = async () => {
@@ -81,6 +82,7 @@ const BookingListing = () => {
         form.append("from", params.from || "");
         form.append("to", params.to || "");
         form.append("start_date", format(new Date(params.date || ""), "yyyy-MM-dd"));
+        form.append("seatCount", params.passenger || "");
 
         try {
           const res = await axios.post(`${BASE_URL}basic-search`, form, {
@@ -109,6 +111,7 @@ const BookingListing = () => {
       form.append("from", from || params.from || "");
       form.append("to", to || params.to || "");
       form.append("start_date", format(date || new Date(params.date || ""), "yyyy-MM-dd"));
+      form.append("seatCount", passenger || params.passenger || "");
 
       try {
         const res = await axios.post(`${BASE_URL}basic-search`, form, {

@@ -144,12 +144,11 @@ export function WelcomeSection() {
                   onChange={(e) => setPassenger(e.target.value)}
                   value={passenger}
                 >
-                  <option value="1" className="bg-white">
-                    1 Passenger
-                  </option>
-                  <option value="2" className="bg-white">
-                    2 Passenger
-                  </option>
+                  {Array.from({ length: 54 }, (_, i) => (
+                    <option key={i + 1} value={i + 1} className="bg-white">
+                      {i + 1} Passenger
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>

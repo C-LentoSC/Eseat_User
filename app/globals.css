@@ -34,6 +34,13 @@
   background-repeat: no-repeat;
 }
 
+.report_bg{
+  background-image: url("/assets/report_bg.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 
 @layer utilities {
   .my-container {
