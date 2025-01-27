@@ -41,6 +41,13 @@
   background-size: contain;
 }
 
+.snd_bg{
+  background-image: url("/assets/snd.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 
 @layer utilities {
   .my-container {
