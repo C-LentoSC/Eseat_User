@@ -2,6 +2,7 @@
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const SendTicket: React.FC = () => {
   const [value, setValue] = React.useState<string>("mTicket");
@@ -11,7 +12,7 @@ const SendTicket: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!termsAccepted) {
-      alert("Please agree to the terms and conditions.");
+      toast.error("Please agree to terms and conditions.");
       return;
     }
   };
