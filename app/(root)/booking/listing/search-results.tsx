@@ -132,17 +132,18 @@ export function SearchResults({ alldata, isloading , from, to , date, passenger 
                     }
                   )
                   .map((data: any) => (
+                    
                     <BusCard
                       key={data.id}
                       id={data.id}
                       image={data.main_image}
                       arrival={{
                         time: data.scheduleData?.end_time,
-                        name: data.to?.name,
+                        name: data.scheduleData?.to?.name,
                       }}
                       departure={{
                         time: data.scheduleData?.start_time,
-                        name: data.from?.name,
+                        name: data.scheduleData?.from?.name,
                       }}
                       booking={{
                         startDate: data.scheduleData?.startDate,
@@ -154,6 +155,7 @@ export function SearchResults({ alldata, isloading , from, to , date, passenger 
                       price={data.scheduleData?.price}
                       duration={data.scheduleData?.duration}
                       availableSeats={data.availableSeats?.length}
+                      schedule_number={data.schedule_number}
                       fasility={data.facilities}
                       boardingDropping={data.fare_point}
                       bookbtnst={true}

@@ -42,6 +42,7 @@ interface BoardingAndDropping {
 }
 
 interface Alldata {
+  schedule_number: string;
   id: number;
   bus: {
     mainImage: string;
@@ -51,7 +52,7 @@ interface Alldata {
   };
   start_time: string;
   end_time: string;
-  startDate: string;
+  start_date: string;
   duration: number;
   allSeats: { seat_no: string; isBooked: boolean; isBlocked: boolean }[];
   boardingAndDropping: BoardingAndDropping;
@@ -416,18 +417,24 @@ export default function BookingPage({
               name: alldata.from?.name,
             }}
             booking={{
-              startDate: alldata?.startDate,
+              startDate: alldata?.start_date,
               startTime: alldata?.start_time,
               endTime: alldata?.end_time,
             }}
             busType={alldata?.bus?.type}
             depotName={alldata?.bus?.depot?.name}
             price={10000}
-            duration={alldata?.duration}
+            duration={alldata?.duration.toFixed(0)}
             availableSeats={alldata.allSeats?.length}
             fasility={alldata?.bus?.facilities}
             boardingDropping={[]}
-            bookbtnst={false} from={""} to={""} date={""} passenger={0}          />
+            bookbtnst={false} 
+            from={""} 
+            to={""} 
+            date={""} 
+            passenger={0} 
+            schedule_number={alldata?.schedule_number} 
+             />
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -525,7 +532,17 @@ export default function BookingPage({
           </div>
 
           <div>
-            <TripSelection />
+            <TripSelection 
+            tripDate={alldata?.start_date ? alldata?.start_date : new Date().toISOString()}
+            startingTime={alldata?.start_time || ""}
+            startingPlace={alldata?.from?.name || ""}
+            start_stand={"stand"}
+            endingTime={alldata?.end_time || ""}
+            endingPlace={alldata?.to?.name || ""}
+            end_stand={"stand"}
+            hours={alldata?.duration || 0}
+            bustype={alldata?.bus?.type || ""}
+            />
             <FareSummary
               baseFare={1350.5}
               convenienceFee={125.0}

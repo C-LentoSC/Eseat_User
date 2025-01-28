@@ -269,6 +269,7 @@ import {
 } from "@/components/ui/popover";
 import Link from "next/link";
 import { useState } from "react";
+import { format } from "date-fns";
 
 interface Facility {
   id: number;
@@ -301,8 +302,9 @@ interface BusCardProps {
   busType: string;
   depotName: string;
   price: number;
-  duration: number;
+  duration: string;
   availableSeats: number;
+  schedule_number: string;
   fasility: Facility[];
   boardingDropping: BoardingDropping[];
   bookbtnst: boolean;
@@ -323,6 +325,7 @@ export function BusCard({
   price,
   duration,
   availableSeats,
+  schedule_number,
   fasility,
   boardingDropping,
   bookbtnst,
@@ -333,11 +336,86 @@ export function BusCard({
 }: BusCardProps) {
   const [bdpoint, setbdpoint] = useState("Boarding / Dropping points");
 
+  const [selectedBusImage, setSelectedBusImage] = useState<string>(image);
+
   return (
     <div className="flex flex-col md:flex-row bg-bgMyColor6 rounded-lg overflow-hidden border">
       {/* Bus Image */}
       <div className="w-full md:w-72 h-auto relative">
-        <Image src={image} alt="Bus" fill className="object-cover" />
+        <div className="w-full absolute top-0 flex justify-end items-center z-50 p-1">
+          <img
+            src="/assets/fullicon.svg"
+            alt="full_Screen"
+            className="w-5 cursor-pointer bg-black/40 rounded p-1"
+            onClick={() => {
+              window.open(selectedBusImage, "_blank");
+            }}
+          />
+        </div>
+        <Image
+          src={selectedBusImage ? selectedBusImage : image}
+          alt="Bus"
+          fill
+          className="object-cover"
+        />
+        <div className="p-2 absolute bottom-0 justify-center items-end right-1 flex gap-2 left-1">
+          <div
+            className={`w-[20%] border border-gray-500 ${
+              selectedBusImage == image ? "h-16" : ""
+            }`}
+          >
+            <img
+              src={image}
+              alt="bus1"
+              className="w-full object-cover h-full"
+              onClick={() => {
+                setSelectedBusImage(image);
+              }}
+            />
+          </div>
+          <div
+            className={`w-[20%] border border-gray-500 ${
+              selectedBusImage == image[1] ? "h-16" : ""
+            }`}
+          >
+            <img
+              src={image}
+              alt="bus1"
+              className="w-full object-cover h-full"
+              onClick={() => {
+                setSelectedBusImage(image);
+              }}
+            />
+          </div>
+          <div
+            className={`w-[20%] border border-gray-500 ${
+              selectedBusImage == image[2] ? "h-16" : ""
+            }`}
+          >
+            <img
+              src={image}
+              alt="bus1"
+              className="w-full object-cover h-full"
+              onClick={() => {
+                setSelectedBusImage(image);
+              }}
+            />
+          </div>
+          <div
+            className={`w-[20%] border border-gray-500 ${
+              selectedBusImage == image[3] ? "h-16" : ""
+            }`}
+          >
+            <img
+              src={image}
+              alt="bus1"
+              className="w-full object-cover h-full"
+              onClick={() => {
+                setSelectedBusImage(image);
+              }}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Content */}
@@ -346,12 +424,12 @@ export function BusCard({
           {/* Arrival Section */}
           <div>
             <p className="text-sm text-gray-500 mb-1">Pickup</p>
-            <p className="text-xl font-medium mb-1">Nittabuwa</p>
-            <p className="text-2xl font-semibold mb-1">15:00</p>
-            <p className="text-gray-600">{arrival.name}</p>
+            <p className="text-xl font-medium mb-1">{departure.name}</p>
+            <p className="text-2xl font-semibold mb-1">{departure.time}</p>
+            {/* <p className="text-gray-600">{arrival.name}</p> */}
 
             <p className="text-gray-600 mt-8">Pickup Date</p>
-            <p className="text-xl">2024-12-17</p>
+            <p className="text-xl">{format(booking.startDate, "yyyy-MM-dd")}</p>
           </div>
 
           {/* Arrow Icon */}
@@ -378,25 +456,25 @@ export function BusCard({
           {/* Departure Section */}
           <div>
             <p className="text-sm text-gray-500 mb-1">Drop</p>
-            <p className="text-xl font-medium mb-1">Ampara</p>
-            <p className="text-2xl font-semibold mb-1">01.00</p>
-            <p className="text-gray-600">{departure.name}</p>
+            <p className="text-xl font-medium mb-1">{arrival.name}</p>
+            <p className="text-2xl font-semibold mb-1">{arrival.time}</p>
+            {/* <p className="text-gray-600">{departure.name}</p> */}
 
             <p className="text-gray-600 mt-8">Drop Time</p>
-            <p className="text-xl">14:00</p>
+            <p className="text-xl">{arrival.time}</p>
           </div>
           {/* Departure Section */}
           <div>
             <p className="text-sm text-gray-500 mb-1">Bus Type</p>
             <Badge
-            variant="outline"
-            className="bg-red-50 text-red-600 py-2 border-red-200"
-          >
-            {busType}
-          </Badge>
+              variant="outline"
+              className="bg-red-50 text-red-600 py-2 border-red-200"
+            >
+              {busType}
+            </Badge>
 
             <p className="text-gray-600 lg:mt-14 mt-10 pt-2">Depot Name</p>
-            <p className="text-xl">Welisara</p>
+            <p className="text-xl">{depotName}</p>
           </div>
         </div>
 
@@ -417,13 +495,13 @@ export function BusCard({
         </div> */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
           <div>
-            <p className="font-medium">Route - #15</p>
+            <p className="font-medium">Route - #{id}</p>
           </div>
           <div>
-            <p className="font-medium">Colombo - Ampara</p>
+            <p className="font-medium">{`${departure.name} - ${arrival.name}`}</p>
           </div>
           <div>
-            <p className="font-medium">Schedule - WS15-2030CA</p>
+            <p className="font-medium">Schedule - {schedule_number}</p>
           </div>
         </div>
 
@@ -522,7 +600,11 @@ export function BusCard({
         {bookbtnst && (
           <>
             <Button className="w-full mt-4" asChild>
-              <Link href={`/booking/listing/${id}/${from}/${to}/${date}/${passenger}`}>Book Now</Link>
+              <Link
+                href={`/booking/listing/${id}/${from}/${to}/${date}/${passenger}`}
+              >
+                Book Now
+              </Link>
             </Button>
           </>
         )}
@@ -530,4 +612,3 @@ export function BusCard({
     </div>
   );
 }
-

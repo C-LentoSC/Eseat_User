@@ -146,7 +146,7 @@ export default function TravelBooking({
                         <Calendar
                           mode="single"
                           selected={date}
-                          onSelect={setDate}
+                          onSelect={(day) => setDate(day || new Date())}
                           initialFocus
                         />
                       </PopoverContent>
