@@ -1,10 +1,11 @@
 "use client";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const SendTicket: React.FC = () => {
-  const [value, setValue] = React.useState("mTicket");
+  const [value, setValue] = React.useState<string>("mTicket");
+  const [valuest, setValueSt] = React.useState<boolean>(true);
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -15,9 +16,16 @@ const SendTicket: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (value == "mTicket") {
+      setValueSt(true);
+    } else {
+      setValueSt(false);
+    }
+  }, [value]);
+
   return (
     <div className="w-full snd_bg bg-contain lg:bg-cover bg-no-repeat flex flex-col justify-between">
-
       {/* Main Container */}
       <div className=" flex flex-col justify-center items-center w-full h-screen z-10 text-center">
         <form
@@ -54,29 +62,56 @@ const SendTicket: React.FC = () => {
             </p>
           </div>
 
-          {/* Mobile Number Input */}
-          <div className="mb-6 text-start">
-            <label
-              htmlFor="mobileNumber"
-              className="block text-sm font-medium font-sans text-[#434a50] mb-2"
-            >
-              Mobile Number
-            </label>
-            <div className="relative mt-2">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-2 text-gray-500 text-sm  border-r-2 border-[#a4b1bd] p-1 h-5 mt-3">
-                +94
-              </span>
-              <input
-                type="text"
-                id="mobile"
-                placeholder="Enter Mobile Number"
-                className="block w-full px-10 py-3 text-sm font-medium font-sans border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 placeholder-[#a4b1bd] bg-[#eff1f3]"
-              />
-            </div>
-            <p className="text-sm font-medium font-sans text-[#a4b1bd] mt-1">
-              Eseat requires your mobile number to send ticket.
-            </p>
-          </div>
+          {valuest ? (
+            <>
+              {/* Mobile Number Input */}
+              <div className="mb-6 text-start">
+                <label
+                  htmlFor="mobile"
+                  className="block text-sm font-medium font-sans text-[#434a50] mb-2"
+                >
+                  Mobile Number
+                </label>
+                <div className="relative mt-2">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-2 text-gray-500 text-sm  border-r-2 border-[#a4b1bd] p-1 h-5 mt-3">
+                    +94
+                  </span>
+                  <input
+                    type="text"
+                    id="mobile"
+                    placeholder="Enter Mobile Number"
+                    className="block w-full px-10 py-3 text-sm font-medium font-sans border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 placeholder-[#a4b1bd] bg-[#eff1f3]"
+                  />
+                </div>
+                <p className="text-sm font-medium font-sans text-[#a4b1bd] mt-1">
+                  Eseat requires your mobile number to send ticket.
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Email Address Input */}
+              <div className="mb-6 text-start">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium font-sans text-[#434a50] mb-2"
+                >
+                  Email Address
+                </label>
+                <div className="relative mt-2">
+                  <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter Mobile Number"
+                    className="block w-full px-5 py-3 text-sm font-medium font-sans border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 placeholder-[#a4b1bd] bg-[#eff1f3]"
+                  />
+                </div>
+                <p className="text-sm font-medium font-sans text-[#a4b1bd] mt-1">
+                  Eseat requires your Email Address to send ticket.
+                </p>
+              </div>
+            </>
+          )}
 
           {/* Ticket Type Selection */}
           <div className="mb-6">
