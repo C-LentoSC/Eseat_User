@@ -103,7 +103,7 @@ const SendTicket: React.FC = () => {
                   <input
                     type="email"
                     id="email"
-                    placeholder="Enter Mobile Number"
+                    placeholder="Enter Email Address"
                     className="block w-full px-5 py-3 text-sm font-medium font-sans border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 placeholder-[#a4b1bd] bg-[#eff1f3]"
                   />
                 </div>
