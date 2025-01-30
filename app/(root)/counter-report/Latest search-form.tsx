@@ -43,18 +43,18 @@ export default function SearchForm({
           },
         });
 
-        if (date) {
+        // if (date) {
 
-          // Filter the data for today's date
-          const todayItems = res.data.filter(
-            (item: { date: string }) => item.date === format(new Date(date), "yyyy-MM-dd")
-          );
+        //   // Filter the data for today's date
+        //   const todayItems = res.data.filter(
+        //     (item: { date: string }) => item.date === format(new Date(date), "yyyy-MM-dd")
+        //   );
 
-          // Set the filtered data
-          setScheduleIddata(todayItems);
-        } else {
+        //   // Set the filtered data
+        //   setScheduleIddata(todayItems);
+        // } else {
           setScheduleIddata(res.data);
-        }
+        // }
       } catch (error) {
         console.error(error);
       }
