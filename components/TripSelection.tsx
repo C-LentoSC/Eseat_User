@@ -11,6 +11,8 @@ interface Traveldata {
   end_stand: string;
   hours: number;
   bustype: string;
+  allSeats: string;
+  bookedSeats: string;
 }
 
 const TripSelection = ({
@@ -22,9 +24,10 @@ const TripSelection = ({
   endingPlace,
   end_stand,
   hours,
-  bustype
+  bustype,
+  allSeats,
+  bookedSeats,
 }: Traveldata) => {
-
   return (
     <div className="max-w-md border rounded-lg p-4 bg-white mb-4">
       <div className="border-b pb-4">
@@ -58,7 +61,9 @@ const TripSelection = ({
               <img src="/assets/clock.svg" alt="bus" className="w-full" />
             </div>
             <div className="bg-white ml-1">
-              <div className="text-sm text-gray-600">{hours.toFixed(0)} Hours</div>
+              <div className="text-sm text-gray-600">
+                {hours.toFixed(0)} Hours
+              </div>
             </div>
           </div>
 
@@ -87,7 +92,9 @@ const TripSelection = ({
         </div>
         <div className="flex items-center gap-2">
           <Users className="w-4 h-4 text-blue-600" />
-          <span className="text-sm">42/35 Seats</span>
+          <span className="text-sm">
+            {allSeats}/{bookedSeats} Seats
+          </span>
         </div>
         <span className="px-3 py-1 rounded-full text-sm bg-red-100 text-red-600">
           {bustype}

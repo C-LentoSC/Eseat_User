@@ -130,6 +130,9 @@ export default function BookingPage({
   const [boarding, setboarding] = useState<string>("");
   const [dropping, setdropping] = useState<string>("");
 
+  const [allSeats , setAllSeats] = useState<string>("");
+  const [bookedSeats , setBookedSeats] = useState<string>("");
+
   // const [bpoint, setbpoint] = useState<string>("");
   // const [bdoint, setdpoint] = useState<string>("");
 
@@ -187,6 +190,9 @@ export default function BookingPage({
           setDate(incrementedDate);
 
           setPassenger(String(params?.params?.[4]));
+
+          setAllSeats(res?.data?.allSeats?.length);
+          setBookedSeats(res?.data?.allSeats?.filter((seat: any) => seat?.isBooked)?.length);
 
           setisLoading(false);
         } catch (error: any) {
@@ -377,7 +383,7 @@ export default function BookingPage({
 
       setSeats((prevSeats) =>
         prevSeats.map((seat) =>
-          seat.number === parsedSeatNumber.toString()
+          seat.number === parsedSeatNumber.toString().padStart(2, "0")
             ? {
                 ...seat,
                 status:
@@ -397,6 +403,8 @@ export default function BookingPage({
     }
   };
 
+  console.log(selectedSeats);
+  console.log(seats);
   // console.log(selectedSeats1);
 
   const addSelectedSeats = async (key: string, parsedSeatNumber: number) => {
@@ -412,9 +420,11 @@ export default function BookingPage({
         },
       });
 
+      console.warn(parsedSeatNumber.toString().padStart(2, "0"));
+
       setSeats((prevSeats) =>
         prevSeats.map((seat) =>
-          seat.number === parsedSeatNumber.toString()
+          seat.number === parsedSeatNumber.toString().padStart(2, "0")
             ? {
                 ...seat,
                 status:
@@ -493,12 +503,12 @@ export default function BookingPage({
   }, [selectedSeats1]);
 
   const printTicket = async () => {
-    console.log("id : ", sheduleId);
-    console.log("name : ", pname);
-    console.log("mobile", pmobile);
-    console.log("NIC", pnic);
-    console.log("email", pemail);
-    console.log("half", halfticket);
+    // console.log("id : ", sheduleId);
+    // console.log("name : ", pname);
+    // console.log("mobile", pmobile);
+    // console.log("NIC", pnic);
+    // console.log("email", pemail);
+    // console.log("half", halfticket);
 
     try {
       const res = await axios.post(
@@ -1011,6 +1021,8 @@ export default function BookingPage({
               end_stand={""}
               hours={alldata?.duration || 0}
               bustype={alldata?.bus?.type || ""}
+              allSeats={allSeats}
+              bookedSeats={bookedSeats}
             />
             <FareSummary
               from={sfrom}
