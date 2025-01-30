@@ -97,7 +97,8 @@ const BookingListing = () => {
         form.append("seatCount", params.passenger || "");
 
         try {
-          const res = await axios.post(`${BASE_URL}basic-search`, form, {
+          const res = await axios.post(`${BASE_URL}basic-search`, form, 
+            {
             headers: {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ${localStorage.getItem("token")}`,

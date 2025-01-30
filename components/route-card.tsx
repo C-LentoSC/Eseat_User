@@ -21,7 +21,7 @@ export interface Route {
   id: string;
   schedule_number: string;
   route: string;
-  datetime: string;
+  dateTime: string;
   code: string;
   number: string;
   depot: string;
@@ -43,7 +43,7 @@ export function RouteCard({ route, className }: RouteCardProps) {
     },
     {
       icon: <img src="/assets/date.svg" alt="location" className="w-4 h-4" />,
-      text: route.datetime ? route.datetime : "",
+      text: route.dateTime ? route.dateTime : "",
     },
     {
       icon: (

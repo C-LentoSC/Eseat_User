@@ -223,7 +223,7 @@ export default function BusCarousel() {
                                   />
                                 </div>
                                 <span className="font-medium text-myColor2">
-                                  {route.datetime}
+                                  {route.dateTime}
                                 </span>
                               </div>
                               <div className="flex items-center gap-2 text-sm">

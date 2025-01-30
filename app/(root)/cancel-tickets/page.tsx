@@ -1,17 +1,73 @@
 "use client";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
+import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 const CancelTickets = () => {
-  const [value, setValue] = React.useState("mTicket");
-  const [termsAccepted, setTermsAccepted] = useState(false);
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [refNo, setrefNo] = React.useState<string>("");
+  const [bankName, setbankName] = React.useState<string>("");
+  const [accountNumber, setaccountNumber] = React.useState<string>("");
+  const [accountName, setaccountName] = React.useState<string>("");
+  const [branch, setBranch] = React.useState<string>("");
+  const [mobile, setMobile] = React.useState<string>("");
+  const [note, setNote] = React.useState<string>("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!termsAccepted) {
-      toast.error("Please agree to terms and Conditions.");
+
+    if (bankName == "") {
+      toast.error("Please enter Bank Name.");
       return;
+    }
+
+    if (accountNumber == "") {
+      toast.error("Please enter Account Number.");
+      return;
+    }
+
+    if (accountName == "") {
+      toast.error("Please enter Account Name.");
+      return;
+    }
+
+    if (branch == "") {
+      toast.error("Please Enter Branch.");
+      return;
+    }
+
+    if (mobile == "") {
+      toast.error("Please Enter Mobile.");
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        `${BASE_URL}cancel-request`,
+        {
+          ref: refNo,
+          details: `Bank Name : ${bankName} \n Account Number : ${accountNumber} \n Account Name : ${accountName} \n Branch : ${branch} \n Phone Number : ${mobile}`,
+          note: note,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (res?.data?.status == "ok") {
+        toast.success("Ticket Cancelled successfully");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.response?.data?.message);
     }
   };
 
@@ -46,6 +102,8 @@ const CancelTickets = () => {
                     type="text"
                     id="referenceNumber"
                     placeholder="Enter ref. no."
+                    value={refNo}
+                    onChange={(e) => setrefNo(e.target.value)}
                     className="block w-full px-10 py-3 text-sm font-medium font-sans border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 placeholder-[#a4b1bd] bg-[#eff1f3]"
                   />
                 </div>
@@ -68,6 +126,8 @@ const CancelTickets = () => {
                         type="text"
                         className="bg-transparent outline-none"
                         placeholder=""
+                        value={bankName}
+                        onChange={(e) => setbankName(e.target.value)}
                       />
                     </div>
                     <div className="w-full flex">
@@ -76,6 +136,8 @@ const CancelTickets = () => {
                         type="text"
                         className="bg-transparent outline-none"
                         placeholder=""
+                        value={accountNumber}
+                        onChange={(e) => setaccountNumber(e.target.value)}
                       />
                     </div>
                     <div className="w-full flex">
@@ -84,6 +146,8 @@ const CancelTickets = () => {
                         type="text"
                         className="bg-transparent outline-none"
                         placeholder=""
+                        value={accountName}
+                        onChange={(e) => setaccountName(e.target.value)}
                       />
                     </div>
                     <div className="w-full flex">
@@ -92,6 +156,8 @@ const CancelTickets = () => {
                         type="text"
                         className="bg-transparent outline-none"
                         placeholder=""
+                        value={branch}
+                        onChange={(e) => setBranch(e.target.value)}
                       />
                     </div>
                     <div className="w-full flex">
@@ -100,6 +166,8 @@ const CancelTickets = () => {
                         type="text"
                         className="bg-transparent outline-none"
                         placeholder=""
+                        value={mobile}
+                        onChange={(e) => setMobile(e.target.value)}
                       />
                     </div>
                   </div>
@@ -115,7 +183,11 @@ const CancelTickets = () => {
                 <div className="w-full p-1 flex bg-[#eef1f3] rounded-xl px-2 items-center">
                   <img src="/assets/note.svg" alt="bank" className="w-6 h-6" />
                   <div className="w-full border-s px-2 flex flex-col border-gray-400 ml-2 space-y-2 py-3 text-[#A4B1BD]">
-                    <textarea className="h-36 bg-transparent outline-none"></textarea>
+                    <textarea
+                      className="h-36 bg-transparent outline-none"
+                      value={note}
+                      onChange={(e) => setNote(e.target.value)}
+                    ></textarea>
                   </div>
                 </div>
                 <p className="text-sm font-medium font-sans text-[#a4b1bd] mt-1">

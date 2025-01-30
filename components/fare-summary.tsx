@@ -1,13 +1,19 @@
 interface FareSummaryProps {
+  from: string;
+  to: string;
   baseFare: number;
   convenienceFee: number;
   bankCharges: number;
+  price: number;
 }
 
 export function FareSummary({
+  from,
+  to,
   baseFare,
   convenienceFee,
   bankCharges,
+  price,
 }: FareSummaryProps) {
   const total = baseFare + convenienceFee + bankCharges;
 
@@ -17,11 +23,11 @@ export function FareSummary({
       <div className="space-y-5">
         <div className="flex border-t pt-2 gap-4">
           <span className="text-gray-600 flex items-center justify-center gap-3">
-            Nittambuwa{" "}
+            {from}{" "}
             <img src="/assets/arrow.svg" alt="arrow" className="w-4 h-4" />
-            Colombo
+            {to}
           </span>
-          <span className="text-gray-600">Rs. 1374.50</span>
+          <span className="text-gray-600">Rs. {price}</span>
         </div>
         {/* <div className="flex justify-between">
           <span className="text-gray-600">Base Fare</span>

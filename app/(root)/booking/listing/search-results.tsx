@@ -107,14 +107,14 @@ export function SearchResults({ alldata, isloading , from, to , date, passenger 
                         case "departure":
                           return (
                             formatTime(
-                              a.scheduleData?.start_time || "00:00:00"
+                              a.scheduleData?.start_time || "00:00"
                             ) -
-                            formatTime(b.scheduleData?.start_time || "00:00:00")
+                            formatTime(b.scheduleData?.start_time || "00:00")
                           );
                         case "arrival":
                           return (
-                            formatTime(a.scheduleData?.end_time || "00:00:00") -
-                            formatTime(b.scheduleData?.end_time || "00:00:00")
+                            formatTime(a.scheduleData?.end_time || "00:00") -
+                            formatTime(b.scheduleData?.end_time || "00:00")
                           );
                         case "seats":
                           return (
@@ -157,12 +157,14 @@ export function SearchResults({ alldata, isloading , from, to , date, passenger 
                       availableSeats={data.availableSeats?.length}
                       schedule_number={data.schedule_number}
                       fasility={data.facilities}
-                      boardingDropping={data.fare_point}
+                      boardingDropping={data.fareBrake}
                       bookbtnst={true}
                       from={from}
                       to={to}
                       date={date}
                       passenger={passenger}
+                      route_id={data.scheduleData?.route_id}
+                      subImages={data.main_image}
                     />
                   ))
               ) : (

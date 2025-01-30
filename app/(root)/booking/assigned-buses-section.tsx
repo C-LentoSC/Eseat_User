@@ -25,7 +25,7 @@ interface Route {
   id: string;
   schedule_number: string;
   route: string;
-  datetime: string;
+  dateTime: string;
   code: string;
   number: string;
   depot: string;

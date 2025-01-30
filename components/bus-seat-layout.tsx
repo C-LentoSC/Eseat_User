@@ -1,21 +1,44 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 interface SeatProps {
   number: string | number;
-  status?: "available" | "processing" | "booked" | "selected";
+  status?: "available" | "processing" | "booked" | "selected" | "blocked";
   onClick?: () => void;
   className?: string;
   isVisible: boolean;
 }
 
+interface SeatData {
+  id: number;
+  number: string;
+  status: "available" | "processing" | "booked" | "selected" | "blocked";
+  key: string;
+  vat: number;
+  service_charge_ctb: number;
+  service_charge_hgh: number;
+  service_charge01: number;
+  service_charge02: number;
+  bank_charges: number;
+  discount: number;
+}
+
 interface BusSeatLayoutProps {
-  seats: Array<{
-    number: string | number;
-    status: "available" | "processing" | "booked" | "selected";
-  }>;
-  onSeatClick?: (seatNumber: string | number) => void;
+  seats: SeatData[];
+  onSeatClick?: (
+    id: number,
+    seatNumber: string | number,
+    key: string,
+    vat: number,
+    discount: number,
+    service_charge_ctb: number,
+    service_charge_hgh: number,
+    service_charge01: number,
+    service_charge02: number,
+    bank_charges: number
+  ) => void;
   className?: string;
 }
 
@@ -55,6 +78,7 @@ function Seat({
         status === "processing" && "text-yellow-500",
         status === "booked" && "text-red-500",
         status === "selected" && "text-green-500",
+        status === "blocked" && "text-black",
         className
       )}
       onClick={onClick}
@@ -71,80 +95,36 @@ function Seat({
 }
 
 export function BusSeatLayout({ seats, onSeatClick }: BusSeatLayoutProps) {
-  const seatLayout = [
-    "-1",
-    "05",
-    "10",
-    "15",
-    "20",
-    "25",
-    "30",
-    "35",
-    "40",
-    "45",
-    "48",
-    "54",
-    "0",
-    "04",
-    "09",
-    "14",
-    "19",
-    "24",
-    "29",
-    "34",
-    "39",
-    "44",
-    "47",
-    "53",
-    "0",
-    "03",
-    "08",
-    "13",
-    "18",
-    "23",
-    "28",
-    "33",
-    "38",
-    "43",
-    "46",
-    "52",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "51",
-    "0",
-    "02",
-    "07",
-    "12",
-    "17",
-    "22",
-    "27",
-    "32",
-    "37",
-    "42",
-    "0",
-    "50",
-    "0",
-    "01",
-    "06",
-    "11",
-    "16",
-    "21",
-    "26",
-    "31",
-    "36",
-    "41",
-    "0",
-    "49",
-  ];
+  const [rows, setRows] = useState<number>(0);
+  const [column, setColumn] = useState<number>(0);
+
+  useEffect(() => {
+    const getMaxRowAndColumn = (seats: any[]) => {
+      let maxRow = 0;
+      let maxColumn = 0;
+
+      seats.forEach((seat) => {
+        const match = seat.key.match(/seat-(\d+)-(\d+)/);
+        if (match) {
+          const row = parseInt(match[1], 10);
+          const column = parseInt(match[2], 10);
+
+          if (row > maxRow) maxRow = row;
+          if (column > maxColumn) maxColumn = column;
+        }
+      });
+
+      return { maxRow, maxColumn };
+    };
+
+    // Usage:
+    const { maxRow, maxColumn } = getMaxRowAndColumn(seats);
+    setRows(maxRow);
+    setColumn(maxColumn);
+
+    // console.log("Max Row:", maxRow);
+    // console.log("Max Column:", maxColumn);
+  }, [seats]);
 
   return (
     <>
@@ -168,207 +148,1027 @@ export function BusSeatLayout({ seats, onSeatClick }: BusSeatLayoutProps) {
         </div>
       </div>
 
-      <div className="space-y-2">
-        <div className="grid grid-cols-12">
-          {seatLayout.map((seatNo, index) => {
-            if (seatNo == "-1") {
-              return (
-                <>
-                  <div
-                    className="col-span-1 p-1 flex items-center justify-center"
-                    key={index}
-                  >
-                    <img
-                      src="/assets/stering.svg"
-                      alt="stering_wheel"
-                      className="p-1 -rotate-90"
-                    />
-                  </div>
-                </>
-              );
-            } else {
-              return (
-                <>
-                  <div className="col-span-1 p-1" key={index}>
-                    <Seat
-                      className={`${seatNo == "0" ? "hidden" : ""}`}
-                      number={seatNo}
-                      isVisible={seats.find((s) => s.number === Number(seatNo)) ? true : false}
-                      status={
-                        seats.find((s) => s.number === Number(seatNo))?.status
-                      }
-                      onClick={() => onSeatClick?.(seatNo)}
-                    />
-                  </div>
-                </>
-              );
-            }
-          })}
-        </div>
-
-        {/* {seatLayout.map((row, rowIndex) => (
-          <div key={rowIndex} className="flex">
-            {row.map((seatNumber, colIndex) => {
-              const seat = seats.find((s) => s.number === Number(seatNumber));
-              if (seat) {
-                return (
-                  <Seat
-                    key={colIndex}
-                    number={seat.number}
-                    status={seat.status}
-                    onClick={() => onSeatClick?.(seat.number)}
-                  />
-                );
-              }
-              return <div key={colIndex} className="m-1" />;
-            })}
+      <div className="flex justify-center">
+        <div className="grid h-full py-2">
+          <div className="w-full flex items-center justify-center">
+            <img
+              src="/assets/stering.svg"
+              alt="stering_wheel"
+              className="p-1 -rotate-90 w-14"
+            />
           </div>
-        ))} */}
+        </div>
+        <div className={`grid grid-flow-row-dense h-full p-2`}>
+          {/* top seats bar */}
+          <div className="grid grid-flow-col-dense">
+            {Array.from({ length: column + 1 }, (_, index) => (
+              <div className="col-span-1" key={index}>
+                <Seat
+                  // className={`${seatNo == "0" ? "hidden" : ""}`}
+                  number={String(
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-0-${index}`)
+                    )?.number
+                  )}
+                  isVisible={
+                    seats.find((s) => s.key === `seat-0-${index}`)?.number !==
+                    undefined
+                  }
+                  status={
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-0-${index}`)
+                    )?.status
+                  }
+                  onClick={() =>
+                    onSeatClick?.(
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.id
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.number
+                      ),
+                      String(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.key
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.vat
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.discount
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.service_charge_ctb
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.service_charge_hgh
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.service_charge01
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.service_charge02
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.bank_charges
+                      )
+                    )
+                  }
+                />
+              </div>
+            ))}
+          </div>
+          {/* second seats bar */}
+          <div className="grid grid-flow-col-dense">
+            {Array.from({ length: column + 1 }, (_, index) => (
+              <div className="col-span-1" key={index}>
+                <Seat
+                  // className={`${seatNo == "0" ? "hidden" : ""}`}
+                  number={String(
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-1-${index}`)
+                    )?.number
+                  )}
+                  isVisible={
+                    seats.find((s) => s.key === `seat-1-${index}`)?.number !==
+                    undefined
+                  }
+                  status={
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-1-${index}`)
+                    )?.status
+                  }
+                  onClick={() =>
+                    onSeatClick?.(
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.id
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.number
+                      ),
+                      String(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.key
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.vat
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.discount
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.service_charge_ctb
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.service_charge_hgh
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.service_charge01
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.service_charge02
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.bank_charges
+                      )
+                    )
+                  }
+                />
+              </div>
+            ))}
+          </div>
+          {/* third seats bar */}
+          <div className="grid grid-flow-col-dense">
+            {Array.from({ length: column + 1 }, (_, index) => (
+              <div className="col-span-1" key={index}>
+                <Seat
+                  // className={`${seatNo == "0" ? "hidden" : ""}`}
+                  number={String(
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-2-${index}`)
+                    )?.number
+                  )}
+                  isVisible={
+                    seats.find((s) => s.key === `seat-2-${index}`)?.number !==
+                    undefined
+                  }
+                  status={
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-2-${index}`)
+                    )?.status
+                  }
+                  onClick={() =>
+                    onSeatClick?.(
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.id
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.number
+                      ),
+                      String(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.key
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.vat
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.discount
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.service_charge_ctb
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.service_charge_hgh
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.service_charge01
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.service_charge02
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.bank_charges
+                      )
+                    )
+                  }
+                />
+              </div>
+            ))}
+          </div>
+          {/* fifth seats bar */}
+          <div className="grid grid-flow-col-dense">
+            {Array.from({ length: column + 1 }, (_, index) => (
+              <div className="col-span-1" key={index}>
+                <Seat
+                  // className={`${seatNo == "0" ? "hidden" : ""}`}
+                  number={String(
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-3-${index}`)
+                    )?.number
+                  )}
+                  isVisible={
+                    seats.find((s) => s.key === `seat-3-${index}`)?.number !==
+                    undefined
+                  }
+                  status={
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-3-${index}`)
+                    )?.status
+                  }
+                  onClick={() =>
+                    onSeatClick?.(
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.id
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.number
+                      ),
+                      String(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.key
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.vat
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.discount
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.service_charge_ctb
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.service_charge_hgh
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.service_charge01
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.service_charge02
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.bank_charges
+                      )
+                    )
+                  }
+                />
+              </div>
+            ))}
+          </div>
+          {/* fifth seats bar */}
+          <div className="grid grid-flow-col-dense">
+            {Array.from({ length: column + 1 }, (_, index) => (
+              <div className="col-span-1" key={index}>
+                <Seat
+                  // className={`${seatNo == "0" ? "hidden" : ""}`}
+                  number={String(
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-4-${index}`)
+                    )?.number
+                  )}
+                  isVisible={
+                    seats.find((s) => s.key === `seat-4-${index}`)?.number !==
+                    undefined
+                  }
+                  status={
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-4-${index}`)
+                    )?.status
+                  }
+                  onClick={() =>
+                    onSeatClick?.(
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.id
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.number
+                      ),
+                      String(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.key
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.vat
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.discount
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.service_charge_ctb
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.service_charge_hgh
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.service_charge01
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.service_charge02
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.bank_charges
+                      )
+                    )
+                  }
+                />
+              </div>
+            ))}
+          </div>
+          {/* fifth seats bar */}
+          <div className="grid grid-flow-col-dense">
+            {Array.from({ length: column + 1 }, (_, index) => (
+              <div className="col-span-1" key={index}>
+                <Seat
+                  // className={`${seatNo == "0" ? "hidden" : ""}`}
+                  number={String(
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-5-${index}`)
+                    )?.number
+                  )}
+                  isVisible={
+                    seats.find((s) => s.key === `seat-5-${index}`)?.number !==
+                    undefined
+                  }
+                  status={
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-5-${index}`)
+                    )?.status
+                  }
+                  onClick={() =>
+                    onSeatClick?.(
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.id
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.number
+                      ),
+                      String(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.key
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.vat
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.discount
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.service_charge_ctb
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.service_charge_hgh
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.service_charge01
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.service_charge02
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.bank_charges
+                      )
+                    )
+                  }
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </>
   );
 }
 
 export function BusSeatLayoutSM({ seats, onSeatClick }: BusSeatLayoutProps) {
-  const seatLayout = [
-    "0",
-    "0",
-    "0",
-    "0",
-    "0",
-    "-1",
-    "01",
-    "02",
-    "0",
-    "03",
-    "04",
-    "05",
-    "06",
-    "07",
-    "0",
-    "08",
-    "09",
-    "10",
-    "11",
-    "12",
-    "0",
-    "13",
-    "14",
-    "15",
-    "16",
-    "17",
-    "0",
-    "18",
-    "19",
-    "20",
-    "21",
-    "22",
-    "0",
-    "23",
-    "24",
-    "25",
-    "26",
-    "27",
-    "0",
-    "28",
-    "29",
-    "30",
-    "31",
-    "32",
-    "0",
-    "33",
-    "34",
-    "35",
-    "36",
-    "37",
-    "0",
-    "38",
-    "39",
-    "40",
-    "41",
-    "42",
-    "0",
-    "43",
-    "44",
-    "45",
-    "0",
-    "0",
-    "0",
-    "46",
-    "47",
-    "48",
-    "49",
-    "50",
-    "51",
-    "52",
-    "53",
-    "54",
-  ];
+  const [rows, setRows] = useState<number>(0);
+  const [column, setColumn] = useState<number>(0);
+
+  useEffect(() => {
+    const getMaxRowAndColumn = (seats: any[]) => {
+      let maxRow = 0;
+      let maxColumn = 0;
+
+      seats.forEach((seat) => {
+        const match = seat.key.match(/seat-(\d+)-(\d+)/);
+        if (match) {
+          const row = parseInt(match[1], 10);
+          const column = parseInt(match[2], 10);
+
+          if (row > maxRow) maxRow = row;
+          if (column > maxColumn) maxColumn = column;
+        }
+      });
+
+      return { maxRow, maxColumn };
+    };
+
+    // Usage:
+    const { maxRow, maxColumn } = getMaxRowAndColumn(seats);
+    setRows(maxRow);
+    setColumn(maxColumn);
+  }, [seats]);
 
   return (
-    <div className="w-full flex flex-col  justify-center items-center ">
+    <>
       {/* Legend */}
-      <div className="flex w-full flex-row justify-between items-center gap-2 md:gap-4 mb-4 md:mb-6 text-xs md:text-sm bg-[#e9f5ff] p-6">
-        <div className="flex flex-col space-y-2">
+      <div className="flex flex-wrap items-center justify-center gap-10 md:gap-4 mb-4 md:mb-6 text-xs md:text-sm">
+        <div className="space-y-2">
           <div className="flex items-center gap-1 md:gap-2">
             <div className="w-3 h-3 md:w-4 md:h-4 bg-gray-500 rounded" />
-            <span>Available Seats</span>
+            <span>Available</span>
+          </div>
+          <div className="flex items-center gap-1 md:gap-2">
+            <div className="w-3 h-3 md:w-4 md:h-4 bg-yellow-500 rounded" />
+            <span>Processing</span>
+          </div>
+        </div>
+        <div className="space-y-2">
+          <div className="flex items-center gap-1 md:gap-2">
+            <div className="w-3 h-3 md:w-4 md:h-4 bg-red-500 rounded" />
+            <span>Booked</span>
           </div>
           <div className="flex items-center gap-1 md:gap-2">
             <div className="w-3 h-3 md:w-4 md:h-4 bg-green-500 rounded" />
-            <span>Processing Seats</span>
-          </div>
-        </div>
-        <div className="flex flex-col space-y-2">
-          <div className="flex items-center gap-1 md:gap-2">
-            <div className="w-3 h-3 md:w-4 md:h-4 bg-yellow-500 rounded" />
-            <span>Counter Seats</span>
-          </div>
-          <div className="flex items-center gap-1 md:gap-2">
-            <div className="w-3 h-3 md:w-4 md:h-4 bg-red-500 rounded" />
-            <span>Booked Seats</span>
+            <span>Selected</span>
           </div>
         </div>
       </div>
 
-      <div className="space-y-2 w-full flex flex-col justify-center items-center">
-        <div className="grid grid-cols-6">
-          {seatLayout.map((seatNo, index) => {
-            if (seatNo == "-1") {
-              return (
-                <>
-                  <div
-                    className="col-span-1 p-1 flex items-center justify-center"
-                    key={index}
-                  >
-                    <img
-                      src="/assets/stering.svg"
-                      alt="stering_wheel"
-                      className="p-1"
-                    />
-                  </div>
-                </>
-              );
-            } else {
-              return (
-                <>
-                  <div className="col-span-1 p-1" key={index}>
-                    <Seat
-                      className={`${seatNo == "0" ? "hidden" : ""}`}
-                      number={seatNo}
-                      isVisible={seats.find((s) => s.number === Number(seatNo)) ? true : false}
-                      status={
-                        seats.find((s) => s.number === Number(seatNo))?.status
-                      }
-                      onClick={() => onSeatClick?.(seatNo)}
-                    />
-                  </div>
-                </>
-              );
-            }
-          })}
+      <div className="flex flex-col justify-center">
+        <div className="grid  h-full p-2">
+          <div className="w-full flex items-center justify-end">
+            <img
+              src="/assets/stering.svg"
+              alt="stering_wheel"
+              className="p-1 w-12"
+            />
+          </div>
+        </div>
+        <div className={`grid grid-flow-col-dense  h-full p-2`}>
+          {/* top seats bar */}
+          <div className="grid grid-flow-row-dense">
+            {Array.from({ length: column + 1 }, (_, index) => (
+              <div className="col-span-1" key={index}>
+                <Seat
+                  // className={`${seatNo == "0" ? "hidden" : ""}`}
+                  number={String(
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-5-${index}`)
+                    )?.number
+                  )}
+                  isVisible={
+                    seats.find((s) => s.key === `seat-5-${index}`)?.number !==
+                    undefined
+                  }
+                  status={
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-5-${index}`)
+                    )?.status
+                  }
+                  onClick={() =>
+                    onSeatClick?.(
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.id
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.number
+                      ),
+                      String(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.key
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.vat
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.discount
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.service_charge_ctb
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.service_charge_hgh
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.service_charge01
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.service_charge02
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-5-${index}`)
+                        )?.bank_charges
+                      )
+                    )
+                  }
+                />
+              </div>
+            ))}
+          </div>
+          {/* second seats bar */}
+          <div className="grid grid-flow-row-dense">
+            {Array.from({ length: column + 1 }, (_, index) => (
+              <div className="col-span-1" key={index}>
+                <Seat
+                  // className={`${seatNo == "0" ? "hidden" : ""}`}
+                  number={String(
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-4-${index}`)
+                    )?.number
+                  )}
+                  isVisible={
+                    seats.find((s) => s.key === `seat-4-${index}`)?.number !==
+                    undefined
+                  }
+                  status={
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-4-${index}`)
+                    )?.status
+                  }
+                  onClick={() =>
+                    onSeatClick?.(
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.id
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.number
+                      ),
+                      String(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.key
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.vat
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.discount
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.service_charge_ctb
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.service_charge_hgh
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.service_charge01
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.service_charge02
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-4-${index}`)
+                        )?.bank_charges
+                      )
+                    )
+                  }
+                />
+              </div>
+            ))}
+          </div>
+          {/* third seats bar */}
+          <div className="grid grid-flow-row-dense">
+            {Array.from({ length: column + 1 }, (_, index) => (
+              <div className="col-span-1" key={index}>
+                <Seat
+                  // className={`${seatNo == "0" ? "hidden" : ""}`}
+                  number={String(
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-3-${index}`)
+                    )?.number
+                  )}
+                  isVisible={
+                    seats.find((s) => s.key === `seat-3-${index}`)?.number !==
+                    undefined
+                  }
+                  status={
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-3-${index}`)
+                    )?.status
+                  }
+                  onClick={() =>
+                    onSeatClick?.(
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.id
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.number
+                      ),
+                      String(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.key
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.vat
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.discount
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.service_charge_ctb
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.service_charge_hgh
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.service_charge01
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.service_charge02
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-3-${index}`)
+                        )?.bank_charges
+                      )
+                    )
+                  }
+                />
+              </div>
+            ))}
+          </div>
+          {/* fifth seats bar */}
+          <div className="grid grid-flow-row-dense">
+            {Array.from({ length: column + 1 }, (_, index) => (
+              <div className="col-span-1" key={index}>
+                <Seat
+                  // className={`${seatNo == "0" ? "hidden" : ""}`}
+                  number={String(
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-2-${index}`)
+                    )?.number
+                  )}
+                  isVisible={
+                    seats.find((s) => s.key === `seat-2-${index}`)?.number !==
+                    undefined
+                  }
+                  status={
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-2-${index}`)
+                    )?.status
+                  }
+                  onClick={() =>
+                    onSeatClick?.(
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.id
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.number
+                      ),
+                      String(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.key
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.vat
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.discount
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.service_charge_ctb
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.service_charge_hgh
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.service_charge01
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.service_charge02
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-2-${index}`)
+                        )?.bank_charges
+                      )
+                    )
+                  }
+                />
+              </div>
+            ))}
+          </div>
+          {/* fifth seats bar */}
+          <div className="grid grid-flow-row-dense">
+            {Array.from({ length: column + 1 }, (_, index) => (
+              <div className="col-span-1" key={index}>
+                <Seat
+                  // className={`${seatNo == "0" ? "hidden" : ""}`}
+                  number={String(
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-1-${index}`)
+                    )?.number
+                  )}
+                  isVisible={
+                    seats.find((s) => s.key === `seat-1-${index}`)?.number !==
+                    undefined
+                  }
+                  status={
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-1-${index}`)
+                    )?.status
+                  }
+                  onClick={() =>
+                    onSeatClick?.(
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.id
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.number
+                      ),
+                      String(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.key
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.vat
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.discount
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.service_charge_ctb
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.service_charge_hgh
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.service_charge01
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.service_charge02
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-1-${index}`)
+                        )?.bank_charges
+                      )
+                    )
+                  }
+                />
+              </div>
+            ))}
+          </div>
+          {/* fifth seats bar */}
+          <div className="grid grid-flow-row-dense">
+            {Array.from({ length: column + 1 }, (_, index) => (
+              <div className="col-span-1" key={index}>
+                <Seat
+                  // className={`${seatNo == "0" ? "hidden" : ""}`}
+                  number={String(
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-0-${index}`)
+                    )?.number
+                  )}
+                  isVisible={
+                    seats.find((s) => s.key === `seat-0-${index}`)?.number !==
+                    undefined
+                  }
+                  status={
+                    seats.find(
+                      (s) => String(s.key) === String(`seat-0-${index}`)
+                    )?.status
+                  }
+                  onClick={() =>
+                    onSeatClick?.(
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.id
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.number
+                      ),
+                      String(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.key
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.vat
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.discount
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.service_charge_ctb
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.service_charge_hgh
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.service_charge01
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.service_charge02
+                      ),
+                      Number(
+                        seats.find(
+                          (s) => String(s.key) === String(`seat-0-${index}`)
+                        )?.bank_charges
+                      )
+                    )
+                  }
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -27,35 +27,70 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { cn } from "@/lib/utils";
+import toast from "react-hot-toast";
 
 // Define types for data structures
 interface SeatData {
-  number: number;
-  status: "available" | "processing" | "booked" | "selected";
+  id: number;
+  number: string;
+  key: any;
+  status: "available" | "processing" | "booked" | "selected" | "blocked";
+  vat: number;
+  service_charge_ctb: number;
+  service_charge_hgh: number;
+  service_charge01: number;
+  service_charge02: number;
+  bank_charges: number;
+  discount: number;
 }
 
 interface BoardingAndDropping {
-  Boarding: { point: { name: string } }[];
-  Dropping: { point: { name: string } }[];
+  id: number;
+  boarding: {
+    id: number;
+    name: string;
+  };
+  dropping: {
+    id: number;
+    name: string;
+  };
+  price: number;
+}
+
+interface Seat {
+  id: number;
+  seat_no?: string;
+  key?: any;
+  isBooked?: boolean;
+  isProcessing?: boolean;
+  isBlocked?: boolean;
+  vat: number;
+  service_charge_ctb: number;
+  service_charge_hgh: number;
+  service_charge01: number;
+  service_charge02: number;
+  bank_charges: number;
+  discount: number;
 }
 
 interface Alldata {
-  schedule_number: string;
+  ScheduleNo: string;
   id: number;
   bus: {
     mainImage: string;
     type: string;
     depot: { name: string };
     facilities: [];
+    otherImages: [];
   };
   start_time: string;
   end_time: string;
   start_date: string;
   duration: number;
-  allSeats: { seat_no: string; isBooked: boolean; isBlocked: boolean }[];
-  boardingAndDropping: BoardingAndDropping;
+  allSeats: Seat[];
+  fareBrake: BoardingAndDropping[];
   to: {
     id: number;
     name: string;
@@ -63,6 +98,11 @@ interface Alldata {
   from: {
     id: number;
     name: string;
+  };
+  route_id: number;
+  routeDetails: {
+    bus_fare: number;
+    id: number;
   };
 }
 
@@ -79,6 +119,7 @@ export default function BookingPage({
   const [seatcount, setseatcount] = useState<number>(0);
 
   const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
+  const [selectedSeats1, setSelectedSeats1] = useState<number[]>([]);
 
   const [isLoading, setisLoading] = useState<boolean>(false);
 
@@ -86,9 +127,11 @@ export default function BookingPage({
   const [pmobile, setpmobile] = useState<string>("");
   const [pnic, setpnic] = useState<string>("");
   const [pemail, setpemail] = useState<string>("");
+  const [boarding, setboarding] = useState<string>("");
+  const [dropping, setdropping] = useState<string>("");
 
-  const [bpoint, setbpoint] = useState<string>("");
-  const [bdoint, setdpoint] = useState<string>("");
+  // const [bpoint, setbpoint] = useState<string>("");
+  // const [bdoint, setdpoint] = useState<string>("");
 
   const [halfticket, sethalfticket] = useState<boolean>(false);
 
@@ -98,6 +141,15 @@ export default function BookingPage({
   const [passenger, setPassenger] = useState<string>("");
 
   const [isVisible, setisVisible] = React.useState(false);
+
+  const [baseFare, setbaseFare] = useState<number>(0);
+  const [fareBrakeId, setFareBrakeId] = useState<number>(0);
+  const [convenienceFee, setconvenienceFee] = useState<number>(0);
+  const [bankCharges, setbankCharges] = useState<number>(0);
+  const [price, setPrice] = useState<number>(0);
+  const [price1, setPrice1] = useState<number>(0);
+  const [sfrom, setsfrom] = useState<string>("");
+  const [sto, setsto] = useState<string>("");
 
   useEffect(() => {
     setisLoading(true);
@@ -115,8 +167,14 @@ export default function BookingPage({
           );
           setAlldata(res.data);
           setseatcount(res?.data?.allSeats?.length);
-          console.log(res?.data?.allSeats?.length);
-          console.log(res?.data?.allSeats);
+
+          setsfrom(res?.data?.from?.name);
+          setsto(res?.data?.to?.name);
+          setPrice(res?.data?.routeDetails?.bus_fare);
+          setPrice1(res?.data?.routeDetails?.bus_fare);
+
+          // console.log(res?.data?.allSeats?.length);
+          // console.log(res?.data?.allSeats);
 
           setFrom(String(params?.params?.[1]));
           setTo(String(params?.params?.[2]));
@@ -148,12 +206,24 @@ export default function BookingPage({
       .fill(null)
       .map((_, index) => {
         const seat = alldata?.allSeats?.[index];
+
         return {
-          number: parseInt(seat?.seat_no || (index + 1).toString(), 10),
+          id: seat?.id ?? 0,
+          number: seat?.seat_no ?? "00",
+          key: seat?.key,
+          vat: seat?.vat ?? 0,
+          service_charge_ctb: seat?.service_charge_ctb ?? 0,
+          service_charge_hgh: seat?.service_charge_hgh ?? 0,
+          service_charge01: seat?.service_charge01 ?? 0,
+          service_charge02: seat?.service_charge02 ?? 0,
+          bank_charges: seat?.bank_charges ?? 0,
+          discount: seat?.discount ?? 0,
           status: seat?.isBooked
             ? "booked"
-            : seat?.isBlocked
+            : seat?.isProcessing
             ? "processing"
+            : seat?.isBlocked
+            ? "blocked"
             : "available",
         };
       })
@@ -162,16 +232,27 @@ export default function BookingPage({
   useEffect(() => {
     setSeats(
       Array(seatcount)
-      // Array(54)
+        // Array(54)
         .fill(null)
         .map((_, index) => {
           const seat = alldata?.allSeats?.[index];
           return {
-            number: parseInt(seat?.seat_no || (index + 1).toString(), 10),
+            id: seat?.id ?? 0,
+            number: seat?.seat_no ?? "00",
+            key: seat?.key,
+            vat: seat?.vat ?? 0,
+            service_charge_ctb: seat?.service_charge_ctb ?? 0,
+            service_charge_hgh: seat?.service_charge_hgh ?? 0,
+            service_charge01: seat?.service_charge01 ?? 0,
+            service_charge02: seat?.service_charge02 ?? 0,
+            bank_charges: seat?.bank_charges ?? 0,
+            discount: seat?.discount ?? 0,
             status: seat?.isBooked
               ? "booked"
-              : seat?.isBlocked
+              : seat?.isProcessing
               ? "processing"
+              : seat?.isBlocked
+              ? "blocked"
               : "available",
           };
         })
@@ -180,42 +261,279 @@ export default function BookingPage({
 
   // console.log(seats);
 
-  const handleSeatClick = (seatNumber: number | string): void => {
+  let st = true;
+  let st1 = true;
+
+  const handleSeatClick = (
+    id: number,
+    seatNumber: number | string,
+    key: string,
+    vat: number,
+    discount: number,
+    service_charge_ctb: number,
+    service_charge_hgh: number,
+    service_charge01: number,
+    service_charge02: number,
+    bank_charges: number
+  ): any => {
     const parsedSeatNumber =
       typeof seatNumber === "string" ? parseInt(seatNumber, 10) : seatNumber;
 
-    setSeats((prevSeats) =>
-      prevSeats.map((seat) =>
-        seat.number === parsedSeatNumber
-          ? {
-              ...seat,
-              status:
-                seat.status === "available"
-                  ? "selected"
-                  : seat.status === "selected"
-                  ? "available"
-                  : seat.status,
-            }
-          : seat
-      )
+    console.log(vat);
+    console.log(discount);
+    console.log(service_charge_ctb);
+    console.log(service_charge_hgh);
+    console.log(service_charge01);
+    console.log(service_charge02);
+    console.log(bank_charges);
+
+    const updateSelectedSeats = (
+      id: number,
+      key: string,
+      vat: number,
+      discount: number,
+      service_charge_ctb: number,
+      service_charge_hgh: number,
+      service_charge01: number,
+      service_charge02: number,
+      bank_charges: number
+    ) => {
+      setSelectedSeats1((prevState: any) => {
+        // Check if the key already exists in the array
+        if (prevState.some((item: any) => item.key === key)) {
+          // If the key exists, remove it
+          const updatedSeats = prevState.filter(
+            (item: any) => item.key !== key
+          );
+          return updatedSeats;
+        } else {
+          // If the key doesn't exist, add it
+          return [
+            ...prevState,
+            {
+              id,
+              key,
+              vat,
+              discount,
+              service_charge_ctb,
+              service_charge_hgh,
+              service_charge01,
+              service_charge02,
+              bank_charges,
+            },
+          ];
+        }
+      });
+    };
+
+    // Call the function to update the array
+    updateSelectedSeats(
+      id,
+      key,
+      vat,
+      discount,
+      service_charge_ctb,
+      service_charge_hgh,
+      service_charge01,
+      service_charge02,
+      bank_charges
     );
 
-    setSelectedSeats(
-      (prevSelectedSeats) =>
-        prevSelectedSeats.includes(parsedSeatNumber)
-          ? prevSelectedSeats.filter((seat) => seat !== parsedSeatNumber) // Remove if it exists
-          : [...prevSelectedSeats, parsedSeatNumber] // Add if it doesn't exist
-    );
+    setSelectedSeats((prevSelectedSeats) => {
+      if (prevSelectedSeats.includes(parsedSeatNumber)) {
+        // Remove the seat and log the removal
+
+        if (st) {
+          console.log(`Removed Key number: ${key}`);
+          removeSelectedSeats(key, parsedSeatNumber);
+          st = false;
+        }
+        return prevSelectedSeats.filter((seat) => seat !== parsedSeatNumber);
+      } else {
+        // Add the seat and log the addition
+
+        if (st1) {
+          console.log(`Added Keyt number: ${key}`);
+          addSelectedSeats(key, parsedSeatNumber);
+          st1 = false;
+        }
+        return [...prevSelectedSeats, parsedSeatNumber];
+      }
+    });
   };
 
-  // console.log(selectedSeats);
+  const removeSelectedSeats = async (key: string, parsedSeatNumber: number) => {
+    try {
+      const form = new FormData();
+      form.append("id", sheduleId);
+      form.append("key", key);
 
-  const printTicket = () => {
+      const res = await axios.post(`${BASE_URL}remove-processing`, form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      setSeats((prevSeats) =>
+        prevSeats.map((seat) =>
+          seat.number === parsedSeatNumber.toString()
+            ? {
+                ...seat,
+                status:
+                  seat.status === "available"
+                    ? "selected"
+                    : seat.status === "selected"
+                    ? "available"
+                    : seat.status,
+              }
+            : seat
+        )
+      );
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response.data.message);
+      return false;
+    }
+  };
+
+  // console.log(selectedSeats1);
+
+  const addSelectedSeats = async (key: string, parsedSeatNumber: number) => {
+    try {
+      const form = new FormData();
+      form.append("id", sheduleId);
+      form.append("key", key);
+
+      const res = await axios.post(`${BASE_URL}add-processing`, form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      setSeats((prevSeats) =>
+        prevSeats.map((seat) =>
+          seat.number === parsedSeatNumber.toString()
+            ? {
+                ...seat,
+                status:
+                  seat.status === "available"
+                    ? "selected"
+                    : seat.status === "selected"
+                    ? "available"
+                    : seat.status,
+              }
+            : seat
+        )
+      );
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response.data.message);
+    }
+  };
+
+  useEffect(() => {
+    const calTotal = () => {
+      // If selectedSeats is not valid, return null
+      if (
+        !selectedSeats1 ||
+        !Array.isArray(selectedSeats1) ||
+        selectedSeats1.length === 0
+      ) {
+        return null;
+      }
+
+      // Assuming transferDetails.boardingPoint is defined, use it to calculate busFare
+      // const busFare = 0;
+      const busFare = Number(price) || 0;
+
+      if (busFare === 0) return 0;
+
+      let totalCost = 0;
+
+      // Loop through all selected seats and calculate their total cost
+      selectedSeats1.forEach((seat: any) => {
+        const ctbCharge = seat.service_charge_ctb || 0;
+        const hghCharge = seat.service_charge_hgh || 0;
+        const discountRate = seat.discount || 0;
+        const vatRate = seat.vat || 0;
+        const bankChargeRate = seat.bank_charges || 0;
+        const serviceCharge1 = seat.service_charge01 || 0;
+        const serviceCharge2 = seat.service_charge02 || 0;
+
+        // 01 - Calculate total before discount for the current seat
+        const totalBeforeDiscount = busFare + ctbCharge + hghCharge;
+
+        // 02 - Calculate discount
+        const discount = (totalBeforeDiscount * discountRate) / 100;
+        const afterDiscountPrice = totalBeforeDiscount - discount;
+
+        // 03 - Calculate VAT
+        const vat = (afterDiscountPrice * vatRate) / 100;
+        const afterVatPrice = afterDiscountPrice + vat;
+
+        // 04 - Calculate bank charges
+        const bankCharge = (afterVatPrice * bankChargeRate) / 100;
+        const afterBankChargePrice = afterVatPrice + bankCharge;
+
+        // Final Total for the current seat
+        const finalTotal =
+          afterBankChargePrice + serviceCharge1 + serviceCharge2;
+        totalCost += finalTotal; // Accumulate the total cost for all selected seats
+      });
+
+      // Return the total cost for all seats
+      return totalCost.toFixed(2);
+    };
+
+    const totalCost = calTotal();
+    // console.log(totalCost);
+    setconvenienceFee(Number(totalCost));
+  }, [selectedSeats1]);
+
+  const printTicket = async () => {
     console.log("id : ", sheduleId);
     console.log("name : ", pname);
     console.log("mobile", pmobile);
     console.log("NIC", pnic);
     console.log("email", pemail);
+    console.log("half", halfticket);
+
+    try {
+      const res = await axios.post(
+        `${BASE_URL}book-new-seat`,
+        {
+          id: Number(sheduleId),
+          name: pname,
+          email: pemail,
+          mobile: pmobile,
+          nicOrPassport: pnic,
+          isHalf: halfticket,
+          seatId: selectedSeats1.map((seat: any) => ({
+            id: Number(seat.id),
+            is_half: false,
+          })),
+          fareBrakeId: Number(fareBrakeId),
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (res.status === 200) {
+        toast.success(res.data.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response.data.message);
+    }
   };
 
   const handleSwapLocations = () => {
@@ -227,6 +545,124 @@ export default function BookingPage({
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Searching for:", { from, to, date });
+  };
+
+  const setboardingdata = (e: any) => {
+    if (e == "Select boarding point") {
+      setsfrom(from);
+      setsto(to);
+      setPrice(price1);
+
+      setFareBrakeId(0);
+
+      // If selectedSeats is not valid, return null
+      if (
+        !selectedSeats1 ||
+        !Array.isArray(selectedSeats1) ||
+        selectedSeats1.length === 0
+      ) {
+        return null;
+      }
+
+      // Assuming transferDetails.boardingPoint is defined, use it to calculate busFare
+      const busFare = Number(price1) || 0;
+
+      if (busFare === 0) return 0;
+
+      let totalCost = 0;
+
+      // Loop through all selected seats and calculate their total cost
+      selectedSeats1.forEach((seat: any) => {
+        const ctbCharge = seat.service_charge_ctb || 0;
+        const hghCharge = seat.service_charge_hgh || 0;
+        const discountRate = seat.discount || 0;
+        const vatRate = seat.vat || 0;
+        const bankChargeRate = seat.bank_charges || 0;
+        const serviceCharge1 = seat.service_charge01 || 0;
+        const serviceCharge2 = seat.service_charge02 || 0;
+
+        // 01 - Calculate total before discount for the current seat
+        const totalBeforeDiscount = busFare + ctbCharge + hghCharge;
+
+        // 02 - Calculate discount
+        const discount = (totalBeforeDiscount * discountRate) / 100;
+        const afterDiscountPrice = totalBeforeDiscount - discount;
+
+        // 03 - Calculate VAT
+        const vat = (afterDiscountPrice * vatRate) / 100;
+        const afterVatPrice = afterDiscountPrice + vat;
+
+        // 04 - Calculate bank charges
+        const bankCharge = (afterVatPrice * bankChargeRate) / 100;
+        const afterBankChargePrice = afterVatPrice + bankCharge;
+
+        // Final Total for the current seat
+        const finalTotal =
+          afterBankChargePrice + serviceCharge1 + serviceCharge2;
+        totalCost += finalTotal; // Accumulate the total cost for all selected seats
+      });
+
+      // console.log(totalCost);
+      setconvenienceFee(totalCost);
+    } else {
+      const data = e.split("|");
+
+      setPrice(data[0]);
+      setsfrom(data[1]);
+      setsto(data[2]);
+
+      setFareBrakeId(Number(data[3]));
+
+      // If selectedSeats is not valid, return null
+      if (
+        !selectedSeats1 ||
+        !Array.isArray(selectedSeats1) ||
+        selectedSeats1.length === 0
+      ) {
+        return null;
+      }
+
+      // Assuming transferDetails.boardingPoint is defined, use it to calculate busFare
+      const busFare = Number(data[0]) || 0;
+
+      if (busFare === 0) return 0;
+
+      let totalCost = 0;
+
+      // Loop through all selected seats and calculate their total cost
+      selectedSeats1.forEach((seat: any) => {
+        const ctbCharge = seat.service_charge_ctb || 0;
+        const hghCharge = seat.service_charge_hgh || 0;
+        const discountRate = seat.discount || 0;
+        const vatRate = seat.vat || 0;
+        const bankChargeRate = seat.bank_charges || 0;
+        const serviceCharge1 = seat.service_charge01 || 0;
+        const serviceCharge2 = seat.service_charge02 || 0;
+
+        // 01 - Calculate total before discount for the current seat
+        const totalBeforeDiscount = busFare + ctbCharge + hghCharge;
+
+        // 02 - Calculate discount
+        const discount = (totalBeforeDiscount * discountRate) / 100;
+        const afterDiscountPrice = totalBeforeDiscount - discount;
+
+        // 03 - Calculate VAT
+        const vat = (afterDiscountPrice * vatRate) / 100;
+        const afterVatPrice = afterDiscountPrice + vat;
+
+        // 04 - Calculate bank charges
+        const bankCharge = (afterVatPrice * bankChargeRate) / 100;
+        const afterBankChargePrice = afterVatPrice + bankCharge;
+
+        // Final Total for the current seat
+        const finalTotal =
+          afterBankChargePrice + serviceCharge1 + serviceCharge2;
+        totalCost += finalTotal; // Accumulate the total cost for all selected seats
+      });
+
+      // console.log(totalCost);
+      setconvenienceFee(totalCost);
+    }
   };
 
   if (isLoading) {
@@ -405,7 +841,7 @@ export default function BookingPage({
       <div className="my-container pb-16 space-y-12">
         {alldata && (
           <BusCard
-            // key={alldata.id}
+            key={alldata.id}
             id={alldata.id}
             image={alldata?.bus?.mainImage}
             arrival={{
@@ -423,18 +859,20 @@ export default function BookingPage({
             }}
             busType={alldata?.bus?.type}
             depotName={alldata?.bus?.depot?.name}
-            price={10000}
+            price={alldata?.routeDetails?.bus_fare}
             duration={alldata?.duration.toFixed(0)}
             availableSeats={alldata.allSeats?.length}
             fasility={alldata?.bus?.facilities}
-            boardingDropping={[]}
-            bookbtnst={false} 
-            from={""} 
-            to={""} 
-            date={""} 
-            passenger={0} 
-            schedule_number={alldata?.schedule_number} 
-             />
+            boardingDropping={alldata?.fareBrake}
+            bookbtnst={false}
+            from={""}
+            to={""}
+            date={""}
+            passenger={0}
+            schedule_number={alldata?.ScheduleNo}
+            route_id={alldata?.routeDetails?.id}
+            subImages={alldata?.bus?.otherImages}
+          />
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -448,23 +886,50 @@ export default function BookingPage({
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 border p-5 rounded-lg bg-slate-50">
               <div>
-                <Label>Boarding Point</Label>
-                <Select>
+                <div className="space-y-4">
+                  <Label>Ticket Type</Label>
+                  <RadioGroup defaultValue="full" className="flex gap-4">
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        value="full"
+                        id="full"
+                        onChange={() => sethalfticket(false)}
+                      />
+                      <Label htmlFor="full">Full Ticket</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        value="half"
+                        id="half"
+                        onChange={() => sethalfticket(true)}
+                      />
+                      <Label htmlFor="half">Half Ticket</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+              </div>
+              <div>
+                <Label>Boarding / Dropping Points</Label>
+                <Select onValueChange={(e) => setboardingdata(e)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select boarding point" />
                   </SelectTrigger>
                   <SelectContent>
-                    {alldata?.boardingAndDropping?.Boarding?.map(
-                      (item, index) => (
-                        <SelectItem value={item?.point?.name} key={index}>
-                          {item?.point?.name}
-                        </SelectItem>
-                      )
-                    )}
+                    <SelectItem value="Select boarding point">
+                      Select boarding point
+                    </SelectItem>
+                    {alldata?.fareBrake?.map((item, index) => (
+                      <SelectItem
+                        value={`${item?.price} | ${item?.boarding?.name} | ${item?.dropping?.name} | ${item?.id}`}
+                        key={index}
+                      >
+                        {item?.boarding?.name} / {item?.dropping?.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
-              <div>
+              {/* <div>
                 <Label>Dropping Point</Label>
                 <Select>
                   <SelectTrigger>
@@ -480,9 +945,9 @@ export default function BookingPage({
                     )}
                   </SelectContent>
                 </Select>
-              </div>
+              </div> */}
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 border p-5 rounded-lg bg-slate-50">
+            {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 border p-5 rounded-lg bg-slate-50">
               <div className="space-y-4">
                 <Label>Ticket Type</Label>
                 <RadioGroup defaultValue="full" className="flex gap-4">
@@ -517,7 +982,7 @@ export default function BookingPage({
                   </SelectContent>
                 </Select>
               </div>
-            </div>
+            </div> */}
 
             <PassengerForm
               name={pname}
@@ -532,21 +997,28 @@ export default function BookingPage({
           </div>
 
           <div>
-            <TripSelection 
-            tripDate={alldata?.start_date ? alldata?.start_date : new Date().toISOString()}
-            startingTime={alldata?.start_time || ""}
-            startingPlace={alldata?.from?.name || ""}
-            start_stand={"stand"}
-            endingTime={alldata?.end_time || ""}
-            endingPlace={alldata?.to?.name || ""}
-            end_stand={"stand"}
-            hours={alldata?.duration || 0}
-            bustype={alldata?.bus?.type || ""}
+            <TripSelection
+              tripDate={
+                alldata?.start_date
+                  ? alldata?.start_date
+                  : new Date().toISOString()
+              }
+              startingTime={alldata?.start_time || ""}
+              startingPlace={alldata?.from?.name || ""}
+              start_stand={""}
+              endingTime={alldata?.end_time || ""}
+              endingPlace={alldata?.to?.name || ""}
+              end_stand={""}
+              hours={alldata?.duration || 0}
+              bustype={alldata?.bus?.type || ""}
             />
             <FareSummary
-              baseFare={1350.5}
-              convenienceFee={125.0}
-              bankCharges={25.0}
+              from={sfrom}
+              to={sto}
+              price={price}
+              baseFare={baseFare}
+              convenienceFee={convenienceFee}
+              bankCharges={bankCharges}
             />
             <Button
               className="w-full mt-4 bg-pink-600 hover:bg-pink-700"

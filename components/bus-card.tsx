@@ -278,8 +278,14 @@ interface Facility {
 }
 interface BoardingDropping {
   id: number;
-  boarding: string;
-  dropping: string;
+  boarding: {
+    id: number;
+    name: string;
+  };
+  dropping: {
+    id: number;
+    name: string;
+  };
   price: number;
 }
 
@@ -312,6 +318,8 @@ interface BusCardProps {
   to: string;
   date: string;
   passenger: number;
+  route_id: number;
+  subImages: [];
 }
 
 export function BusCard({
@@ -333,6 +341,8 @@ export function BusCard({
   to,
   date,
   passenger,
+  route_id,
+  subImages,
 }: BusCardProps) {
   const [bdpoint, setbdpoint] = useState("Boarding / Dropping points");
 
@@ -359,35 +369,42 @@ export function BusCard({
           className="object-cover"
         />
         <div className="p-2 absolute bottom-0 justify-center items-end right-1 flex gap-2 left-1">
-          <div
-            className={`w-[20%] border border-gray-500 ${
-              selectedBusImage == image ? "h-16" : ""
-            }`}
-          >
-            <img
-              src={image}
-              alt="bus1"
-              className="w-full object-cover h-full"
-              onClick={() => {
-                setSelectedBusImage(image);
-              }}
-            />
-          </div>
-          <div
-            className={`w-[20%] border border-gray-500 ${
-              selectedBusImage == image[1] ? "h-16" : ""
-            }`}
-          >
-            <img
-              src={image}
-              alt="bus1"
-              className="w-full object-cover h-full"
-              onClick={() => {
-                setSelectedBusImage(image);
-              }}
-            />
-          </div>
-          <div
+          {subImages?.length > 0 && (
+            <>
+              <div
+                className={`w-[20%] border border-gray-500 ${
+                  selectedBusImage == image ? "h-16" : ""
+                }`}
+              >
+                <img
+                  src={image}
+                  alt="bus1"
+                  className="w-full object-cover h-full"
+                  onClick={() => {
+                    setSelectedBusImage(image);
+                  }}
+                />
+              </div>
+            </>
+          )}
+          {subImages &&
+            Array.isArray(subImages) &&
+            subImages.map((item, index) => (
+              <div
+                key={index}
+                className={`w-[20%] border border-gray-500 ${
+                  selectedBusImage === item ? "h-16" : ""
+                }`}
+              >
+                <img
+                  src={item}
+                  alt="bus1"
+                  className="w-full object-cover h-full"
+                  onClick={() => setSelectedBusImage(item)}
+                />
+              </div>
+            ))}
+          {/* <div
             className={`w-[20%] border border-gray-500 ${
               selectedBusImage == image[2] ? "h-16" : ""
             }`}
@@ -415,6 +432,20 @@ export function BusCard({
               }}
             />
           </div>
+          <div
+            className={`w-[20%] border border-gray-500 ${
+              selectedBusImage == image[3] ? "h-16" : ""
+            }`}
+          >
+            <img
+              src={image}
+              alt="bus1"
+              className="w-full object-cover h-full"
+              onClick={() => {
+                setSelectedBusImage(image);
+              }}
+            />
+          </div> */}
         </div>
       </div>
 
@@ -495,7 +526,7 @@ export function BusCard({
         </div> */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
           <div>
-            <p className="font-medium">Route - #{id}</p>
+            <p className="font-medium">Route - #{route_id}</p>
           </div>
           <div>
             <p className="font-medium">{`${departure.name} - ${arrival.name}`}</p>
@@ -523,7 +554,7 @@ export function BusCard({
                 <div
                   className="text-sm cursor-pointer"
                   onClick={() => {
-                    setbdpoint(`Select`);
+                    setbdpoint(`Boarding / Dropping points`);
                   }}
                 >
                   Select
@@ -533,10 +564,12 @@ export function BusCard({
                     className="text-sm cursor-pointer"
                     key={index}
                     onClick={() => {
-                      setbdpoint(`${item?.boarding} / ${item?.dropping}`);
+                      setbdpoint(
+                        `${item?.boarding?.name} / ${item?.dropping?.name}`
+                      );
                     }}
                   >
-                    {item?.boarding} / {item?.dropping}
+                    {item?.boarding?.name} / {item?.dropping?.name}
                   </div>
                 ))}
 

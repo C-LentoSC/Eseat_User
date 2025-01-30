@@ -1,19 +1,62 @@
 "use client";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const SendTicket: React.FC = () => {
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
+  const [refNo, setrefNo] = React.useState<string>("");
+  const [mobile, setMobile] = React.useState<string>("");
+  const [email, setEmail] = React.useState<string>("");
+
   const [value, setValue] = React.useState<string>("mTicket");
   const [valuest, setValueSt] = React.useState<boolean>(true);
   const [termsAccepted, setTermsAccepted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!termsAccepted) {
       toast.error("Please agree to terms and conditions.");
       return;
+    } else {
+      // if(value == "mTicket"){
+      //   alert("mobile : "+ mobile);
+      // }else{
+      //   alert("Email : "+ email);
+      // }
+
+      try {
+        const res = await axios.post(
+          `${BASE_URL}send-ticket`,
+          {
+            ref: refNo,
+            type: value,
+            mobile: mobile,
+            email: email,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        console.log(res);
+
+        if (res?.data?.status == "ok") {
+          toast.success("Ticket sent successfully");
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        }
+      } catch (error: any) {
+        console.log(error);
+        toast.error(error?.response?.data?.message);
+      }
     }
   };
 
@@ -54,6 +97,8 @@ const SendTicket: React.FC = () => {
                 type="text"
                 id="referenceNumber"
                 placeholder="Enter ref. no."
+                value={refNo}
+                onChange={(e) => setrefNo(e.target.value)}
                 className="block w-full px-10 py-3 text-sm font-medium font-sans border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 placeholder-[#a4b1bd] bg-[#eff1f3]"
               />
             </div>
@@ -81,6 +126,8 @@ const SendTicket: React.FC = () => {
                     type="text"
                     id="mobile"
                     placeholder="Enter Mobile Number"
+                    value={mobile}
+                    onChange={(e) => setMobile(e.target.value)}
                     className="block w-full px-10 py-3 text-sm font-medium font-sans border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 placeholder-[#a4b1bd] bg-[#eff1f3]"
                   />
                 </div>
@@ -104,6 +151,8 @@ const SendTicket: React.FC = () => {
                     type="email"
                     id="email"
                     placeholder="Enter Email Address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="block w-full px-5 py-3 text-sm font-medium font-sans border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 placeholder-[#a4b1bd] bg-[#eff1f3]"
                   />
                 </div>

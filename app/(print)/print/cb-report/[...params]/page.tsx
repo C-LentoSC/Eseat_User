@@ -1,17 +1,19 @@
 "use client";
 import React, { useEffect } from "react";
-import SimpleSearch from "./simple-search";
-import { Button } from "@/components/ui/button";
 import axios from "axios";
-import LoadingAnimation from "@/components/ui/Loading";
 import { format } from "date-fns";
-import toast from "react-hot-toast";
+import LoadingAnimation from "@/components/ui/Loading";
 
-const BusReport = () => {
+const CbReport = ({
+  params,
+}: {
+  params: Record<string, string | undefined>;
+}) => {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-  const [date, setDate] = React.useState<string>("");
-  const [ScheduleId, setScheduleId] = React.useState<string>("");
+  const ScheduleId = params?.params?.[0] || "";
+  const date = params?.params?.[1] || "";
+
   const [bookings, setBookings] = React.useState<any[]>([]);
   const [bookings1, setBookings1] = React.useState<any[]>([]);
   const [bookings2, setBookings2] = React.useState<any>({});
@@ -21,11 +23,15 @@ const BusReport = () => {
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
+  useEffect(() => {
+    loaddata();
+  }, []);
+
   const loaddata = async () => {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `${BASE_URL}report/bus${ScheduleId ? `?id=${ScheduleId}` : ""}${
+        `${BASE_URL}report/cb${ScheduleId ? `?id=${ScheduleId}` : ""}${
           date ? `&date=${format(date, "yyyy-MM-dd")}` : ""
         }`,
         {
@@ -56,6 +62,11 @@ const BusReport = () => {
       setTotal(total.toFixed(2));
 
       setIsLoading(false);
+
+      setTimeout(() => {
+        window.print();
+      }, 1000);
+
     } catch (error) {
       console.error(error);
       setIsLoading(false);
@@ -64,43 +75,9 @@ const BusReport = () => {
 
   return (
     <>
-      <SimpleSearch
-        date={date}
-        setDate={setDate}
-        scheduleId={ScheduleId}
-        setScheduleId={setScheduleId}
-        search={loaddata}
-      />
       <div className=" min-h-[100vh]">
         <div className="w-full my-container mt-3 flex justify-between">
           <label className="text-3xl ">Bus Report</label>
-          {bookings.length > 0 ? (
-            <>
-              <Button
-                onClick={() => {
-                  window.open(
-                    `print/bus-report/${ScheduleId}/${format(
-                      date,
-                      "yyyy-MM-dd"
-                    )}`,
-                    "_blank"
-                  );
-                }}
-              >
-                Download PDF
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                onClick={() => {
-                  toast.error("No data found");
-                }}
-              >
-                Download PDF
-              </Button>
-            </>
-          )}
         </div>
         <div className="w-full my-container mt-5">
           <div
@@ -315,7 +292,7 @@ const BusReport = () => {
                         </td>
                       </tr>
                     ))}
-                    <tr>
+                    <tr className="bg-gray-200">
                       <td className="px-4 py-3 text-sm font-semibold text-gray-900">
                         Total
                       </td>
@@ -405,4 +382,4 @@ const BusReport = () => {
   );
 };
 
-export default BusReport;
+export default CbReport;
