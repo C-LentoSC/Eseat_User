@@ -47,18 +47,18 @@ export default function SimpleSearch({
           },
         });
 
-        if (date) {
-          // Filter the data for today's date
-          const todayItems = res.data.filter(
-            (item: { date: string }) =>
-              item.date === format(new Date(date), "yyyy-MM-dd")
-          );
+        // if (date) {
+        //   // Filter the data for today's date
+        //   const todayItems = res.data.filter(
+        //     (item: { date: string }) =>
+        //       item.date === format(new Date(date), "yyyy-MM-dd")
+        //   );
 
-          // Set the filtered data
-          setScheduleIddata(todayItems);
-        } else {
-          setScheduleIddata(res.data);
-        }
+        //   // Set the filtered data
+        //   setScheduleIddata(todayItems);
+        // } else {
+        setScheduleIddata(res.data);
+        // }
       } catch (error) {
         console.error(error);
       }
@@ -90,7 +90,9 @@ export default function SimpleSearch({
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "yyyy/MM/dd") : "2024/12/19"}
+                  {date
+                    ? format(date, "yyyy/MM/dd")
+                    : format(new Date(), "yyyy/MM/dd")}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">

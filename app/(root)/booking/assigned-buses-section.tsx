@@ -179,7 +179,7 @@ export function AssignedBusesSection() {
               )}
             </>
           ) : (
-            <div className="flex justify-center mt-8">Data Not Found!..</div>
+            <div className="flex justify-start text-lg text-gray-400 font-medium mt-8">Data Not Found!..</div>
           )}
         </>
       )}

@@ -20,7 +20,7 @@ export default function OnlineBookingSection() {
                 <li>Save up to 5 passengers to your account!</li>
               </ul>
             </div>
-            <Button size="lg"><Link href={"/booking"}>Join With Us</Link></Button>
+            <Button size="lg"><Link href={"/"}>Join With Us</Link></Button>
           </div>
           <div className="relative flex items-center justify-center">
             <div className="relative aspect-square w-full max-w-[400px]">

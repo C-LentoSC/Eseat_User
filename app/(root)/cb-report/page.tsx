@@ -62,6 +62,17 @@ const CbReport = () => {
     }
   };
 
+  const handlePrint = () => {
+    const printContents = document.getElementById("printCbReport")?.innerHTML;
+    if (printContents) {
+      const originalContents = document.body.innerHTML;
+      document.body.innerHTML = printContents;
+      window.print();
+      document.body.innerHTML = originalContents;
+      window.location.reload();
+    }
+  };
+
   return (
     <>
       <ScheduleSearch
@@ -71,36 +82,39 @@ const CbReport = () => {
         setScheduleId={setScheduleId}
         search={loaddata}
       />
-      <div className=" min-h-[100vh]">
+      <div className=" min-h-[100vh]" id="printCbReport">
         <div className="w-full my-container mt-3 flex justify-between">
           <label className="text-3xl ">Bus Report</label>
-          {bookings.length > 0 ? (
-            <>
-              <Button
-                onClick={() => {
-                  window.open(
-                    `print/cb-report/${ScheduleId}/${format(
-                      date,
-                      "yyyy-MM-dd"
-                    )}`,
-                    "_blank"
-                  );
-                }}
-              >
-                Download PDF
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button
-                onClick={() => {
-                  toast.error("No data found");
-                }}
-              >
-                Download PDF
-              </Button>
-            </>
-          )}
+          <div className="no-print">
+            {bookings.length > 0 ? (
+              <>
+                <Button
+                  // onClick={() => {
+                  //   window.open(
+                  //     `print/cb-report/${ScheduleId}/${format(
+                  //       date,
+                  //       "yyyy-MM-dd"
+                  //     )}`,
+                  //     "_blank"
+                  //   );
+                  // }}
+                  onClick={handlePrint}
+                >
+                  Download PDF
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  onClick={() => {
+                    toast.error("No data found");
+                  }}
+                >
+                  Download PDF
+                </Button>
+              </>
+            )}
+          </div>
         </div>
         <div className="w-full my-container mt-5">
           <div

@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import toast from "react-hot-toast";
 
 interface FilmOptionType {
   name: string;
@@ -237,7 +238,17 @@ export default function TravelBooking({
                         <Calendar
                           mode="single"
                           selected={date}
-                          onSelect={(day) => setDate(day || new Date())}
+                          onSelect={(selectedDate) => {
+                            if (
+                              selectedDate &&
+                              format(selectedDate, "yyyy-MM-dd") <
+                                format(new Date(), "yyyy-MM-dd")
+                            ) {
+                              toast.error("You can't Select Previous Date");
+                            } else {
+                              setDate(selectedDate);
+                            }
+                          }}
                           initialFocus
                         />
                       </PopoverContent>

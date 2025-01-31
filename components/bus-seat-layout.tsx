@@ -78,7 +78,7 @@ function Seat({
         status === "processing" && "text-yellow-500",
         status === "booked" && "text-red-500",
         status === "selected" && "text-green-500",
-        status === "blocked" && "text-black",
+        status === "blocked" && "text-gray-300",
         className
       )}
       onClick={onClick}

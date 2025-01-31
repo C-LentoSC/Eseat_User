@@ -59,7 +59,7 @@ export function NavBar() {
       <div className="my-container">
         <div className="flex flex-wrap items-center justify-end gap-10 py-3 overflow-x-auto">
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = pathname.includes(item.href);
             return (
               <Link
                 key={item.href}

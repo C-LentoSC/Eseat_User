@@ -8,6 +8,11 @@
   src: url('/app/fonts/OpenSans-VariableFont_wdth,wght.ttf') format('truetype');
 }
 
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
 
 /* Custom scrollbar for the navigation */
 .overflow-x-auto {
@@ -22,26 +27,27 @@
   /* Chrome, Safari, Opera */
 }
 
-.basic_search_bg{
+.basic_search_bg {
   background-image: url("/assets/basic_search.svg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
 }
-.basic_search_bg1{
+
+.basic_search_bg1 {
   background-image: url("/assets/buslist_bg.svg");
   background-position: center;
   background-repeat: no-repeat;
 }
 
-.report_bg{
+.report_bg {
   background-image: url("/assets/report_bg.svg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
 }
 
-.snd_bg{
+.snd_bg {
   background-image: url("/assets/snd.svg");
   background-position: center;
   background-repeat: no-repeat;

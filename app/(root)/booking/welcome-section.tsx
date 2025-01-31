@@ -105,7 +105,10 @@ export function WelcomeSection() {
     } else if (!date) {
       toast.error("Please select date");
     } else {
-      window.location.href = `/booking/listing?from=${from}&to=${to}&date=${format(date, "yyyy-MM-dd")}&passenger=${passenger}`;
+      window.location.href = `/booking/listing?from=${from}&to=${to}&date=${format(
+        date,
+        "yyyy-MM-dd"
+      )}&passenger=${passenger}`;
     }
   };
 
@@ -212,7 +215,17 @@ export function WelcomeSection() {
                   <Calendar
                     mode="single"
                     selected={date}
-                    onSelect={setDate}
+                    onSelect={(selectedDate) => {
+                      if (
+                        selectedDate &&
+                        format(selectedDate, "yyyy-MM-dd") <
+                          format(new Date(), "yyyy-MM-dd")
+                      ) {
+                        toast.error("You can't Select Previous Date");
+                      } else {
+                        setDate(selectedDate);
+                      }
+                    }}
                     initialFocus
                   />
                 </PopoverContent>
@@ -239,8 +252,14 @@ export function WelcomeSection() {
                   disableCloseOnSelect
                   options={passengerOptions}
                   getOptionLabel={(option) => option.name}
-                  value={passengerOptions.find((opt) => opt.value === parseInt(passenger)) || null}
-                  onChange={(_, value) => setPassenger((value?.value || 1).toString())}
+                  value={
+                    passengerOptions.find(
+                      (opt) => opt.value === parseInt(passenger)
+                    ) || null
+                  }
+                  onChange={(_, value) =>
+                    setPassenger((value?.value || 1).toString())
+                  }
                   className="w-40"
                   renderInput={(params) => (
                     <TextField

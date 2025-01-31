@@ -38,15 +38,15 @@ export function HeroSection() {
     },
     {
       title: "Best Bus Ticket Service",
-      title1: "In Sri Lanka",
+      title1: "In Sri Lanka -2",
       description:
-        "Borem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus",
+        "Borem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus -2",
     },
     {
       title: "Best Bus Ticket Service",
-      title1: "In Sri Lanka",
+      title1: "In Sri Lanka -3",
       description:
-        "Borem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus",
+        "Borem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus -3",
     },
   ];
 

@@ -105,6 +105,7 @@ interface Alldata {
   start_time: string;
   end_time: string;
   start_date: string;
+  end_date: string;
   duration: number;
   allSeats: Seat[];
   fareBrake: BoardingAndDropping[];
@@ -612,7 +613,7 @@ export default function BookingPage({
   };
 
   const setboardingdata = (e: any) => {
-    if (e == "Select boarding point") {
+    if (e == "") {
       setsfrom(from);
       setsto(to);
       setPrice(price1);
@@ -985,6 +986,7 @@ export default function BookingPage({
             arrival={{
               time: alldata?.end_time,
               name: alldata.to?.name,
+              date: format(alldata?.end_date, "yyyy-MM-dd"),
             }}
             departure={{
               time: alldata?.start_time,
@@ -1048,7 +1050,7 @@ export default function BookingPage({
               </div>
               <div>
                 <Label>Boarding / Dropping Points</Label>
-                <Select onValueChange={(e) => setboardingdata(e)}>
+                {/* <Select onValueChange={(e) => setboardingdata(e)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select boarding point" />
                   </SelectTrigger>
@@ -1065,7 +1067,34 @@ export default function BookingPage({
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </Select> */}
+                <Autocomplete
+                  options={alldata?.fareBrake || []}
+                  getOptionLabel={(option) =>
+                    `${option?.boarding?.name} / ${option?.dropping?.name}`
+                  }
+                  onChange={(_, value) =>
+                    setboardingdata(
+                      value
+                        ? `${value?.price} | ${value?.boarding?.name} | ${value?.dropping?.name} | ${value?.id}`
+                        : ""
+                    )
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      placeholder="Select boarding point"
+                      variant="standard"
+                      className="bg-transparent border-gray-300 shadow-none text-black placeholder:text-black px-0 w-full outline-none focus:ring-0"
+                      InputProps={{
+                        ...params.InputProps,
+                        disableUnderline: true,
+                        className:
+                          "bg-transparent border-[1.5px] border-gray-200 shadow-none px-2 py-1 rounded-lg h-full text-black placeholder:text-black px-0 w-full outline-none focus:ring-0",
+                      }}
+                    />
+                  )}
+                />
               </div>
               {/* <div>
                 <Label>Dropping Point</Label>
@@ -1164,7 +1193,7 @@ export default function BookingPage({
               className="w-full mt-4 bg-pink-600 hover:bg-pink-700"
               onClick={printTicket}
             >
-              Send IPG link
+              Print Ticket
             </Button>
           </div>
         </div>

@@ -2,7 +2,7 @@ import React from "react";
 
 const BookingTable = ({ bookings }: any) => {
   return (
-    <div className="w-full overflow-x-auto bg-white rounded-lg shadow">
+    <div className="w-full overflow-auto max-h-[30vh] bg-white rounded-lg shadow">
       {/* Desktop View */}
       <table className="w-full hidden md:table">
         <thead className="bg-bgMyColor7">

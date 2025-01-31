@@ -12,22 +12,22 @@ export default function Footer() {
             <h3 className="text-sm font-semibold uppercase">Links</h3>
             <nav className="flex flex-col space-y-2">
               <Link
-                href="#"
+                href="/"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Login
               </Link>
               <Link
-                href="#"
+                href="/send-ticket"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Send Ticket
               </Link>
               <Link
-                href="#"
+                href="/cancel-tickets"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
-                Transfer Ticket
+                Cancel Ticket
               </Link>
               <Link
                 href="#"

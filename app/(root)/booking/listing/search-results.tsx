@@ -139,6 +139,7 @@ export function SearchResults({ alldata, isloading , from, to , date, passenger 
                       image={data.main_image}
                       arrival={{
                         time: data.scheduleData?.end_time,
+                        date: data.scheduleData?.endDate,
                         name: data.scheduleData?.to?.name,
                       }}
                       departure={{

@@ -294,6 +294,7 @@ interface BusCardProps {
   image: string;
   arrival: {
     time: string;
+    date: string;
     name: string;
   };
   departure: {
@@ -491,8 +492,8 @@ export function BusCard({
             <p className="text-2xl font-semibold mb-1">{arrival.time}</p>
             {/* <p className="text-gray-600">{departure.name}</p> */}
 
-            <p className="text-gray-600 mt-8">Drop Time</p>
-            <p className="text-xl">{arrival.time}</p>
+            <p className="text-gray-600 mt-8">Drop Date</p>
+            <p className="text-xl">{arrival.date}</p>
           </div>
           {/* Departure Section */}
           <div>
@@ -572,9 +573,6 @@ export function BusCard({
                     {item?.boarding?.name} / {item?.dropping?.name}
                   </div>
                 ))}
-
-                {/* <div className="text-sm">Kadawatha</div>
-                <div className="text-sm">Kurunegala</div> */}
               </div>
             </PopoverContent>
           </Popover>
