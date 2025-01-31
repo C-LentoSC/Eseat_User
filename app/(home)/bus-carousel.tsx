@@ -94,7 +94,7 @@ export default function BusCarousel() {
 
   return (
     <div className="w-full my-container my-28 !px-12">
-      <div className="flex items-center w-full justify-end mb-8">
+      {/* <div className="flex items-center w-full justify-end mb-8">
         <Image
           src={"/assets/dots.png"}
           alt="Dots"
@@ -102,7 +102,9 @@ export default function BusCarousel() {
           height={100}
           className=" self-end"
         />
-      </div>
+      </div> */}
+
+      
       {/* <Carousel
         opts={{
           align: "start",
