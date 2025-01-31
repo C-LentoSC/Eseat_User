@@ -41,19 +41,19 @@ const BusReport = () => {
       setBookings1(res?.data?.summary);
       setBookings2(res?.data);
 
-      const totalSeats =
-        res?.data?.summary
-          ?.map((item: { noOfSeate: number }) => item.noOfSeate)
-          ?.reduce((acc: number, val: number) => acc + val, 0) || 0;
+      // const totalSeats =
+      //   res?.data?.summary
+      //     ?.map((item: { noOfSeate: number }) => item.noOfSeate)
+      //     ?.reduce((acc: number, val: number) => acc + val, 0) || 0;
 
-      setNoOfSeats(totalSeats);
+      // setNoOfSeats(totalSeats);
 
-      const total =
-        res?.data?.summary
-          ?.map((item: { totalBusFare: number }) => item.totalBusFare)
-          ?.reduce((acc: number, val: number) => acc + val, 0) || 0;
+      // const total =
+      //   res?.data?.summary
+      //     ?.map((item: { totalBusFare: number }) => item.totalBusFare)
+      //     ?.reduce((acc: number, val: number) => acc + val, 0) || 0;
 
-      setTotal(total.toFixed(2));
+      // setTotal(total.toFixed(2));
 
       setIsLoading(false);
     } catch (error) {
@@ -315,7 +315,7 @@ const BusReport = () => {
                         </td>
                       </tr>
                     ))}
-                    <tr>
+                    {/* <tr>
                       <td className="px-4 py-3 text-sm font-semibold text-gray-900">
                         Total
                       </td>
@@ -328,7 +328,7 @@ const BusReport = () => {
                       <td className="px-4 py-3 text-sm font-semibold text-gray-900">
                         {total}
                       </td>
-                    </tr>
+                    </tr> */}
                   </tbody>
                 </table>
 
@@ -381,7 +381,7 @@ const BusReport = () => {
                       </div>
                     </div>
                   ))}
-                  <div className="p-4 border-b space-y-2 bg-gray-200">
+                  {/* <div className="p-4 border-b space-y-2 bg-gray-200">
                     <div className="grid grid-cols-2 gap-2">
                       <div className="text-sm font-medium text-gray-600">
                         Total Seats
@@ -394,7 +394,7 @@ const BusReport = () => {
                       </div>
                       <div className="text-sm text-gray-900">{total}</div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

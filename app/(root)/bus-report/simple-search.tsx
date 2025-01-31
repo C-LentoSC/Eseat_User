@@ -19,6 +19,13 @@ import { format } from "date-fns";
 import { CalendarIcon, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+
+interface FilmOptionType {
+  id: string;
+  scheduleNo: string;
+}
 
 export default function SimpleSearch({
   date,
@@ -26,9 +33,9 @@ export default function SimpleSearch({
   scheduleId,
   setScheduleId,
   search,
-}:any) {
+}: any) {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-  const [scheduleIdadata, setScheduleIddata] = useState<string[]>([]);
+  const [scheduleIdadata, setScheduleIddata] = useState<FilmOptionType[]>([]);
 
   useEffect(() => {
     const loaddata = async () => {
@@ -41,10 +48,10 @@ export default function SimpleSearch({
         });
 
         if (date) {
-
           // Filter the data for today's date
           const todayItems = res.data.filter(
-            (item: { date: string }) => item.date === format(new Date(date), "yyyy-MM-dd")
+            (item: { date: string }) =>
+              item.date === format(new Date(date), "yyyy-MM-dd")
           );
 
           // Set the filtered data
@@ -59,6 +66,11 @@ export default function SimpleSearch({
 
     loaddata();
   }, [date]);
+
+  const defaultProps = {
+    options: scheduleIdadata,
+    getOptionLabel: (option: FilmOptionType) => option.scheduleNo,
+  };
 
   return (
     <div className=" bg-bgMyColor6 report_bg py-14">
@@ -96,7 +108,7 @@ export default function SimpleSearch({
             <label className="text-sm font-medium">
               Schedule ID <span className="text-red-500">*</span>
             </label>
-            <Select onValueChange={setScheduleId} value={scheduleId}>
+            {/* <Select onValueChange={setScheduleId} value={scheduleId}>
               <SelectTrigger>
                 <SelectValue placeholder="Select Schedule ID" />
               </SelectTrigger>
@@ -107,11 +119,28 @@ export default function SimpleSearch({
                       {item?.scheduleNo}
                     </SelectItem>
                   ))}
-                {/* <SelectItem value="schedule1">Schedule 1</SelectItem>
-                <SelectItem value="schedule2">Schedule 2</SelectItem>
-                <SelectItem value="schedule3">Schedule 3</SelectItem> */}
               </SelectContent>
-            </Select>
+            </Select> */}
+            <Autocomplete
+              {...defaultProps}
+              id="disable-close-on-select"
+              disableCloseOnSelect
+              onChange={(_, value) => setScheduleId(value?.id || "")}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="All"
+                  variant="standard"
+                  className="bg-transparent border-gray-300 shadow-none text-black placeholder:text-black px-0 w-full outline-none focus:ring-0"
+                  InputProps={{
+                    ...params.InputProps,
+                    disableUnderline: true,
+                    className:
+                      "bg-transparent border-[1.5px] border-gray-200 shadow-none px-2 py-1 rounded-lg h-full text-black placeholder:text-black px-0 w-full outline-none focus:ring-0",
+                  }}
+                />
+              )}
+            />
           </div>
 
           <Button onClick={search}>

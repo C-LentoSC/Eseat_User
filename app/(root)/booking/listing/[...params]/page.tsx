@@ -31,6 +31,23 @@ import { format, set } from "date-fns";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
 
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+
+interface FilmOptionType {
+  name: string;
+}
+
+interface OptionType {
+  name: string;
+  value: number;
+}
+
+const passengerOptions: OptionType[] = Array.from({ length: 54 }, (_, i) => ({
+  name: `${i + 1} Passenger`,
+  value: i + 1,
+}));
+
 // Define types for data structures
 interface SeatData {
   id: number;
@@ -121,6 +138,8 @@ export default function BookingPage({
   const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
   const [selectedSeats1, setSelectedSeats1] = useState<number[]>([]);
 
+  const [bookedSeatTable, setBookedSeatTable] = useState<any[]>([]);
+
   const [isLoading, setisLoading] = useState<boolean>(false);
 
   const [pname, setpname] = useState<string>("");
@@ -130,8 +149,8 @@ export default function BookingPage({
   const [boarding, setboarding] = useState<string>("");
   const [dropping, setdropping] = useState<string>("");
 
-  const [allSeats , setAllSeats] = useState<string>("");
-  const [bookedSeats , setBookedSeats] = useState<string>("");
+  const [allSeats, setAllSeats] = useState<string>("");
+  const [bookedSeats, setBookedSeats] = useState<string>("");
 
   // const [bpoint, setbpoint] = useState<string>("");
   // const [bdoint, setdpoint] = useState<string>("");
@@ -153,6 +172,33 @@ export default function BookingPage({
   const [price1, setPrice1] = useState<number>(0);
   const [sfrom, setsfrom] = useState<string>("");
   const [sto, setsto] = useState<string>("");
+
+  const [citises, setCities] = React.useState<any[]>([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      window.location.href = "/";
+      return;
+    }
+
+    const getData = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}all-cities`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setCities(res?.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getData();
+  }, []);
 
   useEffect(() => {
     setisLoading(true);
@@ -182,17 +228,22 @@ export default function BookingPage({
           setFrom(String(params?.params?.[1]));
           setTo(String(params?.params?.[2]));
 
-          const originalDate = new Date(
-            String(params?.params?.[3]).split("T")[0]
-          );
-          const incrementedDate = new Date(originalDate);
-          incrementedDate.setDate(originalDate.getDate() + 1);
-          setDate(incrementedDate);
+          // const originalDate = new Date(
+          //   String(params?.params?.[3]).split("T")[0]
+          // );
+          // const incrementedDate = new Date(originalDate);
+          // incrementedDate.setDate(originalDate.getDate() + 1);
+          setDate(new Date(String(params?.params?.[3])));
 
           setPassenger(String(params?.params?.[4]));
 
           setAllSeats(res?.data?.allSeats?.length);
-          setBookedSeats(res?.data?.allSeats?.filter((seat: any) => seat?.isBooked)?.length);
+          setBookedSeats(
+            res?.data?.allSeats?.filter((seat: any) => seat?.isBooked)?.length
+          );
+
+          console.log(res?.data?.bookedSeats);
+          setBookedSeatTable(res?.data?.bookedSeats);
 
           setisLoading(false);
         } catch (error: any) {
@@ -350,7 +401,7 @@ export default function BookingPage({
         // Remove the seat and log the removal
 
         if (st) {
-          console.log(`Removed Key number: ${key}`);
+          // console.log(`Removed Key number: ${key}`);
           removeSelectedSeats(key, parsedSeatNumber);
           st = false;
         }
@@ -359,7 +410,7 @@ export default function BookingPage({
         // Add the seat and log the addition
 
         if (st1) {
-          console.log(`Added Keyt number: ${key}`);
+          // console.log(`Added Keyt number: ${key}`);
           addSelectedSeats(key, parsedSeatNumber);
           st1 = false;
         }
@@ -524,7 +575,7 @@ export default function BookingPage({
             id: Number(seat.id),
             is_half: false,
           })),
-          fareBrakeId: Number(fareBrakeId),
+          fareBrakeId: fareBrakeId ? Number(fareBrakeId) : null,
         },
         {
           headers: {
@@ -534,15 +585,18 @@ export default function BookingPage({
         }
       );
 
-      if (res.status === 200) {
-        toast.success(res.data.message);
+      if (res.data?.status === "ok") {
+        toast.success("Seat Booked Successfully.");
         setTimeout(() => {
           window.location.reload();
         }, 1000);
       }
     } catch (error: any) {
       console.error(error);
-      toast.error(error.response.data.message);
+      toast.error(
+        error.response.data.message.charAt(0).toUpperCase() +
+          error.response.data.message.slice(1)
+      );
     }
   };
 
@@ -685,12 +739,17 @@ export default function BookingPage({
     );
   }
 
+  const defaultProps = {
+    options: citises,
+    getOptionLabel: (option: FilmOptionType) => option.name,
+  };
+
   return (
     <>
       <div className="w-full mb-10 py-20 bg-bgMyColor6 basic_search_bg1 bg-contain lg:bg-cover">
         <div className="w-full my-container">
           <div className="bg-gray-700 text-white p-4 rounded-t-lg flex flex-wrap lg:flex-nowrap items-center justify-center gap-4 lg:gap-12 lg:w-max mx-auto">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center flex-wrap justify-center lg:flex-nowrap gap-4">
               <span>{from}</span>
               {/* <ArrowLeftRight className="w-4 h-4" /> */}
               <img
@@ -739,15 +798,34 @@ export default function BookingPage({
                 >
                   <div className="flex flex-col lg:flex-row gap-10 w-full lg:w-auto bg-white p-6 rounded-lg shadow-lg transform duration-150">
                     <div className="flex flex-col lg:flex-row gap-5 lg:items-center lg:border-e-2 border-[#a4b1bd] h-full">
-                      <div className="text-left">
+                      <div className="text-left w-full lg:w-40">
                         <label className="text-sm font-medium text-gray-500">
                           From / සිට / ஒரு
                         </label>
-                        <Input
+                        {/* <Input
                           placeholder="Leaving from.."
                           className="bg-transparent border-0 shadow-none mt-0 pt-0 px-0 w-32 text-black placeholder:text-black"
                           onChange={(e) => setFrom(e.target.value)}
                           value={from}
+                        /> */}
+                        <Autocomplete
+                          {...defaultProps}
+                          id="disable-close-on-select"
+                          disableCloseOnSelect
+                          value={citises.find((city) => city.name === from)}
+                          onChange={(_, value) => setFrom(value?.name || "")}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              placeholder="Leaving from.."
+                              variant="standard"
+                              className="bg-transparent border-0 shadow-none text-black placeholder:text-black px-0 w-full lg:w-40 outline-none focus:ring-0"
+                              InputProps={{
+                                ...params.InputProps,
+                                disableUnderline: true,
+                              }}
+                            />
+                          )}
                         />
                       </div>
 
@@ -759,15 +837,35 @@ export default function BookingPage({
                         <ArrowLeftRight className="h-4 w-4 text-white" />
                       </Button>
 
-                      <div className="text-left ml-0 lg:ml-8 pr-2">
+                      <div className="text-left ml-0 w-full lg:w-40 pr-2">
                         <label className="text-sm font-medium text-gray-500">
                           To / දක්වා /வரை
                         </label>
-                        <Input
+                        {/* <Input
                           placeholder="Going to.."
                           className="bg-transparent border-0 shadow-none mt-0 pt-0 text-black placeholder:text-black px-0 w-32 outline-none focus:ring-0"
                           onChange={(e) => setTo(e.target.value)}
                           value={to}
+                        /> */}
+
+                        <Autocomplete
+                          {...defaultProps}
+                          id="disable-close-on-select"
+                          disableCloseOnSelect
+                          value={citises.find((city) => city.name === to)}
+                          onChange={(_, value) => setTo(value?.name || "")}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              placeholder="Leaving from.."
+                              variant="standard"
+                              className="bg-transparent border-0 shadow-none text-black placeholder:text-black px-0 w-full lg:w-40 outline-none focus:ring-0"
+                              InputProps={{
+                                ...params.InputProps,
+                                disableUnderline: true,
+                              }}
+                            />
+                          )}
                         />
                       </div>
                     </div>
@@ -781,7 +879,7 @@ export default function BookingPage({
                           <Button
                             variant="outline"
                             className={cn(
-                              "w-full md:w-[200px] justify-start mt-0 pt-2 px-0 text-left font-normal bg-transparent border-0 shadow-none hover:bg-transparent hover:text-black",
+                              "w-full md:w-[200px] justify-start mt-0 pt-2 px-0 text-left font-normal bg-transparent border-0 shadow-none hover:bg-transparent text-md hover:text-black",
                               !date && "text-black"
                             )}
                           >
@@ -803,7 +901,7 @@ export default function BookingPage({
                         <label className="text-sm font-medium text-gray-500">
                           Passengers / මගීන් /பயணிகள்
                         </label>
-                        <select
+                        {/* <select
                           className="flex w-full p-2 px-0 bg-transparent text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                           onChange={(e) => setPassenger(e.target.value)}
                           value={passenger}
@@ -817,7 +915,34 @@ export default function BookingPage({
                               {i + 1} Passenger
                             </option>
                           ))}
-                        </select>
+                        </select> */}
+                        <Autocomplete
+                          id="disable-close-on-select"
+                          disableCloseOnSelect
+                          options={passengerOptions}
+                          getOptionLabel={(option) => option.name}
+                          value={
+                            passengerOptions.find(
+                              (opt) => opt.value === parseInt(passenger)
+                            ) || null
+                          }
+                          onChange={(_, value) =>
+                            setPassenger((value?.value || 1).toString())
+                          }
+                          className="w-40"
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              placeholder="Select Passenger"
+                              variant="standard"
+                              className="bg-transparent border-0 shadow-none text-black placeholder-current:text-black px-0 w-full outline-none focus:ring-0"
+                              InputProps={{
+                                ...params.InputProps,
+                                disableUnderline: true,
+                              }}
+                            />
+                          )}
+                        />
                       </div>
                     </div>
 
@@ -825,7 +950,10 @@ export default function BookingPage({
                       type="submit"
                       className="py-6"
                       onClick={() => {
-                        window.location.href = `/booking/listing?from=${from}&to=${to}&date=${date.toISOString()}&passenger=${passenger}`;
+                        window.location.href = `/booking/listing?from=${from}&to=${to}&date=${format(
+                          date,
+                          "yyyy-MM-dd"
+                        )}&passenger=${passenger}`;
                       }}
                     >
                       <Search className="w-4 h-4 mr-2" />
@@ -1041,7 +1169,11 @@ export default function BookingPage({
           </div>
         </div>
       </div>
-      <BookingTable />
+      {bookedSeatTable.length > 0 && (
+        <>
+          <BookingTable bookings={bookedSeatTable} />
+        </>
+      )}
     </>
   );
 }

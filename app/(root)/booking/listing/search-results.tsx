@@ -164,7 +164,7 @@ export function SearchResults({ alldata, isloading , from, to , date, passenger 
                       date={date}
                       passenger={passenger}
                       route_id={data.scheduleData?.route_id}
-                      subImages={data.main_image}
+                      subImages={data.otherImages}
                     />
                   ))
               ) : (

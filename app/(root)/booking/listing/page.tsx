@@ -59,11 +59,11 @@ const BookingListing = () => {
         if (from && to && date && passenger) {
           setParams({ from, to, date, passenger });
 
-          const originalDate = new Date(String(date).split("T")[0]); // Parse the date string
-          const incrementedDate = new Date(originalDate); // Clone the original date
-          incrementedDate.setDate(originalDate.getDate() + 1); // Add 1 day
+          // const originalDate = new Date(String(date).split("T")[0]); 
+          // const incrementedDate = new Date(originalDate); 
+          // incrementedDate.setDate(originalDate.getDate() + 1); 
 
-          setDate(incrementedDate); // Update the date state
+          setDate(new Date(date)); 
           setFrom(from);
           setTo(to);
           setPassenger(passenger);
@@ -117,7 +117,7 @@ const BookingListing = () => {
   }, [params]);
 
   const search = async () => {
-    window.location.href = `/booking/listing?from=${from}&to=${to}&date=${date.toISOString()}&passenger=${passenger}`;
+    window.location.href = `/booking/listing?from=${from}&to=${to}&date=${format(date , "yyyy-MM-dd")}&passenger=${passenger}`;
     // try {
     //   setIsLoading(true);
     //   const form = new FormData();

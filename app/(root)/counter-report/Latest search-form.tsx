@@ -19,6 +19,13 @@ import { format } from "date-fns";
 import { CalendarIcon, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+
+interface FilmOptionType {
+  id: string;
+  scheduleNo: string;
+}
 
 export default function SearchForm({
   date,
@@ -31,7 +38,7 @@ export default function SearchForm({
 }: any) {
   // const [date, setDate] = useState<Date>();
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-  const [scheduleIdadata, setScheduleIddata] = useState<string[]>([]);
+  const [scheduleIdadata, setScheduleIddata] = useState<FilmOptionType[]>([]);
 
   useEffect(() => {
     const loaddata = async () => {
@@ -53,7 +60,7 @@ export default function SearchForm({
         //   // Set the filtered data
         //   setScheduleIddata(todayItems);
         // } else {
-          setScheduleIddata(res.data);
+        setScheduleIddata(res.data);
         // }
       } catch (error) {
         console.error(error);
@@ -62,6 +69,11 @@ export default function SearchForm({
 
     loaddata();
   }, [date]);
+
+  const defaultProps = {
+    options: scheduleIdadata,
+    getOptionLabel: (option: FilmOptionType) => option.scheduleNo,
+  };
 
   return (
     <div className=" bg-bgMyColor6 report_bg py-14">
@@ -99,7 +111,7 @@ export default function SearchForm({
             <label className="text-sm font-medium">
               Schedule ID <span className="text-red-500">*</span>
             </label>
-            <Select onValueChange={setScheduleId} value={scheduleId}>
+            {/* <Select onValueChange={setScheduleId} value={scheduleId}>
               <SelectTrigger>
                 <SelectValue placeholder="All" />
               </SelectTrigger>
@@ -111,10 +123,27 @@ export default function SearchForm({
                       {item?.scheduleNo}
                     </SelectItem>
                   ))}
-                {/* <SelectItem value="schedule1">Schedule 1</SelectItem>
-                <SelectItem value="schedule2">Schedule 2</SelectItem> */}
               </SelectContent>
-            </Select>
+            </Select> */}
+            <Autocomplete
+              {...defaultProps}
+              id="disable-close-on-select"
+              disableCloseOnSelect
+              onChange={(_, value) => setScheduleId(value?.id || "")}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="All"
+                  variant="standard"
+                  className="bg-transparent border-gray-300 shadow-none text-black placeholder:text-black px-0 w-full outline-none focus:ring-0"
+                  InputProps={{
+                    ...params.InputProps,
+                    disableUnderline: true,
+                    className: "bg-transparent border-[1.5px] border-gray-200 shadow-none px-2 py-1 rounded-lg h-full text-black placeholder:text-black px-0 w-full outline-none focus:ring-0",
+                  }}
+                />
+              )}
+            />
           </div>
 
           <div className="space-y-2">
