@@ -23,6 +23,7 @@ export function AssignedBusesSection() {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const [searchQuery, setSearchQuery] = useState("");
   const [routes, setRoutes] = useState<Route[]>([]);
+  const [filteredRoutes, setFilteredRoutes] = useState<Route[]>([]);
   const [loadMoreCount, setLoadMoreCount] = useState(9);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -46,6 +47,7 @@ export function AssignedBusesSection() {
         const storedOrder = JSON.parse(
           localStorage.getItem("busOrder") || "[]"
         );
+
         if (storedOrder.length > 0) {
           const orderedRoutes = storedOrder
             .map((id: string) =>
@@ -53,8 +55,10 @@ export function AssignedBusesSection() {
             )
             .filter(Boolean);
           setRoutes(orderedRoutes);
+          setFilteredRoutes(orderedRoutes);
         } else {
           setRoutes(fetchedRoutes);
+          setFilteredRoutes(fetchedRoutes);
         }
         setIsLoading(false);
       } catch (error) {
@@ -64,6 +68,26 @@ export function AssignedBusesSection() {
     };
     getData();
   }, []);
+
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      // Reset to stored order if search query is empty
+      const storedOrder = JSON.parse(localStorage.getItem("busOrder") || "[]");
+      if (storedOrder.length > 0) {
+        const orderedRoutes = storedOrder
+          .map((id: string) => routes.find((route: Route) => route.id === id))
+          .filter(Boolean);
+        setFilteredRoutes(orderedRoutes);
+      } else {
+        setFilteredRoutes(routes);
+      }
+    } else {
+      const filtered = routes.filter((route) =>
+        route.schedule_number.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredRoutes(filtered);
+    }
+  }, [searchQuery, routes]);
 
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
@@ -79,10 +103,12 @@ export function AssignedBusesSection() {
     const sourceIndex = parseInt(e.dataTransfer.getData("text/plain"), 10);
     if (sourceIndex === targetIndex) return;
 
-    const updatedRoutes = [...routes];
+    const updatedRoutes = [...filteredRoutes];
     const [movedItem] = updatedRoutes.splice(sourceIndex, 1);
     updatedRoutes.splice(targetIndex, 0, movedItem);
-    setRoutes(updatedRoutes);
+
+    setFilteredRoutes(updatedRoutes);
+    setRoutes(updatedRoutes); // ✅ Keep `routes` updated for localStorage persistence
 
     localStorage.setItem(
       "busOrder",
@@ -119,7 +145,7 @@ export function AssignedBusesSection() {
         <LoadingAnimation />
       ) : (
         <>
-          {routes.length > 0 ? (
+          {filteredRoutes.length > 0 ? (
             <>
               <span className="text-[#d91b5c] font-medium text-base flex gap-2 items-center">
                 Drag and Drop 6 Busses
@@ -130,7 +156,7 @@ export function AssignedBusesSection() {
                 />
               </span>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
-                {routes.slice(0, loadMoreCount).map((route, index) => (
+                {filteredRoutes.slice(0, loadMoreCount).map((route, index) => (
                   <div
                     key={route.id}
                     draggable
@@ -144,7 +170,7 @@ export function AssignedBusesSection() {
                 ))}
               </div>
 
-              {routes.length > loadMoreCount && (
+              {filteredRoutes.length > loadMoreCount && (
                 <div className="flex justify-center mt-8">
                   <Button onClick={() => setLoadMoreCount(loadMoreCount + 9)}>
                     Load More
