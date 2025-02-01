@@ -33,6 +33,7 @@ import toast from "react-hot-toast";
 
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import { Popper } from "@mui/material";
 
 interface FilmOptionType {
   name: string;
@@ -175,6 +176,8 @@ export default function BookingPage({
   const [sto, setsto] = useState<string>("");
 
   const [citises, setCities] = React.useState<any[]>([]);
+
+  const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -809,10 +812,48 @@ export default function BookingPage({
                           onChange={(e) => setFrom(e.target.value)}
                           value={from}
                         /> */}
+                        {/* <Autocomplete
+                          {...defaultProps}
+                          id="disable-close-on-select"
+                          disableCloseOnSelect
+                          value={citises.find((city) => city.name === from)}
+                          onChange={(_, value) => setFrom(value?.name || "")}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              placeholder="Leaving from.."
+                              variant="standard"
+                              className="bg-transparent border-0 shadow-none text-black placeholder:text-black px-0 w-full lg:w-40 outline-none focus:ring-0"
+                              InputProps={{
+                                ...params.InputProps,
+                                disableUnderline: true,
+                              }}
+                            />
+                          )}
+                        /> */}
                         <Autocomplete
                           {...defaultProps}
                           id="disable-close-on-select"
                           disableCloseOnSelect
+                          PopperComponent={(props) => (
+                            <Popper
+                              {...props}
+                              modifiers={[
+                                {
+                                  name: "preventOverflow",
+                                  options: {
+                                    boundary: "window",
+                                  },
+                                },
+                              ]}
+                              sx={{
+                                "& .MuiAutocomplete-listbox": {
+                                  scrollbarWidth: "none", // Firefox
+                                  "&::-webkit-scrollbar": { display: "none" }, // Chrome, Safari
+                                },
+                              }}
+                            />
+                          )}
                           value={citises.find((city) => city.name === from)}
                           onChange={(_, value) => setFrom(value?.name || "")}
                           renderInput={(params) => (
@@ -849,7 +890,7 @@ export default function BookingPage({
                           value={to}
                         /> */}
 
-                        <Autocomplete
+                        {/* <Autocomplete
                           {...defaultProps}
                           id="disable-close-on-select"
                           disableCloseOnSelect
@@ -867,6 +908,37 @@ export default function BookingPage({
                               }}
                             />
                           )}
+                        /> */}
+
+                        <Autocomplete
+                          {...defaultProps}
+                          id="disable-close-on-select"
+                          disableCloseOnSelect
+                          PopperComponent={(props) => (
+                            <Popper
+                              {...props}
+                              sx={{
+                                "& .MuiAutocomplete-listbox": {
+                                  scrollbarWidth: "none", // Firefox
+                                  "&::-webkit-scrollbar": { display: "none" }, // Chrome, Safari
+                                },
+                              }}
+                            />
+                          )}
+                          value={citises.find((city) => city.name === to)}
+                          onChange={(_, value) => setTo(value?.name || "")}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              placeholder="Going to.."
+                              variant="standard"
+                              className="bg-transparent border-0 shadow-none text-black placeholder-current:text-black px-0 w-full lg:w-40 outline-none focus:ring-0"
+                              InputProps={{
+                                ...params.InputProps,
+                                disableUnderline: true,
+                              }}
+                            />
+                          )}
                         />
                       </div>
                     </div>
@@ -875,7 +947,7 @@ export default function BookingPage({
                       <label className="text-sm font-medium text-gray-500">
                         Date / දිනය / தேதி
                       </label>
-                      <Popover>
+                      <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
@@ -891,7 +963,19 @@ export default function BookingPage({
                           <Calendar
                             mode="single"
                             selected={date}
-                            onSelect={(day) => setDate(day || new Date())}
+                            // onSelect={(day) => setDate(day || new Date())}
+                            onSelect={(selectedDate) => {
+                              if (
+                                selectedDate &&
+                                format(selectedDate, "yyyy-MM-dd") <
+                                  format(new Date(), "yyyy-MM-dd")
+                              ) {
+                                toast.error("You can't Select Previous Date");
+                              } else {
+                                setDate(selectedDate || new Date());
+                                setOpen(false);
+                              }
+                            }}
                             initialFocus
                           />
                         </PopoverContent>
@@ -917,6 +1001,33 @@ export default function BookingPage({
                             </option>
                           ))}
                         </select> */}
+                        {/* <Autocomplete
+                          id="disable-close-on-select"
+                          disableCloseOnSelect
+                          options={passengerOptions}
+                          getOptionLabel={(option) => option.name}
+                          value={
+                            passengerOptions.find(
+                              (opt) => opt.value === parseInt(passenger)
+                            ) || null
+                          }
+                          onChange={(_, value) =>
+                            setPassenger((value?.value || 1).toString())
+                          }
+                          className="w-40"
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              placeholder="Select Passenger"
+                              variant="standard"
+                              className="bg-transparent border-0 shadow-none text-black placeholder-current:text-black px-0 w-full outline-none focus:ring-0"
+                              InputProps={{
+                                ...params.InputProps,
+                                disableUnderline: true,
+                              }}
+                            />
+                          )}
+                        /> */}
                         <Autocomplete
                           id="disable-close-on-select"
                           disableCloseOnSelect
@@ -930,6 +1041,17 @@ export default function BookingPage({
                           onChange={(_, value) =>
                             setPassenger((value?.value || 1).toString())
                           }
+                          PopperComponent={(props) => (
+                            <Popper
+                              {...props}
+                              sx={{
+                                "& .MuiAutocomplete-listbox": {
+                                  scrollbarWidth: "none", // Firefox
+                                  "&::-webkit-scrollbar": { display: "none" }, // Chrome, Safari
+                                },
+                              }}
+                            />
+                          )}
                           className="w-40"
                           renderInput={(params) => (
                             <TextField

@@ -16,6 +16,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import { Popper } from "@mui/material";
 
 interface FilmOptionType {
   name: string;
@@ -41,6 +42,8 @@ export function WelcomeSection() {
   const [from, setFrom] = useState<string>("");
   const [to, setTo] = useState<string>("");
   const [passenger, setPassenger] = useState<string>("1");
+
+  const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -142,6 +145,25 @@ export function WelcomeSection() {
                   {...defaultProps}
                   id="disable-close-on-select"
                   disableCloseOnSelect
+                  PopperComponent={(props) => (
+                    <Popper
+                      {...props}
+                      modifiers={[
+                        {
+                          name: "preventOverflow",
+                          options: {
+                            boundary: "window",
+                          },
+                        },
+                      ]}
+                      sx={{
+                        "& .MuiAutocomplete-listbox": {
+                          scrollbarWidth: "none", // Firefox
+                          "&::-webkit-scrollbar": { display: "none" }, // Chrome, Safari
+                        },
+                      }}
+                    />
+                  )}
                   onChange={(_, value) => setFrom(value?.name || "")}
                   renderInput={(params) => (
                     <TextField
@@ -178,6 +200,17 @@ export function WelcomeSection() {
                   {...defaultProps}
                   id="disable-close-on-select"
                   disableCloseOnSelect
+                  PopperComponent={(props) => (
+                    <Popper
+                      {...props}
+                      sx={{
+                        "& .MuiAutocomplete-listbox": {
+                          scrollbarWidth: "none", // Firefox
+                          "&::-webkit-scrollbar": { display: "none" }, // Chrome, Safari
+                        },
+                      }}
+                    />
+                  )}
                   onChange={(_, value) => setTo(value?.name || "")}
                   renderInput={(params) => (
                     <TextField
@@ -199,7 +232,7 @@ export function WelcomeSection() {
               <label className="text-sm font-medium text-gray-500">
                 Date / දිනය / தேதி
               </label>
-              <Popover>
+              <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -224,6 +257,7 @@ export function WelcomeSection() {
                         toast.error("You can't Select Previous Date");
                       } else {
                         setDate(selectedDate);
+                        setOpen(false);
                       }
                     }}
                     initialFocus
@@ -260,6 +294,17 @@ export function WelcomeSection() {
                   onChange={(_, value) =>
                     setPassenger((value?.value || 1).toString())
                   }
+                  PopperComponent={(props) => (
+                    <Popper
+                      {...props}
+                      sx={{
+                        "& .MuiAutocomplete-listbox": {
+                          scrollbarWidth: "none", // Firefox
+                          "&::-webkit-scrollbar": { display: "none" }, // Chrome, Safari
+                        },
+                      }}
+                    />
+                  )}
                   className="w-40"
                   renderInput={(params) => (
                     <TextField
