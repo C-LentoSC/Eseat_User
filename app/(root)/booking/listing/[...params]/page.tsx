@@ -1190,7 +1190,7 @@ export default function BookingPage({
                     ))}
                   </SelectContent>
                 </Select> */}
-                <Autocomplete
+                {/* <Autocomplete
                   options={alldata?.fareBrake || []}
                   getOptionLabel={(option) =>
                     `${option?.boarding?.name} / ${option?.dropping?.name}`
@@ -1213,6 +1213,44 @@ export default function BookingPage({
                         disableUnderline: true,
                         className:
                           "bg-transparent border-[1.5px] border-gray-200 shadow-none px-2 py-1 rounded-lg h-full text-black placeholder:text-black px-0 w-full outline-none focus:ring-0",
+                      }}
+                    />
+                  )}
+                /> */}
+                <Autocomplete
+                  options={alldata?.fareBrake || []}
+                  getOptionLabel={(option) =>
+                    `${option?.boarding?.name} / ${option?.dropping?.name}`
+                  }
+                  onChange={(_, value) =>
+                    setboardingdata(
+                      value
+                        ? `${value?.price} | ${value?.boarding?.name} | ${value?.dropping?.name} | ${value?.id}`
+                        : ""
+                    )
+                  }
+                  PopperComponent={(props) => (
+                    <Popper
+                      {...props}
+                      sx={{
+                        "& .MuiAutocomplete-listbox": {
+                          scrollbarWidth: "none", // Firefox
+                          "&::-webkit-scrollbar": { display: "none" }, // Chrome, Safari
+                        },
+                      }}
+                    />
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      placeholder="Select boarding point"
+                      variant="standard"
+                      className="bg-transparent border-gray-300 shadow-none text-black placeholder:text-black px-0 w-full outline-none focus:ring-0"
+                      InputProps={{
+                        ...params.InputProps,
+                        disableUnderline: true,
+                        className:
+                          "bg-transparent border-[1.5px] border-gray-200 shadow-none px-2 py-1 rounded-lg h-full text-black placeholder:text-black w-full outline-none focus:ring-0",
                       }}
                     />
                   )}
