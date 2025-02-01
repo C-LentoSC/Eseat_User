@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import { Popper } from "@mui/material";
 
 interface FilmOptionType {
   id: string;
@@ -36,6 +37,8 @@ export default function SimpleSearch({
 }: any) {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const [scheduleIdadata, setScheduleIddata] = useState<FilmOptionType[]>([]);
+
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const loaddata = async () => {
@@ -80,7 +83,7 @@ export default function SimpleSearch({
             <label className="text-sm font-medium">
               Select Date <span className="text-red-500">*</span>
             </label>
-            <Popover>
+            <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant={"outline"}
@@ -99,7 +102,10 @@ export default function SimpleSearch({
                 <Calendar
                   mode="single"
                   selected={date}
-                  onSelect={setDate}
+                  onSelect={(date)=>{
+                    setDate(date);
+                    setOpen(false);
+                  }}
                   initialFocus
                 />
               </PopoverContent>
@@ -123,7 +129,7 @@ export default function SimpleSearch({
                   ))}
               </SelectContent>
             </Select> */}
-            <Autocomplete
+            {/* <Autocomplete
               {...defaultProps}
               id="disable-close-on-select"
               disableCloseOnSelect
@@ -139,6 +145,37 @@ export default function SimpleSearch({
                     disableUnderline: true,
                     className:
                       "bg-transparent border-[1.5px] border-gray-200 shadow-none px-2 py-1 rounded-lg h-full text-black placeholder:text-black px-0 w-full outline-none focus:ring-0",
+                  }}
+                />
+              )}
+            /> */}
+            <Autocomplete
+              {...defaultProps}
+              id="disable-close-on-select"
+              disableCloseOnSelect
+              onChange={(_, value) => setScheduleId(value?.id || "")}
+              PopperComponent={(props) => (
+                <Popper
+                  {...props}
+                  sx={{
+                    "& .MuiAutocomplete-listbox": {
+                      scrollbarWidth: "none", // Firefox
+                      "&::-webkit-scrollbar": { display: "none" }, // Chrome, Safari
+                    },
+                  }}
+                />
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="All"
+                  variant="standard"
+                  className="bg-transparent border-gray-300 shadow-none text-black placeholder:text-black px-0 w-full outline-none focus:ring-0"
+                  InputProps={{
+                    ...params.InputProps,
+                    disableUnderline: true,
+                    className:
+                      "bg-transparent border-[1.5px] border-gray-200 shadow-none px-2 py-1 rounded-lg h-full text-black placeholder:text-black w-full outline-none focus:ring-0",
                   }}
                 />
               )}

@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import { Popper } from "@mui/material";
 
 interface FilmOptionType {
   id: string;
@@ -39,6 +40,9 @@ export default function SearchForm({
   // const [date, setDate] = useState<Date>();
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const [scheduleIdadata, setScheduleIddata] = useState<FilmOptionType[]>([]);
+
+  const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
 
   useEffect(() => {
     const loaddata = async () => {
@@ -83,7 +87,7 @@ export default function SearchForm({
             <label className="text-sm font-medium">
               Selected Booked Date <span className="text-red-500">*</span>
             </label>
-            <Popover>
+            <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant={"outline"}
@@ -100,7 +104,12 @@ export default function SearchForm({
                 <Calendar
                   mode="single"
                   selected={date}
-                  onSelect={setDate}
+                  onSelect={(date) => {
+                    if (date) {
+                      setDate(date);
+                      setOpen(false);
+                    }
+                  }}
                   initialFocus
                 />
               </PopoverContent>
@@ -125,7 +134,7 @@ export default function SearchForm({
                   ))}
               </SelectContent>
             </Select> */}
-            <Autocomplete
+            {/* <Autocomplete
               {...defaultProps}
               id="disable-close-on-select"
               disableCloseOnSelect
@@ -140,6 +149,37 @@ export default function SearchForm({
                     ...params.InputProps,
                     disableUnderline: true,
                     className: "bg-transparent border-[1.5px] border-gray-200 shadow-none px-2 py-1 rounded-lg h-full text-black placeholder:text-black px-0 w-full outline-none focus:ring-0",
+                  }}
+                />
+              )}
+            /> */}
+            <Autocomplete
+              {...defaultProps}
+              id="disable-close-on-select"
+              disableCloseOnSelect
+              onChange={(_, value) => setScheduleId(value?.id || "")}
+              PopperComponent={(props) => (
+                <Popper
+                  {...props}
+                  sx={{
+                    "& .MuiAutocomplete-listbox": {
+                      scrollbarWidth: "none", // Firefox
+                      "&::-webkit-scrollbar": { display: "none" }, // Chrome, Safari
+                    },
+                  }}
+                />
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="All"
+                  variant="standard"
+                  className="bg-transparent border-gray-300 shadow-none text-black placeholder:text-black px-0 w-full outline-none focus:ring-0"
+                  InputProps={{
+                    ...params.InputProps,
+                    disableUnderline: true,
+                    className:
+                      "bg-transparent border-[1.5px] border-gray-200 shadow-none px-2 py-1 rounded-lg h-full text-black placeholder:text-black w-full outline-none focus:ring-0",
                   }}
                 />
               )}
@@ -160,7 +200,7 @@ export default function SearchForm({
                 <SelectItem value="point3">Point 3</SelectItem>
               </SelectContent>
             </Select> */}
-            <Popover>
+            <Popover open={open1} onOpenChange={setOpen1}>
               <PopoverTrigger asChild>
                 <Button
                   variant={"outline"}
@@ -177,7 +217,10 @@ export default function SearchForm({
                 <Calendar
                   mode="single"
                   selected={travelDate}
-                  onSelect={setTravelDate}
+                  onSelect={(TravelDate)=>{
+                    setTravelDate(TravelDate);
+                    setOpen1(false);
+                  }}
                   initialFocus
                 />
               </PopoverContent>
