@@ -353,7 +353,7 @@ export function BusCard({
     <div className="flex flex-col md:flex-row bg-bgMyColor6 rounded-lg overflow-hidden border">
       {/* Bus Image */}
       <div className="w-full md:w-72 h-auto relative">
-        <div className="w-full absolute top-0 flex justify-end items-center z-50 p-1">
+        <div className="w-full absolute top-0 flex justify-end items-center z-40 p-1">
           <img
             src="/assets/fullicon.svg"
             alt="full_Screen"

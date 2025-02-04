@@ -2,7 +2,7 @@ import React from "react";
 
 const BookingTable = ({ bookings }: any) => {
   return (
-    <div className="w-full overflow-auto max-h-[30vh] bg-white rounded-lg shadow">
+    <div className="w-full overflow-auto max-h-[25vh] bg-white rounded-lg shadow">
       {/* Desktop View */}
       <table className="w-full hidden md:table">
         <thead className="bg-bgMyColor7">
@@ -78,7 +78,7 @@ const BookingTable = ({ bookings }: any) => {
 
       {/* Mobile View */}
       <div className="md:hidden">
-        {bookings?.length < 0 ? (
+        {bookings?.length > 0 ? (
           <>
             {bookings.map((booking :any, index: React.Key | null | undefined) => (
               <div key={index} className="p-4 border-b">

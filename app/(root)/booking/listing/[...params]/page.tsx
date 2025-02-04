@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
+import html2canvas from "html2canvas";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -134,6 +135,7 @@ export default function BookingPage({
   const sheduleId = params?.params?.[0] || "";
 
   const [alldata, setAlldata] = useState<Alldata | null>(null);
+  const [ticketData, setTicketData] = useState<any>({});
 
   const [seatcount, setseatcount] = useState<number>(0);
 
@@ -143,6 +145,7 @@ export default function BookingPage({
   const [bookedSeatTable, setBookedSeatTable] = useState<any[]>([]);
 
   const [isLoading, setisLoading] = useState<boolean>(false);
+  const [isLoading1, setisLoading1] = useState<boolean>(false);
 
   const [pname, setpname] = useState<string>("");
   const [pmobile, setpmobile] = useState<string>("");
@@ -218,6 +221,7 @@ export default function BookingPage({
               },
             }
           );
+
           setAlldata(res.data);
           setseatcount(res?.data?.allSeats?.length);
 
@@ -425,16 +429,16 @@ export default function BookingPage({
 
   const removeSelectedSeats = async (key: string, parsedSeatNumber: number) => {
     try {
-      const form = new FormData();
-      form.append("id", sheduleId);
-      form.append("key", key);
+      // const form = new FormData();
+      // form.append("id", sheduleId);
+      // form.append("key", key);
 
-      const res = await axios.post(`${BASE_URL}remove-processing`, form, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      // const res = await axios.post(`${BASE_URL}remove-processing`, form, {
+      //   headers: {
+      //     "Content-Type": "multipart/form-data",
+      //     Authorization: `Bearer ${localStorage.getItem("token")}`,
+      //   },
+      // });
 
       setSeats((prevSeats) =>
         prevSeats.map((seat) =>
@@ -464,18 +468,18 @@ export default function BookingPage({
 
   const addSelectedSeats = async (key: string, parsedSeatNumber: number) => {
     try {
-      const form = new FormData();
-      form.append("id", sheduleId);
-      form.append("key", key);
+      // const form = new FormData();
+      // form.append("id", sheduleId);
+      // form.append("key", key);
 
-      const res = await axios.post(`${BASE_URL}add-processing`, form, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      // const res = await axios.post(`${BASE_URL}add-processing`, form, {
+      //   headers: {
+      //     "Content-Type": "multipart/form-data",
+      //     Authorization: `Bearer ${localStorage.getItem("token")}`,
+      //   },
+      // });
 
-      console.warn(parsedSeatNumber.toString().padStart(2, "0"));
+      // console.warn(parsedSeatNumber.toString().padStart(2, "0"));
 
       setSeats((prevSeats) =>
         prevSeats.map((seat) =>
@@ -591,8 +595,31 @@ export default function BookingPage({
 
       if (res.data?.status === "ok") {
         toast.success("Seat Booked Successfully.");
+        setisLoading1(true);
+        setTicketData(res.data);
+
         setTimeout(() => {
-          window.location.reload();
+          const ticketElement = document.getElementById("user-ticket");
+          if (ticketElement) {
+            html2canvas(ticketElement)
+              .then((canvas) => {
+                const dataUrl = canvas.toDataURL("image/png");
+                const link = document.createElement("a");
+                link.href = dataUrl;
+                link.download = "ticket.png";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              })
+              .catch((error) => {
+                console.error("Error generating image:", error);
+                toast.error("Error generating image.");
+              });
+          }
+          setisLoading1(false);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         }, 1000);
       }
     } catch (error: any) {
@@ -750,6 +777,282 @@ export default function BookingPage({
 
   return (
     <>
+      {isLoading1 && (
+        <>
+          <>
+            <div className="h-full top-0 z-50 w-full flex-col bg-black/70 fixed flex justify-center items-center">
+              <LoadingAnimation />
+            </div>
+          </>
+        </>
+      )}
+      <>
+        <div className="absolute left-[-9999px] top-[-9999px] flex justify-center items-center bg-black/50 bg-contain h-full w-full z-50">
+          <div
+            id="user-ticket"
+            className="bg-white ticket_bg bg-center bg-contain rounded-2xl min-h-auto flex justify-center items-center"
+          >
+            <div className="flex w-full flex-row px-5 h-full items-start gap-2">
+              <div className="p-2 min-w-[270px] lg:min-w-max flex h-full flex-col space-y-5">
+                <img
+                  src="/logos/sltb_logo2.svg"
+                  alt="Sri Lanka Transport Board"
+                  className="w-40"
+                />
+                <div className="flex flex-col mt-3 space-y-1">
+                  <span className="font-extralight uppercase text-md">
+                    PASSENGER NAME
+                  </span>
+                  <span className="font-semibold text-lg">
+                    {ticketData?.details?.name
+                      ? ticketData?.details?.name
+                      : "--"}
+                  </span>
+                </div>
+                <div className="flex flex-col mt-3 space-y-1">
+                  <span className="font-extralight uppercase text-md">nic</span>
+                  <span className="font-semibold text-lg">
+                    {ticketData?.details?.nicOrPassport
+                      ? ticketData?.details?.nicOrPassport
+                      : "--"}
+                  </span>
+                </div>
+                <div className="flex flex-col mt-3 space-y-1">
+                  <span className="font-extralight text-md">Booked Date</span>
+                  <span className="font-semibold text-lg">
+                    {ticketData?.bookedDateTime
+                      ? new Date(
+                          ticketData?.bookedDateTime
+                        ).toLocaleDateString()
+                      : "--/--/--"}
+                  </span>
+                </div>
+                <div className="flex items-center mt-5 gap-3">
+                  <div className="flex flex-col font-extralight text-md">
+                    <span>Bus Fare</span>
+                    <span>Service Chargers</span>
+                  </div>
+                  <div className="flex flex-col font-normal text-md">
+                    <span>
+                      Rs {ticketData?.busFare ? ticketData?.busFare : 0.0} x{" "}
+                      {ticketData?.seats?.length}
+                    </span>
+                    <span>
+                      Rs{" "}
+                      {ticketData?.serviceCharge
+                        ? ticketData?.serviceCharge
+                        : 0.0}{" "}
+                      x {ticketData?.seats?.length}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col mt-3 font-medium text-lg">
+                  <span>
+                    Total : {ticketData.total ? ticketData.total.toFixed(2) : 0.0}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex flex-col min-w-[750px] lg:min-w-max h-[450px] gap-5">
+                <div className="w-full flex flex-row gap-5">
+                  <div className="h-auto">
+                    <img
+                      src="/assets/sltb-eseat.svg"
+                      alt="Sri Lanka Transport Board"
+                      className="object-cover h-full min-w-[45px] lg:w-full"
+                    />
+                  </div>
+                  <div className="h-full w-full flex flex-col pt-5 space-y-3 gap-5">
+                    <div className="flex flex-row w-full justify-between gap-5">
+                      <div className="flex flex-col w-max">
+                        <span className="font-extralight text-md">Pickup</span>
+                        <span className="font-medium text-lg">
+                          {ticketData?.route?.split("-")[0]}
+                        </span>
+                        {/* <span className="font-extralight text-md">
+                          (Colombo)
+                        </span> */}
+                      </div>
+                      <div className="flex gap-2 w-max items-center justify-center">
+                        <img
+                          src="/assets/bus-dot.svg"
+                          alt="bus_dot"
+                          className="w-5"
+                        />
+                        <img
+                          src="/assets/bus-dot.svg"
+                          alt="bus_dot"
+                          className="w-5"
+                        />
+                        <img
+                          src="/assets/bus-dot.svg"
+                          alt="bus_dot"
+                          className="w-5"
+                        />
+                        <img
+                          src="/assets/bus-dot.svg"
+                          alt="bus_dot"
+                          className="w-5"
+                        />
+                        <img
+                          src="/assets/bus-icon.svg"
+                          alt="Bus"
+                          className="w-9"
+                        />
+                        <img
+                          src="/assets/bus-dot.svg"
+                          alt="bus_dot"
+                          className="w-5"
+                        />
+                        <img
+                          src="/assets/bus-dot.svg"
+                          alt="bus_dot"
+                          className="w-5"
+                        />
+                        <img
+                          src="/assets/bus-dot.svg"
+                          alt="bus_dot"
+                          className="w-5"
+                        />
+                        <img
+                          src="/assets/bus-dot.svg"
+                          alt="bus_dot"
+                          className="w-5"
+                        />
+                      </div>
+                      <div className="flex flex-col w-max">
+                        <span className="font-extralight text-md">Drop</span>
+                        <span className="font-medium text-lg">
+                          {ticketData?.route?.split("-")[1]}
+                        </span>
+                        {/* <span className="font-extralight text-md">
+                          (Ampara)
+                        </span> */}
+                      </div>
+                    </div>
+                    <div className="w-full flex justify-between">
+                      <div className="flex flex-col">
+                        <span className="font-extralight text-md">
+                          Pickup Date / Time
+                        </span>
+                        <span className="font-medium text-lg">
+                          {ticketData?.startDateTime
+                            ? new Date(
+                                ticketData?.startDateTime
+                              ).toLocaleDateString()
+                            : "--/--/--"}
+                        </span>
+                        <span className="font-medium text-lg">
+                          {ticketData?.startDateTime
+                            ? new Date(
+                                ticketData?.startDateTime
+                              ).toLocaleTimeString()
+                            : "--:--"}
+                        </span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-extralight text-md">
+                          Drop Date / Time
+                        </span>
+                        <span className="font-medium text-lg">
+                          {ticketData?.endDateTime
+                            ? new Date(
+                                ticketData?.endDateTime
+                              ).toLocaleDateString()
+                            : "--/--/--"}
+                        </span>
+                        <span className="font-medium text-lg">
+                          {ticketData?.endDateTime
+                            ? new Date(
+                                ticketData?.endDateTime
+                              ).toLocaleTimeString()
+                            : "--:--"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full flex flex-col items-start justify-start px-10 h-full">
+                  {/* Top card */}
+                  <div className="flex flex-row items-center h-full justify-center gap-14">
+                    {/* card */}
+                    <div className="flex flex-col space-y-10">
+                      <div className="flex flex-col space-y-2">
+                        <span className="font-extralight text-sm">
+                          Ticket Ref No.
+                        </span>
+                        <span className="text-md font-medium">
+                          {ticketData.ref ? ticketData.ref : "--"}
+                        </span>
+                      </div>
+                      <div className="flex flex-col space-y-2">
+                        <span className="font-extralight text-sm">Depot</span>
+                        <span className="text-md font-medium">
+                          {ticketData?.depot ? ticketData?.depot : "--"}
+                        </span>
+                      </div>
+                    </div>
+                    {/* card */}
+                    {/* card */}
+                    <div className="flex flex-col space-y-10">
+                      <div className="flex flex-col space-y-2">
+                        <span className="font-extralight text-sm">V-Code</span>
+                        <span className="text-md font-medium">
+                          {ticketData?.vCode ? ticketData?.vCode : "--"}
+                        </span>
+                      </div>
+                      <div className="flex flex-col space-y-2">
+                        <span className="font-extralight text-sm">
+                          Bus Model
+                        </span>
+                        <span className="text-md font-medium">
+                          {ticketData?.bus_model ? ticketData?.bus_model : "--"}
+                        </span>
+                      </div>
+                    </div>
+                    {/* card */}
+                    {/* card */}
+                    <div className="flex flex-col space-y-10">
+                      <div className="flex flex-col space-y-2">
+                        <span className="font-extralight text-sm">Seat No</span>
+                        <span className="text-md font-medium">
+                          {ticketData?.seats
+                            ? ticketData?.seats.map((item: any) =>
+                                item.seat_no
+                              ).join(",")
+                            : "--"}
+                        </span>
+                      </div>
+                      <div className="flex flex-col space-y-2">
+                        <span className="font-extralight text-sm">
+                          Schedule ID
+                        </span>
+                        <span className="text-md font-medium">{ticketData?.scheduleId ? ticketData?.scheduleId : "--"}</span>
+                      </div>
+                    </div>
+                    {/* card */}
+                    {/* card */}
+                    <div className="flex flex-col space-y-10">
+                      <div className="flex flex-col space-y-2">
+                        <span className="font-extralight text-sm">
+                          No.of Seats
+                        </span>
+                        <span className="text-md font-medium">{ticketData?.seats ? ticketData?.seats.length : "--"}</span>
+                      </div>
+                      <div className="flex flex-col space-y-2">
+                        <span className="font-extralight text-sm">Route</span>
+                        <span className="text-md font-medium">{ticketData?.routeId ? ticketData?.routeId : "--"}</span>
+                      </div>
+                    </div>
+                    {/* card */}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+
       <div className="w-full mb-10 py-20 bg-bgMyColor6 basic_search_bg1 bg-contain lg:bg-cover">
         <div className="w-full my-container">
           <div className="bg-gray-700 text-white p-4 rounded-t-lg flex flex-wrap lg:flex-nowrap items-center justify-center gap-4 lg:gap-12 lg:w-max mx-auto">
@@ -1243,7 +1546,7 @@ export default function BookingPage({
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      placeholder="Select boarding point"
+                      placeholder={`${alldata?.from?.name} - ${alldata?.to?.name}`}
                       variant="standard"
                       className="bg-transparent border-gray-300 shadow-none text-black placeholder:text-black px-0 w-full outline-none focus:ring-0"
                       InputProps={{
@@ -1351,6 +1654,7 @@ export default function BookingPage({
             />
             <Button
               className="w-full mt-4 bg-pink-600 hover:bg-pink-700"
+              // onClick={handleDownload}
               onClick={printTicket}
             >
               Print Ticket
