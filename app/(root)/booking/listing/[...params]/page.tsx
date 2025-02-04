@@ -839,16 +839,27 @@ export default function BookingPage({
                     </span>
                     <span>
                       Rs{" "}
-                      {ticketData?.serviceCharge
-                        ? ticketData?.serviceCharge
-                        : 0.0}{" "}
-                      x {ticketData?.seats?.length}
+                      {ticketData?.seats
+                        ? ticketData.seats.reduce(
+                            (total : any, seat : any) =>
+                              total +
+                              (seat.service_charge01
+                                ? seat.service_charge01
+                                : 0) +
+                              (seat.service_charge02
+                                ? seat.service_charge02
+                                : 0),
+                            0.00
+                          )
+                        : 0}{" "}
+                      x {ticketData?.seats?.length ?? 0}
                     </span>
                   </div>
                 </div>
                 <div className="flex flex-col mt-3 font-medium text-lg">
                   <span>
-                    Total : {ticketData.total ? ticketData.total.toFixed(2) : 0.0}
+                    Total :{" "}
+                    {ticketData.total ? ticketData.total.toFixed(2) : 0.0}
                   </span>
                 </div>
               </div>
@@ -1017,9 +1028,9 @@ export default function BookingPage({
                         <span className="font-extralight text-sm">Seat No</span>
                         <span className="text-md font-medium">
                           {ticketData?.seats
-                            ? ticketData?.seats.map((item: any) =>
-                                item.seat_no
-                              ).join(",")
+                            ? ticketData?.seats
+                                .map((item: any) => item.seat_no)
+                                .join(",")
                             : "--"}
                         </span>
                       </div>
@@ -1027,7 +1038,11 @@ export default function BookingPage({
                         <span className="font-extralight text-sm">
                           Schedule ID
                         </span>
-                        <span className="text-md font-medium">{ticketData?.scheduleId ? ticketData?.scheduleId : "--"}</span>
+                        <span className="text-md font-medium">
+                          {ticketData?.scheduleId
+                            ? ticketData?.scheduleId
+                            : "--"}
+                        </span>
                       </div>
                     </div>
                     {/* card */}
@@ -1037,11 +1052,15 @@ export default function BookingPage({
                         <span className="font-extralight text-sm">
                           No.of Seats
                         </span>
-                        <span className="text-md font-medium">{ticketData?.seats ? ticketData?.seats.length : "--"}</span>
+                        <span className="text-md font-medium">
+                          {ticketData?.seats ? ticketData?.seats.length : "--"}
+                        </span>
                       </div>
                       <div className="flex flex-col space-y-2">
                         <span className="font-extralight text-sm">Route</span>
-                        <span className="text-md font-medium">{ticketData?.routeId ? ticketData?.routeId : "--"}</span>
+                        <span className="text-md font-medium">
+                          {ticketData?.routeId ? ticketData?.routeId : "--"}
+                        </span>
                       </div>
                     </div>
                     {/* card */}
