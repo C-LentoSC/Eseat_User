@@ -5,28 +5,50 @@ import { NavBar } from "@/components/nav-bar";
 import { useEffect, useState } from "react";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
-  
-  const checkAuth = () => {
-    if (localStorage.getItem("token")) {
-      // console.log("User is authenticated");
-    } else {
-      window.location.href = "/";
-    }
+  const logout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/";
   };
 
+  const resetTimer = () => {
+    localStorage.setItem("lastActive", Date.now().toString());
+  };
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
-    // Call the function immediately
+    const checkAuth = () => {
+      if (!localStorage.getItem("token")) {
+        window.location.href = "/";
+      }
+    };
+
+    const checkInactivity = () => {
+      const lastActive = localStorage.getItem("lastActive");
+      if (lastActive && Date.now() - parseInt(lastActive) > 45 * 60 * 1000) {
+        logout();
+      }
+    };
+
+    // Set last active time on user interaction
+    document.addEventListener("mousemove", resetTimer);
+    document.addEventListener("keydown", resetTimer);
+    document.addEventListener("click", resetTimer);
+
+    resetTimer();
     checkAuth();
 
-    // Set up an interval to call the function periodically
     const interval = setInterval(() => {
       checkAuth();
-    }, 1000); // Check every 1 second
+      checkInactivity();
+    }, 1000);
 
-    // Cleanup interval on component unmount
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("mousemove", resetTimer);
+      document.removeEventListener("keydown", resetTimer);
+      document.removeEventListener("click", resetTimer);
+    };
   }, []);
-
 
   return (
     <>

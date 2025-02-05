@@ -9,6 +9,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
       }
     };
   
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       // Call the function immediately
       checkAuth();

@@ -849,7 +849,7 @@ export default function BookingPage({
                               (seat.service_charge02
                                 ? seat.service_charge02
                                 : 0),
-                            0.00
+                            0
                           )
                         : 0}{" "}
                       x {ticketData?.seats?.length ?? 0}

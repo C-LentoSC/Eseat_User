@@ -81,7 +81,7 @@ function Seat({
         status === "blocked" && "text-gray-300",
         className
       )}
-      onClick={onClick}
+      onClick={status !== "blocked" ? onClick : undefined}
       role="button"
       tabIndex={0}
       aria-label={`Seat ${number} - ${status}`}
