@@ -36,7 +36,12 @@ const BusReport = () => {
         }
       );
 
-      console.log(res?.data);
+      // console.log(res?.data);
+
+      setBookings([]);
+      setBookings1([]);
+      setBookings2({});
+
       setBookings(res?.data?.bookings);
       setBookings1(res?.data?.summary);
       setBookings2(res?.data);
@@ -58,6 +63,9 @@ const BusReport = () => {
       setIsLoading(false);
     } catch (error) {
       console.error(error);
+      setBookings([]);
+      setBookings1([]);
+      setBookings2({});
       setIsLoading(false);
     }
   };

@@ -57,11 +57,13 @@ const CounterReport = () => {
         }
       );
 
+      setBookings([]);
       setBookings(res?.data);
 
       setIsLoading(false);
     } catch (error: any) {
       console.error(error);
+      setBookings([]);
       toast.error(error?.response?.data?.message);
       setIsLoading(false);
     }
