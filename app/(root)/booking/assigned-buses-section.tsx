@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search } from "lucide-react";
+import { Route, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RouteCard } from "@/components/route-card";
@@ -47,6 +47,16 @@ export function AssignedBusesSection() {
         const storedOrder = JSON.parse(
           localStorage.getItem("busOrder") || "[]"
         );
+
+        if (storedOrder.length < fetchedRoutes.length) {
+          // Add any new route IDs that aren't in storedOrder yet
+          const fetchedIds = fetchedRoutes.map((route: Route) => route.id);
+          const newIds = fetchedIds.filter((id: string) => !storedOrder.includes(id));
+          const updatedOrder = [...storedOrder, ...newIds];
+
+          // Save updated order to localStorage
+          localStorage.setItem("busOrder", JSON.stringify(updatedOrder));
+        }
 
         if (storedOrder.length > 0) {
           const orderedRoutes = storedOrder
@@ -163,9 +173,8 @@ export function AssignedBusesSection() {
                     onDragStart={(e) => handleDragStart(e, index)}
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e) => handleDrop(e, index)}
-                    className="cursor-move"
                   >
-                    <RouteCard route={route} />
+                    <RouteCard key={index} route={route} className="cursor-pointer" />
                   </div>
                 ))}
               </div>

@@ -233,8 +233,9 @@ export default function BookingPage({
           // console.log(res?.data?.allSeats?.length);
           // console.log(res?.data?.allSeats);
 
-          setFrom(String(params?.params?.[1]));
-          setTo(String(params?.params?.[2]));
+          setFrom(decodeURIComponent(String(params?.params?.[1])));
+
+          setTo(decodeURIComponent(String(params?.params?.[2])));
 
           // const originalDate = new Date(
           //   String(params?.params?.[3]).split("T")[0]
@@ -286,10 +287,10 @@ export default function BookingPage({
           status: seat?.isBooked
             ? "booked"
             : seat?.isProcessing
-            ? "processing"
-            : seat?.isBlocked
-            ? "blocked"
-            : "available",
+              ? "processing"
+              : seat?.isBlocked
+                ? "blocked"
+                : "available",
         };
       })
   );
@@ -315,10 +316,10 @@ export default function BookingPage({
             status: seat?.isBooked
               ? "booked"
               : seat?.isProcessing
-              ? "processing"
-              : seat?.isBlocked
-              ? "blocked"
-              : "available",
+                ? "processing"
+                : seat?.isBlocked
+                  ? "blocked"
+                  : "available",
           };
         })
     );
@@ -444,14 +445,14 @@ export default function BookingPage({
         prevSeats.map((seat) =>
           seat.number === parsedSeatNumber.toString().padStart(2, "0")
             ? {
-                ...seat,
-                status:
-                  seat.status === "available"
-                    ? "selected"
-                    : seat.status === "selected"
+              ...seat,
+              status:
+                seat.status === "available"
+                  ? "selected"
+                  : seat.status === "selected"
                     ? "available"
                     : seat.status,
-              }
+            }
             : seat
         )
       );
@@ -485,14 +486,14 @@ export default function BookingPage({
         prevSeats.map((seat) =>
           seat.number === parsedSeatNumber.toString().padStart(2, "0")
             ? {
-                ...seat,
-                status:
-                  seat.status === "available"
-                    ? "selected"
-                    : seat.status === "selected"
+              ...seat,
+              status:
+                seat.status === "available"
+                  ? "selected"
+                  : seat.status === "selected"
                     ? "available"
                     : seat.status,
-              }
+            }
             : seat
         )
       );
@@ -599,23 +600,81 @@ export default function BookingPage({
         setTicketData(res.data);
 
         setTimeout(() => {
+          // const ticketElement = document.getElementById("user-ticket");
+          // if (ticketElement) {
+          //   html2canvas(ticketElement)
+          //     .then((canvas) => {
+          //       const dataUrl = canvas.toDataURL("image/png");
+          //       const link = document.createElement("a");
+          //       link.href = dataUrl;
+          //       link.download = "ticket.png";
+          //       document.body.appendChild(link);
+          //       link.click();
+          //       document.body.removeChild(link);
+          //     })
+          //     .catch((error) => {
+          //       console.error("Error generating image:", error);
+          //       toast.error("Error generating image.");
+          //     });
+          // }
           const ticketElement = document.getElementById("user-ticket");
+
           if (ticketElement) {
-            html2canvas(ticketElement)
-              .then((canvas) => {
-                const dataUrl = canvas.toDataURL("image/png");
-                const link = document.createElement("a");
-                link.href = dataUrl;
-                link.download = "ticket.png";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-              })
-              .catch((error) => {
-                console.error("Error generating image:", error);
-                toast.error("Error generating image.");
-              });
+            const printContents = ticketElement.innerHTML;
+
+            const tailwindCDN = `<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">`;
+
+            // Create an invisible iframe
+            const iframe = document.createElement("iframe");
+            iframe.style.position = "fixed";
+            iframe.style.right = "0";
+            iframe.style.bottom = "0";
+            iframe.style.width = "0";
+            iframe.style.height = "0";
+            iframe.style.border = "none";
+
+            document.body.appendChild(iframe);
+
+            const doc = iframe.contentWindow?.document;
+
+            if (doc) {
+              doc.open();
+              doc.write(`
+      <html>
+        <head>
+          <title>Print Ticket</title>
+          ${tailwindCDN}
+          <style>
+            @page {
+              size: A4;
+              margin: 0mm;
+            }
+            body {
+              font-family: 'Inter', sans-serif;
+              padding: 20px;
+            }
+          </style>
+        </head>
+        <body>
+          ${printContents}
+        </body>
+      </html>
+    `);
+              doc.close();
+
+              iframe.onload = () => {
+                iframe.contentWindow?.focus();
+                iframe.contentWindow?.print();
+
+                // Clean up after printing
+                setTimeout(() => {
+                  document.body.removeChild(iframe);
+                }, 1000);
+              };
+            }
           }
+
+
           setisLoading1(false);
           setTimeout(() => {
             window.location.reload();
@@ -626,7 +685,7 @@ export default function BookingPage({
       console.error(error);
       toast.error(
         error.response.data.message.charAt(0).toUpperCase() +
-          error.response.data.message.slice(1)
+        error.response.data.message.slice(1)
       );
     }
   };
@@ -787,12 +846,12 @@ export default function BookingPage({
         </>
       )}
       <>
-        <div className="absolute left-[-9999px] top-[-9999px] flex justify-center items-center bg-black/50 bg-contain h-full w-full z-50">
+        <div className="absolute top-[-9999999px] left-[-9999999px] flex justify-center items-center bg-black/50 bg-contain h-full w-full z-50">
           <div
             id="user-ticket"
-            className="bg-white ticket_bg bg-center bg-contain rounded-2xl min-h-auto flex justify-center items-center"
+            className="bg-white rounded-2xl min-w-[40%] min-h-auto flex flex-col justify-center items-center p-5"
           >
-            <div className="flex w-full flex-row px-5 h-full items-start gap-2">
+            {/* <div className="flex w-full flex-row px-5 h-full items-start gap-2">
               <div className="p-2 min-w-[270px] lg:min-w-max flex h-full flex-col space-y-5">
                 <img
                   src="/logos/sltb_logo2.svg"
@@ -822,8 +881,8 @@ export default function BookingPage({
                   <span className="font-semibold text-lg">
                     {ticketData?.bookedDateTime
                       ? new Date(
-                          ticketData?.bookedDateTime
-                        ).toLocaleDateString()
+                        ticketData?.bookedDateTime
+                      ).toLocaleDateString()
                       : "--/--/--"}
                   </span>
                 </div>
@@ -841,16 +900,16 @@ export default function BookingPage({
                       Rs{" "}
                       {ticketData?.seats
                         ? ticketData.seats.reduce(
-                            (total : any, seat : any) =>
-                              total +
-                              (seat.service_charge01
-                                ? seat.service_charge01
-                                : 0) +
-                              (seat.service_charge02
-                                ? seat.service_charge02
-                                : 0),
-                            0
-                          )
+                          (total: any, seat: any) =>
+                            total +
+                            (seat.service_charge01
+                              ? seat.service_charge01
+                              : 0) +
+                            (seat.service_charge02
+                              ? seat.service_charge02
+                              : 0),
+                          0
+                        )
                         : 0}{" "}
                       x {ticketData?.seats?.length ?? 0}
                     </span>
@@ -880,9 +939,6 @@ export default function BookingPage({
                         <span className="font-medium text-lg">
                           {ticketData?.route?.split("-")[0]}
                         </span>
-                        {/* <span className="font-extralight text-md">
-                          (Colombo)
-                        </span> */}
                       </div>
                       <div className="flex gap-2 w-max items-center justify-center">
                         <img
@@ -936,9 +992,6 @@ export default function BookingPage({
                         <span className="font-medium text-lg">
                           {ticketData?.route?.split("-")[1]}
                         </span>
-                        {/* <span className="font-extralight text-md">
-                          (Ampara)
-                        </span> */}
                       </div>
                     </div>
                     <div className="w-full flex justify-between">
@@ -949,15 +1002,15 @@ export default function BookingPage({
                         <span className="font-medium text-lg">
                           {ticketData?.startDateTime
                             ? new Date(
-                                ticketData?.startDateTime
-                              ).toLocaleDateString()
+                              ticketData?.startDateTime
+                            ).toLocaleDateString()
                             : "--/--/--"}
                         </span>
                         <span className="font-medium text-lg">
                           {ticketData?.startDateTime
                             ? new Date(
-                                ticketData?.startDateTime
-                              ).toLocaleTimeString()
+                              ticketData?.startDateTime
+                            ).toLocaleTimeString()
                             : "--:--"}
                         </span>
                       </div>
@@ -968,15 +1021,15 @@ export default function BookingPage({
                         <span className="font-medium text-lg">
                           {ticketData?.endDateTime
                             ? new Date(
-                                ticketData?.endDateTime
-                              ).toLocaleDateString()
+                              ticketData?.endDateTime
+                            ).toLocaleDateString()
                             : "--/--/--"}
                         </span>
                         <span className="font-medium text-lg">
                           {ticketData?.endDateTime
                             ? new Date(
-                                ticketData?.endDateTime
-                              ).toLocaleTimeString()
+                              ticketData?.endDateTime
+                            ).toLocaleTimeString()
                             : "--:--"}
                         </span>
                       </div>
@@ -984,9 +1037,7 @@ export default function BookingPage({
                   </div>
                 </div>
                 <div className="w-full flex flex-col items-start justify-start px-10 h-full">
-                  {/* Top card */}
                   <div className="flex flex-row items-center h-full justify-center gap-14">
-                    {/* card */}
                     <div className="flex flex-col space-y-10">
                       <div className="flex flex-col space-y-2">
                         <span className="font-extralight text-sm">
@@ -1003,8 +1054,6 @@ export default function BookingPage({
                         </span>
                       </div>
                     </div>
-                    {/* card */}
-                    {/* card */}
                     <div className="flex flex-col space-y-10">
                       <div className="flex flex-col space-y-2">
                         <span className="font-extralight text-sm">V-Code</span>
@@ -1021,16 +1070,14 @@ export default function BookingPage({
                         </span>
                       </div>
                     </div>
-                    {/* card */}
-                    {/* card */}
                     <div className="flex flex-col space-y-10">
                       <div className="flex flex-col space-y-2">
                         <span className="font-extralight text-sm">Seat No</span>
                         <span className="text-md font-medium">
                           {ticketData?.seats
                             ? ticketData?.seats
-                                .map((item: any) => item.seat_no)
-                                .join(",")
+                              .map((item: any) => item.seat_no)
+                              .join(",")
                             : "--"}
                         </span>
                       </div>
@@ -1045,8 +1092,6 @@ export default function BookingPage({
                         </span>
                       </div>
                     </div>
-                    {/* card */}
-                    {/* card */}
                     <div className="flex flex-col space-y-10">
                       <div className="flex flex-col space-y-2">
                         <span className="font-extralight text-sm">
@@ -1063,10 +1108,221 @@ export default function BookingPage({
                         </span>
                       </div>
                     </div>
-                    {/* card */}
                   </div>
                 </div>
               </div>
+            </div> */}
+            <div className="w-full flex flex-col justify-center items-center">
+              <div className="w-full px-10 flex justify-center items-center">
+                <img src="/logos/sltb.svg" alt="sltb_logo" className="w-[30%] object-cover object-center" />
+              </div>
+              <div className="w-full px-10 flex justify-center items-center">
+                <img
+                  src="/logos/sltb_logo2.svg"
+                  alt="sltb_logo"
+                  className="w-[15%] object-cover object-cover"
+                />
+              </div>
+              <div className="w-full px-10 flex justify-center mt-1">
+                <span className="text-xl font-medium gap-2 flex items-center">
+                  Hot Line : <img src="/logos/call.svg" alt="call" className="w-5 h-5" /> 1315
+                </span>
+              </div>
+              <div className="w-full px-10 mt-3 flex justify-center  border-t-2 pt-2 border-gray-300">
+                <span className="text-xl font-normal flex gap-2">eTicket</span>
+              </div>
+            </div>
+            <div className="w-full mt-5 flex justify-center gap-5">
+              <div className="w-full text-base">
+                <span className="text-gray-500">Ticket Ref</span>
+                <span className="ml-4">
+                  {ticketData.ref ? ticketData.ref : "--"}
+                </span>
+              </div>
+              <div className="w-full text-base">
+                <span className="text-gray-500">Seat No.</span>
+                <span className="ml-4">
+                  {ticketData?.seats
+                    ? ticketData?.seats
+                      .map((item: any) => item.seat_no)
+                      .join(",")
+                    : "--"}
+                </span>
+              </div>
+            </div>
+            <div className="w-full mt-2 flex justify-center gap-5">
+              <div className="w-full text-base">
+                <span className="text-gray-500">Travel Date</span>
+                <span className="ml-4">
+                  {ticketData?.startDateTime
+                    ? new Date(ticketData?.startDateTime).toLocaleDateString()
+                    : "--/--/--"}
+                </span>
+              </div>
+              <div className="w-full text-base">
+                <span className="text-gray-500">Travel Time</span>
+                <span className="ml-4">
+                  {ticketData?.startDateTime
+                    ? new Date(ticketData?.startDateTime).toLocaleTimeString()
+                    : "--:--"}
+                </span>
+              </div>
+            </div>
+            <div className="w-full mt-2 flex justify-center gap-5">
+              <div className="w-full text-base">
+                <span className="text-gray-500">Travel From</span>
+                <span className="ml-4">{ticketData?.route?.split("-")[0]}</span>
+              </div>
+              <div className="w-full text-base">
+                <span className="text-gray-500">Travel To</span>
+                <span className="ml-4">{ticketData?.route?.split("-")[1]}</span>
+              </div>
+            </div>
+            <div className="w-full mt-2 flex justify-center gap-5">
+              <div className="w-full text-base">
+                <span className="text-gray-500">Counter</span>
+                <span className="ml-4">2025-01-28</span>
+              </div>
+              <div className="w-full text-base">
+                <span className="text-gray-500">Depot</span>
+                <span className="ml-4">
+                  {ticketData?.depot ? ticketData?.depot : "--"}
+                </span>
+              </div>
+            </div>
+            <div className="w-full mt-2 flex justify-center gap-5">
+              <div className="w-full text-base">
+                <span className="text-gray-500">Payment Type</span>
+                <span className="ml-4">2025-01-28</span>
+              </div>
+              <div className="w-full text-base">
+                <span className="text-gray-500">Route</span>
+                <span className="ml-4">{ticketData?.route}</span>
+              </div>
+            </div>
+            <div className="w-full mt-2 flex justify-center gap-5">
+              <div className="w-full text-base">
+                <span className="text-gray-500">NIC</span>
+                <span className="ml-4">
+                  {ticketData?.details?.nicOrPassport
+                    ? ticketData?.details?.nicOrPassport
+                    : "--"}
+                </span>
+              </div>
+              <div className="w-full text-base">
+                <span className="text-gray-500">Name</span>
+                <span className="ml-4">
+                  {ticketData?.details?.name ? ticketData?.details?.name : "--"}
+                </span>
+              </div>
+            </div>
+            <div className="w-full mt-2 flex justify-center gap-5">
+              <div className="w-full text-base">
+                <span className="text-gray-500">Bus Schedule ID</span>
+                <span className="ml-4">
+                  {ticketData?.scheduleId ? ticketData?.scheduleId : "--"}
+                </span>
+              </div>
+            </div>
+            <div className="w-full mt-2 flex flex-col justify-center gap-2 border-t-2 border-b-2 border-dashed border-black">
+              <div className="mt-2  flex">
+                <div className="w-48">
+                  <span>Bus Fare</span>
+                </div>
+                <div className="w-full">
+                  <span>
+                    Rs {ticketData?.busFare ? ticketData?.busFare : 0.0} x{" "}
+                    {ticketData?.seats?.length}
+                  </span>
+                </div>
+              </div>
+              <div className="mb-3 flex">
+                <div className="w-48">
+                  <span>Service Chargers</span>
+                </div>
+                <div className="w-full">
+                  <span>
+                    Rs{" "}
+                    {ticketData?.seats
+                      ? ticketData.seats.reduce(
+                        (total: any, seat: any) =>
+                          total +
+                          (seat.service_charge01
+                            ? seat.service_charge01
+                            : 0) +
+                          (seat.service_charge02 ? seat.service_charge02 : 0),
+                        0
+                      )
+                      : 0}{" "}
+                    x {ticketData?.seats?.length ?? 0}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="w-full flex font-medium text-lg mt-3 justify-center items-center">
+              <span>Amount : </span>
+              <span className="ml-2">
+                {" "}
+                Rs.{ticketData.total ? ticketData.total.toFixed(2) : 0.0}
+              </span>
+            </div>
+            <div className="w-full flex font-medium text-base mt-2 justify-center items-center">
+              <span>V-Code : </span>
+              <span className="ml-2">
+                {ticketData?.vCode ? ticketData?.vCode : "--"}
+              </span>
+            </div>
+            <div className="w-full flex flex-col font-normal text-base mt-2 text-center justify-center items-center">
+              <span>
+                You are required to submit this and obtain a regular ticket
+              </span>
+              <span>from the conductor once you you board the bus.</span>
+            </div>
+            <div className="w-full flex flex-col font-medium text-md mt-3 text-center justify-center items-center">
+              <span>THIS RESERVATION HAS BEEN MADE</span>
+              <span>SUBJECT TO THE FOLLOWING</span>
+              <span>CONDITIONS</span>
+            </div>
+            <div className="w-full flex font-medium text-base mt-3 gap-2 justify-center items-start">
+              <span>1.</span>
+              <div>
+                <span>
+                  The full Bus fare of the route will be charged irrespective of
+                  the boarding & dropping points.
+                </span>
+              </div>
+            </div>
+            <div className="w-full flex font-medium text-base mt-2 gap-2 justify-center items-start">
+              <span>2.</span>
+              <div>
+                <span>
+                  Tickets reserved from Depot counters cannot be cancelled
+                  changed or transferred.
+                </span>
+              </div>
+            </div>
+            <div className="w-full flex font-medium text-base mt-2 gap-2 justify-center items-start">
+              <span>3.</span>
+              <div>
+                <span>
+                  Seats reserved should be occupied 15 minutes before the
+                  scheduled departure time.
+                </span>
+              </div>
+            </div>
+            <div className="w-full flex flex-col font-normal text-md mt-4 text-center justify-center items-center">
+              <span>
+                Login to{" "}
+                <span className="font-medium text-md underline">WWW. sltb.eseat.lk</span>
+              </span>
+              <span>for online ticket reservation</span>
+              <span>
+                call <span className="font-medium text-md">1315</span>
+              </span>
+              <span>for ticket reservation through the call center</span>
+            </div>
+            <div className="w-full flex flex-col font-medium text-xl mt-4 text-center justify-center items-center">
+              <span>Thank You & have a pleasant Journey !</span>
             </div>
           </div>
         </div>
@@ -1290,7 +1546,7 @@ export default function BookingPage({
                               if (
                                 selectedDate &&
                                 format(selectedDate, "yyyy-MM-dd") <
-                                  format(new Date(), "yyyy-MM-dd")
+                                format(new Date(), "yyyy-MM-dd")
                               ) {
                                 toast.error("You can't Select Previous Date");
                               } else {

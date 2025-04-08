@@ -1,8 +1,17 @@
+"use client";
 import { Separator } from "@/components/ui/separator";
+import { set } from "date-fns";
 import { Facebook, Instagram, Twitter } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Footer() {
+  const [namest, setNamest] = useState<boolean>(false);
+
+  useEffect(() => {
+    setNamest(localStorage.getItem("token") ? true : false);
+  }, []);
+
   return (
     <footer className="bg-bgMyColor7 pt-24 pb-8 md:pb-12">
       <div className="my-container">
@@ -11,12 +20,21 @@ export default function Footer() {
           <div className="space-y-4">
             <h3 className="text-sm font-semibold uppercase">Links</h3>
             <nav className="flex flex-col space-y-2">
-              <Link
+              {namest ? (
+                <Link
+                  href="/booking"
+                  className="text-sm text-muted-foreground hover:text-primary"
+                >
+                  Home
+                </Link>
+              ):(
+                <Link
                 href="/"
                 className="text-sm text-muted-foreground hover:text-primary"
               >
                 Login
               </Link>
+              )}
               <Link
                 href="/send-ticket"
                 className="text-sm text-muted-foreground hover:text-primary"

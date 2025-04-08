@@ -20,14 +20,21 @@ import { Input } from "@/components/ui/input";
 import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
+import Modal from "@/components/model";
 
 export function HeroSection() {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
+  const [isModalOpen, setModalOpen] = useState(false);
+
   const [showPassword, setShowPassword] = useState(false);
   const [isloading, setIsloading] = useState(false);
+  const [isloading1, setIsloading1] = useState(false);
 
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const [otp, setOtp] = useState<number>(0);
+  const [token, setToken] = useState("");
 
   const sliderText = [
     {
@@ -91,9 +98,8 @@ export function HeroSection() {
       });
 
       if (res?.data?.token) {
-        localStorage.setItem("token", res?.data?.token);
-
-        window.location.href = "/booking";
+        setToken(res?.data?.token);
+        setModalOpen(true);
       }
     } catch (error: any) {
       console.error(error);
@@ -101,6 +107,48 @@ export function HeroSection() {
       setIsloading(false);
     }
   }
+
+  const handleOtpLogin = async () => {
+
+    if (!otp) {
+      setIsloading1(false);
+      toast.error("Please Enter OTP.");
+      return;
+    }
+
+    setIsloading1(true);
+
+    try {
+
+      const res = await axios.post(`${BASE_URL}otp-check`,
+        {
+          otp: otp
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+      if (res?.data?.verified) {
+        setIsloading1(false);
+        setModalOpen(false);
+        localStorage.setItem("token", token);
+        window.location.href = "/booking";
+
+      } else {
+        localStorage.removeItem("token");
+      }
+
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error?.response?.data?.message);
+      setIsloading1(false);
+      localStorage.removeItem("token");
+    }
+
+  };
 
   return (
     <>
@@ -110,23 +158,22 @@ export function HeroSection() {
           <section className="relative min-h-[calc(100dvh-100px)] w-full overflow-hidden bg-hero-bg bg-cover bg-center py-24 flex">
             <div className=" grid my-container gap-8 lg:grid-cols-2 lg:gap-16 self-center">
               {sliderText.map((item, index) => (
-                <>
-                  <div
-                    className={`flex flex-col justify-center ${
-                      index === activeIndex ? "block" : "hidden"
+
+                <div
+                  className={`flex flex-col justify-center ${index === activeIndex ? "block" : "hidden"
                     }`}
-                    key={index}
-                  >
-                    <h1 className="mb-4 text-4xl font-bold tracking-tight text-myColor2 sm:text-5xl">
-                      {item?.title}
-                      <br />
-                      {item?.title1}
-                    </h1>
-                    <p className="mb-8 max-w-lg text-gray-600">
-                      {item?.description}
-                    </p>
-                  </div>
-                </>
+                  key={index}
+                >
+                  <h1 className="mb-4 text-4xl font-bold tracking-tight text-myColor2 sm:text-5xl">
+                    {item?.title}
+                    <br />
+                    {item?.title1}
+                  </h1>
+                  <p className="mb-8 max-w-lg text-gray-600">
+                    {item?.description}
+                  </p>
+                </div>
+
               ))}
 
               <div className="flex items-center justify-center lg:justify-end">
@@ -220,7 +267,7 @@ export function HeroSection() {
                         <div className="flex items-center justify-between">
                           {isloading ? (
                             <Button disabled className="w-full py-5 mt-5">
-                              Login now
+                              Sending OTP
                               <div className="w-5 h-5 border-4 border-t-4 border-gray-300 border-t-blue-500 animate-spin rounded-full"></div>
                             </Button>
                           ) : (
@@ -291,14 +338,49 @@ export function HeroSection() {
             <button
               key={index}
               type="button"
-              className={`w-3 h-3 rounded-full ${
-                index === activeIndex ? "bg-[#d91b5c]" : "bg-[#edefed]"
-              }`}
+              className={`w-3 h-3 rounded-full ${index === activeIndex ? "bg-[#d91b5c]" : "bg-[#edefed]"
+                }`}
               onClick={() => handleIndicatorClick(index)}
             ></button>
           ))}
         </div>
       </section>
+
+      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
+        <h2 className="text-xl font-semibold mb-4">OTP Verification</h2>
+        <div className="flex flex-col gap-2">
+          <Label
+            htmlFor="otp_code"
+            className=" text-myColor2"
+          >
+            OTP
+          </Label>
+          <input
+            name="otp_code"
+            id="otp_code"
+            type="number"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            className="appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+             [&::-webkit-inner-spin-button]:m-0
+             focus:outline-none p-2 border-2 rounded-[10px] outline-none placeholder:text-base"
+            placeholder="Enter OTP here.."
+            onChange={(e: any) => setOtp(e.target.value)}
+          />
+        </div>
+        <div className="flex gap-5 justify-end mt-2">
+          <Button variant="cancel" className="py-5 mt-5" onClick={() => setModalOpen(false)}>
+            Cancel
+          </Button>
+          <Button onClick={handleOtpLogin} className="py-5 mt-5 flex gap-3 items-center">
+            Login
+            {isloading1 && (
+              <div className="w-5 h-5 border-4 border-t-4 border-gray-300 border-t-blue-500 animate-spin rounded-full"></div>
+            )}
+          </Button>
+        </div>
+
+      </Modal>
     </>
   );
 }

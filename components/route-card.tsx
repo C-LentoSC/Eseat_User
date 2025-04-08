@@ -2,6 +2,8 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 // import { Route } from "@/types/route";
 import { cn } from "@/lib/utils";
+import toast from "react-hot-toast";
+import { number } from "zod";
 
 interface RouteInfoItemProps {
   icon: React.ReactNode;
@@ -19,13 +21,16 @@ const RouteInfoItem = ({ icon, text }: RouteInfoItemProps) => (
 
 export interface Route {
   id: string;
+  scheduleId: number;
   schedule_number: string;
   route: string;
   dateTime: string;
+  dateTimeIso: string;
   code: string;
   number: string;
   depot: string;
   main_image: string;
+  route_details: any;
 }
 
 interface RouteCardProps {
@@ -39,11 +44,11 @@ export function RouteCard({ route, className }: RouteCardProps) {
       icon: (
         <img src="/assets/location.svg" alt="location" className="w-4 h-4" />
       ),
-      text: route?.route,
+      text: route?.route ? route?.route : "N/A",
     },
     {
       icon: <img src="/assets/date.svg" alt="location" className="w-4 h-4" />,
-      text: route.dateTime ? route.dateTime : "",
+      text: route.dateTime ? route.dateTime : "N/A",
     },
     {
       icon: (
@@ -53,22 +58,31 @@ export function RouteCard({ route, className }: RouteCardProps) {
           className="w-4 h-4"
         />
       ),
-      text: route?.schedule_number,
+      text: route?.schedule_number ? route?.schedule_number : "N/A",
     },
     {
       icon: <img src="/assets/number.svg" alt="location" className="w-4 h-4" />,
-      text: route?.number,
+      text: route?.number ? route?.number : "N/A",
     },
     {
       icon: <img src="/assets/depot.svg" alt="location" className="w-4 h-4" />,
-      text: route.depot,
+      text: route.depot ? route.depot : "N/A",
     },
   ];
 
   // console.log(route);
 
   return (
-    <Card className={cn("shadow-none border", className)}>
+    <Card className={cn("shadow-none border", className)} onClick={() => {
+      // toast.error("Service Not Available. Bus Id : " + route?.id);
+
+      if (!route?.dateTimeIso) {
+        toast?.error("No Available Shedules.");
+      } else {
+        window.location.href = `/booking/listing/${route?.scheduleId}/${route?.route_details[0]?.starting}/${route?.route_details?.[0]?.end}/${new Date(route?.dateTimeIso)?.toLocaleDateString()}/1`;
+      }
+
+    }}>
       <CardContent className="p-0">
         <div className="space-y-4">
           <div className="relative aspect-[4/3] overflow-hidden rounded-t-lg">
