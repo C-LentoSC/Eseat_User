@@ -117,6 +117,7 @@ export function HeroSection() {
     }
 
     setIsloading1(true);
+    setIsloading(true);
 
     try {
 

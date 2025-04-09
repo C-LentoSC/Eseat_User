@@ -1136,7 +1136,7 @@ export default function BookingPage({
               <div className="w-full text-base">
                 <span className="text-gray-500">Ticket Ref</span>
                 <span className="ml-4">
-                  {ticketData.ref ? ticketData.ref : "--"}
+                  {ticketData.ref ? ticketData.ref : "N/A"}
                 </span>
               </div>
               <div className="w-full text-base">
@@ -1146,7 +1146,7 @@ export default function BookingPage({
                     ? ticketData?.seats
                       .map((item: any) => item.seat_no)
                       .join(",")
-                    : "--"}
+                    : "N/A"}
                 </span>
               </div>
             </div>
@@ -1156,7 +1156,7 @@ export default function BookingPage({
                 <span className="ml-4">
                   {ticketData?.startDateTime
                     ? new Date(ticketData?.startDateTime).toLocaleDateString()
-                    : "--/--/--"}
+                    : "N/A"}
                 </span>
               </div>
               <div className="w-full text-base">
@@ -1164,7 +1164,7 @@ export default function BookingPage({
                 <span className="ml-4">
                   {ticketData?.startDateTime
                     ? new Date(ticketData?.startDateTime).toLocaleTimeString()
-                    : "--:--"}
+                    : "N/A"}
                 </span>
               </div>
             </div>
@@ -1181,19 +1181,19 @@ export default function BookingPage({
             <div className="w-full mt-2 flex justify-center gap-5">
               <div className="w-full text-base">
                 <span className="text-gray-500">Counter</span>
-                <span className="ml-4">2025-01-28</span>
+                <span className="ml-4">{ticketData?.agentName ? ticketData?.agentName : "N/A"}</span>
               </div>
               <div className="w-full text-base">
                 <span className="text-gray-500">Depot</span>
                 <span className="ml-4">
-                  {ticketData?.depot ? ticketData?.depot : "--"}
+                  {ticketData?.depot ? ticketData?.depot : "N/A"}
                 </span>
               </div>
             </div>
             <div className="w-full mt-2 flex justify-center gap-5">
               <div className="w-full text-base">
                 <span className="text-gray-500">Payment Type</span>
-                <span className="ml-4">2025-01-28</span>
+                <span className="ml-4">Cash</span>
               </div>
               <div className="w-full text-base">
                 <span className="text-gray-500">Route</span>
@@ -1206,13 +1206,13 @@ export default function BookingPage({
                 <span className="ml-4">
                   {ticketData?.details?.nicOrPassport
                     ? ticketData?.details?.nicOrPassport
-                    : "--"}
+                    : "N/A"}
                 </span>
               </div>
               <div className="w-full text-base">
                 <span className="text-gray-500">Name</span>
                 <span className="ml-4">
-                  {ticketData?.details?.name ? ticketData?.details?.name : "--"}
+                  {ticketData?.details?.name ? ticketData?.details?.name : "N/A"}
                 </span>
               </div>
             </div>
@@ -1220,7 +1220,7 @@ export default function BookingPage({
               <div className="w-full text-base">
                 <span className="text-gray-500">Bus Schedule ID</span>
                 <span className="ml-4">
-                  {ticketData?.scheduleId ? ticketData?.scheduleId : "--"}
+                  {ticketData?.scheduleId ? ticketData?.scheduleId : "N/A"}
                 </span>
               </div>
             </div>
@@ -1269,7 +1269,7 @@ export default function BookingPage({
             <div className="w-full flex font-medium text-base mt-2 justify-center items-center">
               <span>V-Code : </span>
               <span className="ml-2">
-                {ticketData?.vCode ? ticketData?.vCode : "--"}
+                {ticketData?.vCode ? ticketData?.vCode : "N/A"}
               </span>
             </div>
             <div className="w-full flex flex-col font-normal text-base mt-2 text-center justify-center items-center">
