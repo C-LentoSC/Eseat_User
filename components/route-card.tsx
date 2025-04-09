@@ -3,7 +3,6 @@ import { Card, CardContent } from "@/components/ui/card";
 // import { Route } from "@/types/route";
 import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
-import { number } from "zod";
 
 interface RouteInfoItemProps {
   icon: React.ReactNode;
@@ -19,26 +18,26 @@ const RouteInfoItem = ({ icon, text }: RouteInfoItemProps) => (
   </div>
 );
 
-export interface Route {
-  id: string;
-  scheduleId: number;
-  schedule_number: string;
-  route: string;
-  dateTime: string;
-  dateTimeIso: string;
-  code: string;
-  number: string;
-  depot: string;
-  main_image: string;
-  route_details: any;
-}
+// export interface Route {
+//   id: string;
+//   scheduleId: number;
+//   schedule_number: string;
+//   route: string;
+//   dateTime: string;
+//   dateTimeIso: string;
+//   code: string;
+//   number: string;
+//   depot: string;
+//   main_image: string;
+//   route_details: any[];
+// }
 
-interface RouteCardProps {
-  route: Route;
-  className?: string;
-}
+// interface RouteCardProps {
+//   route: Route;
+//   className?: string;
+// }
 
-export function RouteCard({ route, className }: RouteCardProps) {
+export function RouteCard({ route, className }: any) {
   const routeInfo = [
     {
       icon: (
