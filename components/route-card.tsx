@@ -84,7 +84,7 @@ export function RouteCard({ route, className }: any) {
     }}>
       <CardContent className="p-0">
         <div className="space-y-4">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-t-lg">
+          {/* <div className="relative aspect-[4/3] overflow-hidden rounded-t-lg">
             <Image
               src={route?.main_image}
               alt={route.route}
@@ -92,7 +92,7 @@ export function RouteCard({ route, className }: any) {
               className="object-cover"
               sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
             />
-          </div>
+          </div> */}
           <div className="space-y-2.5 p-3">
             {routeInfo.map((info, index) => (
               <RouteInfoItem key={index} icon={info.icon} text={info.text} />

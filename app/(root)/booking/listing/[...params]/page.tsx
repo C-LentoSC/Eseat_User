@@ -1852,6 +1852,37 @@ export default function BookingPage({
                 </Select>
               </div> */}
             </div>
+            {/* <div className="grid grid-cols-1 gap-4 border p-5 rounded-lg bg-slate-50">
+              <div className="space-y-4">
+                <Label>Additional Type</Label>
+                <RadioGroup defaultValue="full" className="flex gap-4">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value="full"
+                      id="full"
+                      onChange={() => sethalfticket(false)}
+                    />
+                    <Label htmlFor="full">Full Ticket</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value="half"
+                      id="half"
+                      onChange={() => sethalfticket(true)}
+                    />
+                    <Label htmlFor="half">Half Ticket</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value="half"
+                      id="half"
+                      onChange={() => sethalfticket(true)}
+                    />
+                    <Label htmlFor="half">Half Ticket</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+            </div> */}
             {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 border p-5 rounded-lg bg-slate-50">
               <div className="space-y-4">
                 <Label>Ticket Type</Label>

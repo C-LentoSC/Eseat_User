@@ -53,6 +53,7 @@ export default function TravelBooking({
   const [isVisible, setisVisible] = React.useState(false);
 
   const [citises, setCities] = React.useState<any[]>([]);
+  const [endcitises, setEndCities] = React.useState<any[]>([]);
 
   const [open, setOpen] = React.useState(false);
 
@@ -74,6 +75,11 @@ export default function TravelBooking({
         });
 
         setCities(res?.data);
+
+        const matchedCity = res?.data;
+        console.log(matchedCity);
+        setEndCities(matchedCity?.ends || []);
+
       } catch (error) {
         console.error(error);
       }
@@ -94,6 +100,11 @@ export default function TravelBooking({
 
   const defaultProps = {
     options: citises,
+    getOptionLabel: (option: FilmOptionType) => option.name,
+  };
+
+  const defaultProps1 = {
+    options: endcitises,
     getOptionLabel: (option: FilmOptionType) => option.name,
   };
 
@@ -202,8 +213,12 @@ export default function TravelBooking({
                             }}
                           />
                         )}
+                        // value={citises.find((city) => city.name === from)}
                         value={citises.find((city) => city.name === from)}
-                        onChange={(_, value) => setFrom(value?.name || "")}
+                        onChange={(_: any, value: any) => {
+                          setFrom(value?.name || "");
+                          setEndCities(value?.ends || []);
+                        }}
                         renderInput={(params) => (
                           <TextField
                             {...params}
@@ -257,7 +272,7 @@ export default function TravelBooking({
                         )}
                       /> */}
                       <Autocomplete
-                        {...defaultProps}
+                        {...defaultProps1}
                         id="disable-close-on-select"
                         disableCloseOnSelect
                         PopperComponent={(props) => (
@@ -313,7 +328,7 @@ export default function TravelBooking({
                             if (
                               selectedDate &&
                               format(selectedDate, "yyyy-MM-dd") <
-                                format(new Date(), "yyyy-MM-dd")
+                              format(new Date(), "yyyy-MM-dd")
                             ) {
                               toast.error("You can't Select Previous Date");
                             } else {

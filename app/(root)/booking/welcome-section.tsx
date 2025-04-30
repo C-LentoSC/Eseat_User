@@ -37,6 +37,7 @@ export function WelcomeSection() {
   const [date, setDate] = useState<Date | undefined>(undefined);
 
   const [citises, setCities] = useState<any[]>([]);
+  const [endcitises, setEndCities] = useState<any[]>([]);
 
   const [name, setName] = useState<string>("");
   const [from, setFrom] = useState<string>("");
@@ -72,6 +73,11 @@ export function WelcomeSection() {
 
   const defaultProps = {
     options: citises,
+    getOptionLabel: (option: FilmOptionType) => option.name,
+  };
+  
+  const defaultProps1 = {
+    options: endcitises,
     getOptionLabel: (option: FilmOptionType) => option.name,
   };
 
@@ -116,9 +122,9 @@ export function WelcomeSection() {
   };
 
   return (
-    <div className="w-full bg-[#F0FBFE] basic_search_bg py-24">
+    <div className="w-full bg-[#F0FBFE] basic_search_bg py-20">
       <div className="my-container">
-        <h1 className="text-3xl font-medium text-myColor2 mb-4">
+        {/* <h1 className="text-3xl font-medium text-myColor2 mb-4">
           Hi, {name ? name : "__"}
         </h1>
         <p className="text-myColor2 mb-8 max-w-3xl">
@@ -127,7 +133,7 @@ export function WelcomeSection() {
           monitor bookings, and oversee all key details with ease. Designed for
           simplicity and control, the Admin Panel helps you keep everything
           running smoothly.
-        </p>
+        </p> */}
 
         <div className="flex flex-col md:flex-row md:items-end justify-center">
           <div className="flex flex-col gap-10 md:flex-row md:items-end lg:items-center bg-white p-8 rounded-[9px]">
@@ -164,7 +170,11 @@ export function WelcomeSection() {
                       }}
                     />
                   )}
-                  onChange={(_, value) => setFrom(value?.name || "")}
+                  onChange={(_: any, value: any) => {
+                    setFrom(value?.name || "");
+                    setEndCities(value?.ends || []);
+                  }}
+
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -197,7 +207,7 @@ export function WelcomeSection() {
                   onChange={(e) => setTo(e.target.value)}
                 /> */}
                 <Autocomplete
-                  {...defaultProps}
+                  {...defaultProps1}
                   id="disable-close-on-select"
                   disableCloseOnSelect
                   PopperComponent={(props) => (
@@ -252,7 +262,7 @@ export function WelcomeSection() {
                       if (
                         selectedDate &&
                         format(selectedDate, "yyyy-MM-dd") <
-                          format(new Date(), "yyyy-MM-dd")
+                        format(new Date(), "yyyy-MM-dd")
                       ) {
                         toast.error("You can't Select Previous Date");
                       } else {

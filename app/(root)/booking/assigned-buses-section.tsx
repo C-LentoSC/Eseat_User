@@ -24,7 +24,7 @@ export function AssignedBusesSection() {
   const [searchQuery, setSearchQuery] = useState("");
   const [routes, setRoutes] = useState<Route[]>([]);
   const [filteredRoutes, setFilteredRoutes] = useState<Route[]>([]);
-  const [loadMoreCount, setLoadMoreCount] = useState(9);
+  const [loadMoreCount, setLoadMoreCount] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -157,15 +157,15 @@ export function AssignedBusesSection() {
         <>
           {filteredRoutes.length > 0 ? (
             <>
-              <span className="text-[#d91b5c] font-medium text-base flex gap-2 items-center">
+              {/* <span className="text-[#d91b5c] font-medium text-base flex gap-2 items-center">
                 Drag and Drop 6 Busses
                 <img
                   src="/assets/download.svg"
                   alt="download"
                   className="w-4 h-4"
                 />
-              </span>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
+              </span> */}
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mt-2">
                 {filteredRoutes.slice(0, loadMoreCount).map((route, index) => (
                   <div
                     key={route.id}
@@ -181,7 +181,7 @@ export function AssignedBusesSection() {
 
               {filteredRoutes.length > loadMoreCount && (
                 <div className="flex justify-center mt-8">
-                  <Button onClick={() => setLoadMoreCount(loadMoreCount + 9)}>
+                  <Button onClick={() => setLoadMoreCount(loadMoreCount + 10)}>
                     Load More
                   </Button>
                 </div>

@@ -34,11 +34,11 @@ const navItems: NavItem[] = [
     href: "/bus-report",
     icon: Bus,
   },
-  {
-    title: "CB Report",
-    href: "/cb-report",
-    icon: FileBarChart,
-  },
+  // {
+  //   title: "CB Report",
+  //   href: "/cb-report",
+  //   icon: FileBarChart,
+  // },
   {
     title: "Send Tickets",
     href: "/send-ticket",
