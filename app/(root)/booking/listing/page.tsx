@@ -39,13 +39,12 @@ const BookingListing = () => {
   const [params, setParams] = useState<Params>({});
   const [isloading, setIsLoading] = useState<boolean>(false);
   const [alldata, setAlldata] = useState<BusData[]>([]);
+  const [allcityend, setAllcityend] = useState<any[]>([]);
 
   const [date, setDate] = React.useState<Date>(new Date());
   const [from, setFrom] = React.useState<string>("");
   const [to, setTo] = React.useState<string>("");
   const [passenger, setPassenger] = useState<string>("");
-
-  console.log(passenger);
 
   useEffect(() => {
     try {
@@ -63,7 +62,7 @@ const BookingListing = () => {
           // const incrementedDate = new Date(originalDate); 
           // incrementedDate.setDate(originalDate.getDate() + 1); 
 
-          setDate(new Date(date)); 
+          setDate(new Date(date));
           setFrom(from);
           setTo(to);
           setPassenger(passenger);
@@ -97,16 +96,27 @@ const BookingListing = () => {
         form.append("seatCount", params.passenger || "");
 
         try {
-          const res = await axios.post(`${BASE_URL}basic-search`, form, 
+          const res = await axios.post(`${BASE_URL}basic-search`, form,
             {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            });
+
+          setAlldata(res?.data || []);
+          setIsLoading(false);
+
+
+          const res1 = await axios.get(`${BASE_URL}all-cities-end?from=${params.from}`, {
             headers: {
-              "Content-Type": "multipart/form-data",
+              "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           });
 
-          setAlldata(res?.data || []);
-          setIsLoading(false);
+          setAllcityend(res1?.data?.ends);
+
         } catch (error) {
           console.error(error);
           setIsLoading(false);
@@ -117,7 +127,7 @@ const BookingListing = () => {
   }, [params]);
 
   const search = async () => {
-    window.location.href = `/booking/listing?from=${from}&to=${to}&date=${format(date , "yyyy-MM-dd")}&passenger=${passenger}`;
+    window.location.href = `/booking/listing?from=${from}&to=${to}&date=${format(date, "yyyy-MM-dd")}&passenger=${passenger}`;
     // try {
     //   setIsLoading(true);
     //   const form = new FormData();
@@ -158,6 +168,7 @@ const BookingListing = () => {
         to={to || params.to || ""}
         passenger={passenger || params.passenger || ""}
         date={date || ""}
+        endCities={allcityend}
         setDate={setDate}
         setFrom={setFrom}
         setTo={setTo}

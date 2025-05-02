@@ -225,7 +225,7 @@ export default function BusCarousel() {
                                   />
                                 </div>
                                 <span className="font-medium text-myColor2">
-                                  {route.dateTime}
+                                  {route.dateTime ? route.dateTime :"N/A"}
                                 </span>
                               </div>
                               <div className="flex items-center gap-2 text-sm">
@@ -236,7 +236,7 @@ export default function BusCarousel() {
                                     className="w-4 h-4"
                                   />
                                 </div>
-                                <span className="text-myColor2">
+                                <span className="font-medium text-myColor2">
                                   {route.schedule_number}
                                 </span>
                               </div>
@@ -248,7 +248,7 @@ export default function BusCarousel() {
                                     className="w-4 h-4"
                                   />
                                 </div>
-                                <span className="text-myColor2">
+                                <span className="font-medium text-myColor2">
                                   {route.number}
                                 </span>
                               </div>
@@ -260,7 +260,7 @@ export default function BusCarousel() {
                                     className="w-4 h-4"
                                   />
                                 </div>
-                                <span className="text-myColor2">
+                                <span className="font-medium text-myColor2">
                                   {route.depot}
                                 </span>
                               </div>
