@@ -78,7 +78,7 @@ export function RouteCard({ route, className }: any) {
       if (!route?.dateTimeIso) {
         toast?.error("No Available Shedules.");
       } else {
-        window.location.href = `/booking/listing/${route?.scheduleId}/${route?.route_details[0]?.starting}/${route?.route_details?.[0]?.end}/${new Date(route?.dateTimeIso)?.toLocaleDateString()}/1`;
+        window.location.href = `/booking/listing/${route?.scheduleId}/${route?.route_details[0]?.starting}/${route?.route_details?.[0]?.end}/${new Date(route?.dateTimeIso)?.toLocaleDateString().replace(/\//g, '-')}/1`;
       }
 
     }}>

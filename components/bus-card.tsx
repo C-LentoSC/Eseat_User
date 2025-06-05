@@ -617,7 +617,7 @@ export function BusCard({
       <div className="md:w-64 p-6 flex flex-col justify-center items-center border-l">
         <div className="text-right">
           <p className="text-3xl font-bold text-gray-900">
-            Rs {price.toFixed(2)}
+            Rs {price ? price : "N/A"}
           </p>
           <div className="flex items-center justify-center gap-2 text-sm text-gray-500 mt-2">
             <Clock className="w-4 h-4" />
