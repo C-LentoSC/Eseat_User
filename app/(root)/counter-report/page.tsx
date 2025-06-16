@@ -125,7 +125,7 @@ const CounterReport = () => {
             if (isSend?.data?.status == "ok") {
                 setModalOpen(false);
                 setIsloading1(false);
-                toast.error("Booking Canceled.")
+                toast.error("Booking Canceled.");
                 setOtp(0);
                 setBookingid(0);
                 search();
