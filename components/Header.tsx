@@ -24,7 +24,7 @@ export default function Header() {
     const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
     const [currentPath, setCurrentPath] = useState("");
-    const {setMode} = useAppStore();
+    const {setMode , setMobile} = useAppStore();
 
     const [name, setName] = useState<string>("");
     const [namest, setNamest] = useState<boolean>(false);
@@ -45,6 +45,7 @@ export default function Header() {
 
                 setName(res?.data?.name || "");
                 setMode(res?.data?.type || "");
+                setMobile(res?.data?.manager_mobile || 0);
 
             } catch (error) {
                 console.error(error);

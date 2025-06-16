@@ -119,9 +119,9 @@ const SendTicket: React.FC = () => {
                   Mobile Number
                 </label>
                 <div className="relative mt-2">
-                  <span className="absolute inset-y-0 left-0 flex items-center pl-2 text-gray-500 text-sm  border-r-2 border-[#a4b1bd] p-1 h-5 mt-3">
-                    +94
-                  </span>
+                  {/*<span className="absolute inset-y-0 left-0 flex items-center pl-2 text-gray-500 text-sm  border-r-2 border-[#a4b1bd] p-1 h-5 mt-3">*/}
+                  {/*  +94*/}
+                  {/*</span>*/}
                   <input
                     type="text"
                     id="mobile"
