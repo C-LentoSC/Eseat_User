@@ -2,14 +2,20 @@ import { NextResponse } from 'next/server'
 
 export async function POST(request) {
     try {
+        const formData = await request.formData()
 
-        // process the payment response...
-        return NextResponse.json({ name: 'ede' }, { status: 200 })
+        // Convert FormData to a plain object
+        const data = {}
+        for (const [key, value] of formData.entries()) {
+            data[key] = value
+        }
+
+        return NextResponse.json(data)
     } catch (error) {
-        console.error('Error processing payment response:', error)
-        return new Response(JSON.stringify({ error: 'Invalid request' }), {
-            status: 400,
-            headers: { 'Content-Type': 'application/json' },
-        })
+        console.error('Error processing form data:', error)
+        return NextResponse.json(
+            { error: 'Invalid request' },
+            { status: 400 }
+        )
     }
 }
