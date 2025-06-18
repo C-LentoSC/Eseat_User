@@ -1,34 +1,39 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server';
 
 export async function POST(request) {
     try {
-        const formData = await request.formData()
-        // Extract the json string from form data
-        const jsonString = formData.get('json')
+        const formData = await request.formData();
+        const jsonString = formData.get('json');
 
         if (!jsonString) {
             return NextResponse.json(
                 { error: 'Missing "json" field in form data' },
                 { status: 400 }
-            )
+            );
         }
 
-        // Parse the JSON string
-        let jsonData
+        let jsonData;
         try {
-            jsonData = JSON.parse(jsonString)
+            jsonData = JSON.parse(jsonString);
         } catch (parseError) {
             return NextResponse.json(
                 { error: 'Failed to parse "json" field' },
                 { status: 400 }
-            )
+            );
         }
 
-        const encodedData = encodeURIComponent(JSON.stringify(jsonData));
-        return NextResponse.redirect(`/payment-response/print?data=${encodedData}`, 303);
+        // Safely encode query parameters
+        const searchParams = new URLSearchParams();
+        searchParams.set('data', JSON.stringify(jsonData));
 
+        const url = `/payment-response/print?${searchParams.toString()}`;
+
+        return NextResponse.redirect(url, 303);
     } catch (error) {
-        console.error('Error processing form data:', error)
-        return NextResponse.redirect(`/payment-response/print?data=${error}`, 303);
+        console.error('Error processing form data:', error);
+        return NextResponse.json(
+            { error: 'Internal server error' },
+            { status: 500 }
+        );
     }
 }
