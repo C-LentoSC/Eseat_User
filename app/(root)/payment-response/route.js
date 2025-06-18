@@ -27,7 +27,7 @@ export async function POST(request) {
 
         // Return parsed JSON in response
         return NextResponse.json({
-            received: jsonData
+            received: jsonData.received
         })
 
     } catch (error) {
