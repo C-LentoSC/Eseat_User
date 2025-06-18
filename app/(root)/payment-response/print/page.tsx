@@ -1,24 +1,29 @@
-// app/payment-response/print/page.tsx or pages/payment-response/print.tsx
+// app/(root)/payment-response/print/page.tsx
 
+"use client";
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export default function PrintTicketPage() {
     const router = useRouter();
 
     useEffect(() => {
-        const { ticket } = router.query;
+        const searchParams = new URLSearchParams(window.location.search);
+        const ticket = searchParams.get('ticket');
 
         if (ticket) {
-            const decodedTicket = decodeURIComponent(ticket as string);
-            const ticketData = JSON.parse(decodedTicket);
+            try {
+                const decodedTicket = decodeURIComponent(ticket);
+                const ticketData = JSON.parse(decodedTicket);
 
-            // Now generate printable iframe or trigger print
-            generateAndPrintTicket(ticketData);
+                generateAndPrintTicket(ticketData);
+            } catch (e) {
+                console.error("Failed to parse ticket data", e);
+            }
         }
-    }, [router.query]);
+    }, []);
 
-    const generateAndPrintTicket = (ticketData) => {
+    const generateAndPrintTicket = (ticketData : any) => {
         const iframe = document.createElement('iframe');
         iframe.style.position = 'fixed';
         iframe.style.width = '100%';
@@ -80,7 +85,7 @@ export default function PrintTicketPage() {
             <div className="w-full text-base">
               <span className="text-gray-500">Seat No.</span>
               <span className="ml-4">
-                ${(ticketData.seats || []).map(s => s.seat_no).join(",") || 'N/A'}
+                ${(ticketData.seats || []).map((s: { seat_no: any; }) => s.seat_no).join(",") || 'N/A'}
               </span>
             </div>
           </div>
