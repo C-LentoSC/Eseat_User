@@ -2,7 +2,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useTicketContext } from "@/context/TicketContext";
+import {useTicketContext} from "@/lib/ticketStore";
 
 export default function PrintTicketPage() {
     const router = useRouter();
