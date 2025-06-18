@@ -1,5 +1,4 @@
-import {NextResponse} from 'next/server'
-import {storeTicketData} from '@/lib/ticketStore';
+import { NextResponse } from 'next/server'
 
 export async function POST(request) {
     try {
@@ -9,8 +8,8 @@ export async function POST(request) {
 
         if (!jsonString) {
             return NextResponse.json(
-                {error: 'Missing "json" field in form data'},
-                {status: 400}
+                { error: 'Missing "json" field in form data' },
+                { status: 400 }
             )
         }
 
@@ -20,22 +19,19 @@ export async function POST(request) {
             jsonData = JSON.parse(jsonString)
         } catch (parseError) {
             return NextResponse.json(
-                {error: 'Failed to parse "json" field'},
-                {status: 400}
+                { error: 'Failed to parse "json" field' },
+                { status: 400 }
             )
         }
 
-        const ticketId = storeTicketData(jsonData);
-        console.log("heee",ticketId);
-        // Return redirect response
-        return NextResponse.redirect(`/payment-response/print?id=${ticketId}`, 303);
-        // return NextResponse.json(jsonData)
+        const encodedData = encodeURIComponent(JSON.stringify(jsonData));
+        return NextResponse.redirect(`/payment-response/print?data=${encodedData}`, 303);
 
     } catch (error) {
         console.error('Error processing form data:', error)
         return NextResponse.json(
-            {error: 'Invalid request'},
-            {status: 400}
+            { error: 'Invalid request' },
+            { status: 400 }
         )
     }
 }

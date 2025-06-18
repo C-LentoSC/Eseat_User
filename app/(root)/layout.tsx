@@ -3,7 +3,6 @@ import Footer from "@/components/footer";
 import Header from "@/components/Header";
 import { NavBar } from "@/components/nav-bar";
 import { useEffect, useState } from "react";
-import {TicketProvider} from "@/lib/ticketStore";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
@@ -55,7 +54,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
     <>
       <Header />
       <NavBar />
-      <TicketProvider>{children}</TicketProvider>
+      {children}
       <Footer />
     </>
   );
