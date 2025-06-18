@@ -26,9 +26,7 @@ export async function POST(request) {
         }
 
         // Return parsed JSON in response
-        return NextResponse.json({
-            received: jsonData.received
-        })
+        return NextResponse.json(jsonData)
 
     } catch (error) {
         console.error('Error processing form data:', error)
