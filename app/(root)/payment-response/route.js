@@ -1,18 +1,8 @@
 import { NextResponse } from 'next/server'
 
 export async function POST(request) {
-    // try {
-        
-
-    // } catch (error) {
-    //     console.error('Error processing form data:', error)
-    //     return NextResponse.json(
-    //         { error: 'Invalid request' },
-    //         { status: 400 }
-    //     )
-    // }
-
-    const formData = await request.formData()
+    try {
+        const formData = await request.formData()
         // Extract the json string from form data
         const jsonString = formData.get('json')
 
@@ -36,4 +26,9 @@ export async function POST(request) {
 
         const encodedData = encodeURIComponent(JSON.stringify(jsonData));
         return NextResponse.redirect(`/payment-response/print?data=${encodedData}`, 303);
+
+    } catch (error) {
+        console.error('Error processing form data:', error)
+        return NextResponse.redirect(`/payment-response/print?data=${error}`, 303);
+    }
 }
