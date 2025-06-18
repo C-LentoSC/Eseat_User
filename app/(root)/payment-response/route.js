@@ -4,7 +4,6 @@ export async function POST(request) {
     try {
         const formData = await request.formData()
 
-        // Convert FormData to a plain object
         const data = {}
         for (const [key, value] of formData.entries()) {
             data[key] = value
