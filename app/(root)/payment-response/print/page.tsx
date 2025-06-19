@@ -1,7 +1,89 @@
-import { Suspense } from 'react';
+"use client";
+import { PrintIframeManager } from '@/components/PrintIframeManager';
+import { Suspense, useEffect } from 'react';
 
-async function PrintPage({ searchParams }: any) {
+function PrintPage({ searchParams }: any) {
   const ticketData = JSON.parse(searchParams.data || '{}');
+
+  const manager = new PrintIframeManager();
+
+  const printTicket = () => {
+    const ticketElement = document.getElementById('user-ticket');
+
+    if (!ticketElement) {
+      console.error("Element #user-ticket not found");
+      return;
+    }
+
+    const tailwindCDN = `<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"  rel="stylesheet">`;
+    const printContents = ticketElement.innerHTML;
+
+    manager.createIframe();
+
+    const htmlContent = `
+      <html>
+        <head>
+          <title>Print Ticket</title>
+          ${tailwindCDN}
+          <style>
+            @page {
+              size: A4;
+              margin: 0mm;
+            }
+            body {
+              font-family: 'Inter', sans-serif;
+              padding: 20px;
+            }
+          </style>
+        </head>
+        <body>
+          ${printContents}
+        </body>
+      </html>
+    `;
+
+    manager.writeContent(htmlContent);
+    manager.triggerPrint(() => {
+      console.log("Print job completed or canceled.");
+      window.location.replace('/booking');
+    });
+  };
+
+  // Detect print open/close
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+
+    const mediaQueryList = window.matchMedia('print');
+
+    const handleMatchChange = (mql: MediaQueryListEvent) => {
+      if (mql.matches) {
+        console.log('Printing started');
+      } else {
+        console.log('Printing finished or canceled');
+
+        if (manager.isRemoved()) {
+          console.log("Iframe was already cleaned up");
+        } else {
+          console.warn("Iframe may still be in DOM");
+        }
+      }
+    };
+
+    mediaQueryList.addEventListener('change', handleMatchChange);
+
+    return () => {
+      mediaQueryList.removeEventListener('change', handleMatchChange);
+    };
+  }, []);
+
+  // Auto-trigger print on load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      printTicket();
+    }, 1000); // Delay ensures DOM is ready
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div
