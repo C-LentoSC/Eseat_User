@@ -3,7 +3,10 @@ import { Suspense } from 'react';
 async function PrintPage({ searchParams }: any) {
   const data = JSON.parse(searchParams.data || '{}');
   return (
-    <pre>{JSON.stringify(data, null, 2)}</pre>
+    <div>
+      <span>{data.status}</span>
+      <span>{data.tx_id}</span>
+    </div>
   );
 }
 
