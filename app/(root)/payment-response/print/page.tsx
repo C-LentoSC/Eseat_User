@@ -2,9 +2,10 @@ import { Suspense } from 'react';
 
 async function PrintPage({ searchParams }: any) {
   const ticketData = JSON.parse(searchParams.data || '{}');
+
   return (
     <div
-      className="flex justify-center items-cente bg-contain h-full w-full z-50">
+      className="flex justify-center py-20 items-cente bg-contain h-full w-full z-50">
       <div
         id="user-ticket"
         className="bg-white rounded-2xl min-w-[40%] min-h-auto flex flex-col justify-center items-center p-5"
@@ -166,7 +167,7 @@ async function PrintPage({ searchParams }: any) {
           <span>Amount : </span>
           <span className="ml-2">
             {" "}
-            Rs.{ticketData.total ? ticketData.total.toFixed(2) : 0.0}
+            Rs.{ticketData.total ? ticketData.total : 0.0}
           </span>
         </div>
         <div className="w-full flex font-medium text-base mt-2 justify-center items-center">
