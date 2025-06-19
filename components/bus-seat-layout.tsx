@@ -73,7 +73,8 @@ function Seat({
   return (
     <div
       className={cn(
-        "relative m-0.5 md:m-1 cursor-pointer transition-all",
+        "relative m-0.5 md:m-1 transition-all",
+        parseFloat(String(number)) ? "cursor-pointer" : "cursor-default",
         status === "available" && "text-gray-500 hover:text-gray-700",
         status === "processing" && "text-yellow-500",
         status === "booked" && "text-red-500",
