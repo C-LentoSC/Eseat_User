@@ -1,39 +1,40 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 export async function POST(request) {
-    try {
-        const formData = await request.formData();
-        const jsonString = formData.get('json');
+  // try {
 
-        if (!jsonString) {
-            return NextResponse.json(
-                { error: 'Missing "json" field in form data' },
-                { status: 400 }
-            );
-        }
+  // } catch (error) {
+  //     console.error('Error processing form data:', error);
+  //     return NextResponse.json(
+  //         { error: 'Internal server error' },
+  //         { status: 500 }
+  //     );
+  // }
+  const formData = await request.formData();
+  const jsonString = formData.get("json");
 
-        let jsonData;
-        try {
-            jsonData = JSON.parse(jsonString);
-        } catch (parseError) {
-            return NextResponse.json(
-                { error: 'Failed to parse "json" field' },
-                { status: 400 }
-            );
-        }
+  if (!jsonString) {
+    return NextResponse.json(
+      { error: 'Missing "json" field in form data' },
+      { status: 400 }
+    );
+  }
 
-        // Safely encode query parameters
-        const searchParams = new URLSearchParams();
-        searchParams.set('data', JSON.stringify(jsonData));
+  let jsonData;
+  try {
+    jsonData = JSON.parse(jsonString);
+  } catch (parseError) {
+    return NextResponse.json(
+      { error: 'Failed to parse "json" field' },
+      { status: 400 }
+    );
+  }
 
-        const url = `/payment-response/print?${searchParams.toString()}`;
+  // Safely encode query parameters
+  const searchParams = new URLSearchParams();
+  searchParams.set("data", JSON.stringify(jsonData));
 
-        return NextResponse.redirect(url, 303);
-    } catch (error) {
-        console.error('Error processing form data:', error);
-        return NextResponse.json(
-            { error: 'Internal server error' },
-            { status: 500 }
-        );
-    }
+  const url = `/payment-response/print?${searchParams.toString()}`;
+
+  return NextResponse.redirect(url, 303);
 }
