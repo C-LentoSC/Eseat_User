@@ -88,7 +88,7 @@ function Seat({
     >
       <SeatIcon isVisible={isVisible} />
       <span className="absolute left-1/3 bottom-2 md:bottom-4 -translate-x-1/2 text-[10px] md:text-xs font-medium text-white">
-        {number}
+        {parseFloat(String(number)) ? number : ""}
       </span>
     </div>
   );
