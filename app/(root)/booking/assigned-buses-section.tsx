@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { RouteCard } from "@/components/route-card";
 import axios from "axios";
 import LoadingAnimation from "@/components/ui/Loading";
+import Modal from "@/components/model";
+import { Label } from "@/components/ui/label";
+import toast from "react-hot-toast";
 
 interface Route {
   id: string;
@@ -26,6 +29,14 @@ export function AssignedBusesSection() {
   const [filteredRoutes, setFilteredRoutes] = useState<Route[]>([]);
   const [loadMoreCount, setLoadMoreCount] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoading1, setIsLoading1] = useState(false);
+
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const [conductorMobile, setconductorMobile] = useState("");
+  const [busNumber, setbusNumber] = useState("");
+
+  const [enteredBusNumber, setenteredBusNumber] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -35,49 +46,69 @@ export function AssignedBusesSection() {
     }
 
     setIsLoading(true);
-    const getData = async () => {
-      try {
-        const res = await axios.get(`${BASE_URL}get-available-buses`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        const fetchedRoutes = res?.data || [];
-        const storedOrder = JSON.parse(
-          localStorage.getItem("busOrder") || "[]"
-        );
 
-        if (storedOrder.length < fetchedRoutes.length) {
-          // Add any new route IDs that aren't in storedOrder yet
-          const fetchedIds = fetchedRoutes.map((route: Route) => route.id);
-          const newIds = fetchedIds.filter((id: string) => !storedOrder.includes(id));
-          const updatedOrder = [...storedOrder, ...newIds];
-
-          // Save updated order to localStorage
-          localStorage.setItem("busOrder", JSON.stringify(updatedOrder));
-        }
-
-        if (storedOrder.length > 0) {
-          const orderedRoutes = storedOrder
-            .map((id: string) =>
-              fetchedRoutes.find((route: Route) => route.id === id)
-            )
-            .filter(Boolean);
-          setRoutes(orderedRoutes);
-          setFilteredRoutes(orderedRoutes);
-        } else {
-          setRoutes(fetchedRoutes);
-          setFilteredRoutes(fetchedRoutes);
-        }
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-        setIsLoading(false);
-      }
-    };
     getData();
   }, []);
+
+  const getData = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}get-available-buses`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const fetchedRoutes = res?.data || [];
+      const storedOrder = JSON.parse(
+        localStorage.getItem("busOrder") || "[]"
+      );
+
+      // if (storedOrder.length < fetchedRoutes.length) {
+      //   // Add any new route IDs that aren't in storedOrder yet
+      //   const fetchedIds = fetchedRoutes.map((route: Route) => route.id);
+      //   const newIds = fetchedIds.filter((id: string) => !storedOrder.includes(id));
+      //   const updatedOrder = [...storedOrder, ...newIds];
+
+      //   // Save updated order to localStorage
+      //   localStorage.setItem("busOrder", JSON.stringify(updatedOrder));
+      // }
+
+      const fetchedIds = fetchedRoutes.map((route: Route) => route.id);
+
+      // 1. Add missing IDs (in fetched but not in stored)
+      const idsToAdd = fetchedIds.filter((id: any) => !storedOrder.includes(id));
+      const updatedOrderAfterAdd = [...storedOrder, ...idsToAdd];
+
+      // 2. Remove obsolete IDs (in stored but not in fetched)
+      const updatedOrder = updatedOrderAfterAdd.filter(id => fetchedIds.includes(id));
+
+      // 3. Only save to localStorage if there was a change
+      if (
+        updatedOrder.length !== storedOrder.length ||
+        updatedOrder.some((id, index) => id !== storedOrder[index])
+      ) {
+        localStorage.setItem("busOrder", JSON.stringify(updatedOrder));
+      }
+
+
+      if (storedOrder.length > 0) {
+        const orderedRoutes = storedOrder
+          .map((id: string) =>
+            fetchedRoutes.find((route: Route) => route.id === id)
+          )
+          .filter(Boolean);
+        setRoutes(orderedRoutes);
+        setFilteredRoutes(orderedRoutes);
+      } else {
+        setRoutes(fetchedRoutes);
+        setFilteredRoutes(fetchedRoutes);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (searchQuery.trim() === "") {
@@ -99,6 +130,44 @@ export function AssignedBusesSection() {
     }
   }, [searchQuery, routes]);
 
+  //  useEffect(() => {
+  //   if (searchQuery.trim() === "") {
+  //     const storedOrderRaw = localStorage.getItem("busOrder");
+  //     const storedOrder: string[] = storedOrderRaw ? JSON.parse(storedOrderRaw) : [];
+
+  //     const currentRouteIds = new Set(routes.map((route) => route.id));
+
+  //     let updatedStoredOrder: string[] = [];
+
+  //     if (storedOrder.length > 0) {
+  //       // Remove stale IDs not in current routes
+  //       updatedStoredOrder = storedOrder.filter((id) => currentRouteIds.has(id));
+  //     }
+
+  //     // Add any new route IDs not already in localStorage
+  //     const newIdsToAdd = routes
+  //       .filter((route) => !updatedStoredOrder.includes(route.id))
+  //       .map((route) => route.id);
+
+  //     updatedStoredOrder = [...updatedStoredOrder, ...newIdsToAdd];
+
+  //     // Save updated order back to localStorage
+  //     localStorage.setItem("busOrder", JSON.stringify(updatedStoredOrder));
+
+  //     // Reorder routes based on updated stored order
+  //     const orderedRoutes = updatedStoredOrder
+  //       .map((id) => routes.find((route) => route.id === id))
+  //       .filter((route): route is Route => route !== undefined); // Type guard
+
+  //     setFilteredRoutes(orderedRoutes);
+  //   } else {
+  //     const filtered = routes.filter((route) =>
+  //       route.schedule_number.toLowerCase().includes(searchQuery.toLowerCase())
+  //     );
+  //     setFilteredRoutes(filtered);
+  //   }
+  // }, [searchQuery, routes]);
+
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
     index: number
@@ -118,13 +187,47 @@ export function AssignedBusesSection() {
     updatedRoutes.splice(targetIndex, 0, movedItem);
 
     setFilteredRoutes(updatedRoutes);
-    setRoutes(updatedRoutes); // ✅ Keep `routes` updated for localStorage persistence
+    setRoutes(updatedRoutes);
 
     localStorage.setItem(
       "busOrder",
       JSON.stringify(updatedRoutes.map((route) => route.id))
     );
   };
+
+  const closeBooking = async () => {
+    try {
+      setIsLoading1(true);
+
+      if (busNumber == enteredBusNumber) {
+        const data = await axios.post(`${BASE_URL}toggle-schedule`, {
+          id: busNumber,
+          conductorMobile: conductorMobile
+        }
+          , {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+
+        if (data?.data?.status == "ok") {
+          getData();
+          setModalOpen(false);
+          setIsLoading1(false);
+        } else {
+          setIsLoading1(false);
+          toast.error("Somthign went wrong.");
+        }
+      } else {
+        setIsLoading1(false);
+        toast.error("Bus Number doesn't Match.")
+      }
+
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message);
+    }
+  }
 
   return (
     <section className="my-container my-24">
@@ -174,7 +277,7 @@ export function AssignedBusesSection() {
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e) => handleDrop(e, index)}
                   >
-                    <RouteCard key={index} route={route} className="cursor-pointer" />
+                    <RouteCard key={index} route={route} setModelOpen={setModalOpen} className={`cursor-move`} setconductorMobile={setconductorMobile} setbusNumber={setbusNumber} />
                   </div>
                 ))}
               </div>
@@ -192,6 +295,70 @@ export function AssignedBusesSection() {
           )}
         </>
       )}
+      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
+        <h2 className="text-xl font-semibold mb-4">Close Booking</h2>
+        <div className="flex flex-col gap-2">
+          <Label
+            htmlFor="otp_code"
+            className=" text-myColor2"
+          >
+            Conductor Mobile
+          </Label>
+          <input
+            name="cmobile"
+            id="cmobile"
+            type="number"
+            defaultValue={conductorMobile}
+            disabled
+            inputMode="numeric"
+            pattern="[0-9]*"
+            className="appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+             [&::-webkit-inner-spin-button]:m-0
+             focus:outline-none p-2 border-2 rounded-[10px] outline-none placeholder:text-base"
+            placeholder="Enter Conductor Mobile here.."
+          />
+          <Label
+            htmlFor="otp_code"
+            className=" text-myColor2 mt-2"
+          >
+            Bus Number
+          </Label>
+          <input
+            name="busNumber"
+            id="busNumber"
+            type="text"
+            value={enteredBusNumber}
+            className="appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+             [&::-webkit-inner-spin-button]:m-0
+             focus:outline-none p-2 border-2 rounded-[10px] outline-none placeholder:text-base"
+            placeholder="Enter Bus Number here.."
+            onChange={(e) => {
+              setenteredBusNumber(e.target.value);
+            }}
+          />
+        </div>
+        <div className="flex gap-5 justify-end mt-2">
+          <Button variant="cancel" disabled={isLoading1} className="py-5 mt-5" onClick={() => {
+            setModalOpen(false);
+            setconductorMobile("");
+            setbusNumber("");
+          }}>
+            Cancel
+          </Button>
+          <Button className="py-5 mt-5 flex gap-3 items-center" disabled={isLoading1} onClick={closeBooking}>
+            {isLoading1 ? (
+              <>
+                Closing..
+                <div
+                  className="w-5 h-5 border-4 border-t-4 border-gray-300 border-t-blue-500 animate-spin rounded-full"></div>
+              </>
+            ) : (
+              "Confirm"
+            )}
+          </Button>
+        </div>
+
+      </Modal>
     </section>
   );
 }

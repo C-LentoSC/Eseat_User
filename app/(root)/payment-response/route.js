@@ -13,9 +13,6 @@ export async function POST(request) {
   const formData = await request.formData();
   const jsonString = formData.get("json");
 
-  console.log("fromData ", formData);
-  console.log("fromData ", jsonString);
-
   if (!jsonString) {
     return NextResponse.json(
       { error: 'Missing "json" field in form data' },
@@ -35,8 +32,6 @@ export async function POST(request) {
 
   const url = new URL("/payment-response/print", request.url);
   url.searchParams.set("data", JSON.stringify(jsonData));
-
-  console.log(url);
 
   return NextResponse.redirect(url, 303);
 }

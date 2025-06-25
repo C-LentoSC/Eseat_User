@@ -1,14 +1,14 @@
 "use client";
 
-import {SetStateAction, useState} from "react";
-import {useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {Eye, EyeOff} from "lucide-react";
+import { SetStateAction, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff } from "lucide-react";
 // import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-import {Button} from "@/components/ui/button";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     Form,
     FormControl,
@@ -16,9 +16,9 @@ import {
     FormItem,
     FormMessage,
 } from "@/components/ui/form";
-import {Input} from "@/components/ui/input";
-import {loginSchema, type LoginFormData} from "@/lib/validations/auth";
-import {Label} from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
+import { Label } from "@/components/ui/label";
 import axios from "axios";
 import Modal from "@/components/model";
 
@@ -258,12 +258,12 @@ export function HeroSection() {
 
                                 <div
                                     className={`flex flex-col justify-center ${index === activeIndex ? "block" : "hidden"
-                                    }`}
+                                        }`}
                                     key={index}
                                 >
                                     <h1 className="mb-4 text-4xl font-bold tracking-tight text-myColor2 sm:text-5xl">
                                         {item?.title}
-                                        <br/>
+                                        <br />
                                         {item?.title1}
                                     </h1>
                                     <p className="mb-8 max-w-lg text-gray-600">
@@ -289,7 +289,7 @@ export function HeroSection() {
                                                 <FormField
                                                     control={form.control}
                                                     name="email"
-                                                    render={({field}) => (
+                                                    render={({ field }) => (
                                                         <FormItem>
                                                             <Label htmlFor="email" className=" text-myColor2">
                                                                 Username
@@ -302,14 +302,14 @@ export function HeroSection() {
                                                                     {...field}
                                                                 />
                                                             </FormControl>
-                                                            <FormMessage/>
+                                                            <FormMessage />
                                                         </FormItem>
                                                     )}
                                                 />
                                                 <FormField
                                                     control={form.control}
                                                     name="password"
-                                                    render={({field}) => (
+                                                    render={({ field }) => (
                                                         <FormItem>
                                                             <div className="flex justify-between items-center">
                                                                 <Label
@@ -347,18 +347,18 @@ export function HeroSection() {
                                                                     onClick={() => setShowPassword(!showPassword)}
                                                                 >
                                                                     {showPassword ? (
-                                                                        <EyeOff className="h-4 w-4 text-gray-400"/>
+                                                                        <EyeOff className="h-4 w-4 text-gray-400" />
                                                                     ) : (
-                                                                        <Eye className="h-4 w-4 text-gray-400"/>
+                                                                        <Eye className="h-4 w-4 text-gray-400" />
                                                                     )}
                                                                     <span className="sr-only">
-                                    {showPassword
-                                        ? "Hide password"
-                                        : "Show password"}
-                                  </span>
+                                                                        {showPassword
+                                                                            ? "Hide password"
+                                                                            : "Show password"}
+                                                                    </span>
                                                                 </Button>
                                                             </div>
-                                                            <FormMessage/>
+                                                            <FormMessage />
                                                         </FormItem>
                                                     )}
                                                 />
@@ -389,48 +389,48 @@ export function HeroSection() {
                         className="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 group focus:outline-none"
                         onClick={handlePrev}
                     >
-            <span
-                className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50">
-              <svg
-                  className="w-8 h-8 p-2 text-white bg-[#dd3170] rounded-full"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 6 10"
-              >
-                <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M5 1 1 5l4 4"
-                />
-              </svg>
-              <span className="sr-only">Previous</span>
-            </span>
+                        <span
+                            className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50">
+                            <svg
+                                className="w-8 h-8 p-2 text-white bg-[#dd3170] rounded-full"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 6 10"
+                            >
+                                <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M5 1 1 5l4 4"
+                                />
+                            </svg>
+                            <span className="sr-only">Previous</span>
+                        </span>
                     </button>
                     <button
                         type="button"
                         className="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 group focus:outline-none"
                         onClick={handleNext}
                     >
-            <span
-                className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50">
-              <svg
-                  className="w-8 h-8 p-2 text-white bg-[#dd3170] rounded-full"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 6 10"
-              >
-                <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 9 4-4-4-4"
-                />
-              </svg>
-              <span className="sr-only">Next</span>
-            </span>
+                        <span
+                            className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50">
+                            <svg
+                                className="w-8 h-8 p-2 text-white bg-[#dd3170] rounded-full"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 6 10"
+                            >
+                                <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="m1 9 4-4-4-4"
+                                />
+                            </svg>
+                            <span className="sr-only">Next</span>
+                        </span>
                     </button>
                 </div>
                 {/* Carousel Indicators */}
@@ -440,7 +440,7 @@ export function HeroSection() {
                             key={index}
                             type="button"
                             className={`w-3 h-3 rounded-full ${index === activeIndex ? "bg-[#d91b5c]" : "bg-[#edefed]"
-                            }`}
+                                }`}
                             onClick={() => handleIndicatorClick(index)}
                         ></button>
                     ))}
@@ -554,8 +554,8 @@ export function HeroSection() {
                                         <Eye className="h-4 w-4 text-gray-400" />
                                     )}
                                     <span className="sr-only">
-                    {showPassword0 ? "Hide password" : "Show password"}
-                  </span>
+                                        {showPassword0 ? "Hide password" : "Show password"}
+                                    </span>
                                 </Button>
                             </div>
                             <Label
@@ -589,8 +589,8 @@ export function HeroSection() {
                                         <Eye className="h-4 w-4 text-gray-400" />
                                     )}
                                     <span className="sr-only">
-                    {showPassword1 ? "Hide password" : "Show password"}
-                  </span>
+                                        {showPassword1 ? "Hide password" : "Show password"}
+                                    </span>
                                 </Button>
                             </div>
                         </>

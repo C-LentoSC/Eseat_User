@@ -707,7 +707,7 @@ export default function BookingPage({
           }, 1000);
 
         } else {
-          setisLoading1(true);
+          setisLoading1(false);
           if (res?.data?.paymentUrl) {
             window.location.replace(res?.data?.paymentUrl);
           } else {
