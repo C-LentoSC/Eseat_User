@@ -18,7 +18,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkAuth = () => {
       if (!localStorage.getItem("token")) {
-        // window.location.href = "/";
+        window.location.href = "/";
       }
     };
 
