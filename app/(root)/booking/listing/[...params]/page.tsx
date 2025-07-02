@@ -1298,7 +1298,7 @@ export default function BookingPage({
   Rs{" "}
                     {(() => {
                       return (
-                          ticketData?.seats?.reduce((sum, seat) => sum + (seat.bank_charges || 0), 0) ||
+                          ticketData?.seats?.reduce((sum: any, seat: { bank_charges: any; }) => sum + (seat.bank_charges || 0), 0) ||
                           0
                       );
                     })().toFixed(2)}
