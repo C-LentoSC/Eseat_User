@@ -38,7 +38,7 @@ async function decrypt(ciphertextBase64: string, ivArray: number[], keyBuffer: A
 }
 
 
-async function PrintPage({searchParams}: any) {
+function PrintPage({searchParams}: any) {
     const [ticketData, setTicketData] = useState<any>(null);
     const [convenienceFee, setconvenienceFee] = useState(0);
 
