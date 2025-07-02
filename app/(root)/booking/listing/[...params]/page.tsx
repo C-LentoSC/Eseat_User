@@ -1268,43 +1268,69 @@ export default function BookingPage({
             </div>
             <div
               className="w-full mt-2 flex flex-col justify-center gap-2 border-t-2 border-b-2 border-dashed border-black">
-              <div className="mt-2  flex">
+              {/*<div className="mt-2  flex">*/}
+              {/*  <div className="w-48">*/}
+              {/*    <span>Bus Fare</span>*/}
+              {/*  </div>*/}
+              {/*  <div className="w-full">*/}
+              {/*    <span>*/}
+              {/*      Rs {ticketData?.busFare ? ticketData?.busFare : 0.0} x{" "}*/}
+              {/*      {ticketData?.seats?.length}*/}
+              {/*    </span>*/}
+              {/*  </div>*/}
+              {/*</div>*/}
+              <div className="mt-2 w-full flex">
                 <div className="w-48">
-                  <span>Bus Fare</span>
+                  <span className="text-gray-500">Convenience Fee</span>
                 </div>
                 <div className="w-full">
                   <span>
-                    Rs {ticketData?.busFare ? ticketData?.busFare : 0.0} x{" "}
-                    {ticketData?.seats?.length}
+                    Rs {convenienceFee ? convenienceFee : 0.0}
                   </span>
                 </div>
               </div>
-              <div className="mb-3 flex">
+              <div className="mt-2 w-full flex">
                 <div className="w-48">
-                  <span>Service Chargers</span>
+                  <span className="text-gray-500">Bank Charges</span>
                 </div>
                 <div className="w-full">
                   <span>
-                    Rs{" "}
+  Rs{" "}
                     {(() => {
-                      const tot = ticketData?.total;
-                      const busfare = ticketData?.busFare;
-                      const length = ticketData?.seats?.length;
-
-                      console.log(tot)
-                      console.log(busfare)
-                      console.log(length)
-
-                      if (!length || !tot || !busfare) return "0.00";
-
-                      const finaltot = (tot - (busfare * length)) / length;
-                      console.log(finaltot)
-                      return finaltot.toFixed(0); // Always show two decimal places
-                    })()}
-                    {" x "} {ticketData?.seats?.length ?? 0}
-                  </span>
+                      return (
+                          ticketData?.seats?.reduce((sum, seat) => sum + (seat.bank_charges || 0), 0) ||
+                          0
+                      );
+                    })().toFixed(2)}
+</span>
                 </div>
               </div>
+              {/*<div className="mb-3 flex">*/}
+              {/*  <div className="w-48">*/}
+              {/*    <span>Service Chargers</span>*/}
+              {/*  </div>*/}
+              {/*  <div className="w-full">*/}
+              {/*    <span>*/}
+              {/*      Rs{" "}*/}
+              {/*      {(() => {*/}
+              {/*        const tot = ticketData?.total;*/}
+              {/*        const busfare = ticketData?.busFare;*/}
+              {/*        const length = ticketData?.seats?.length;*/}
+
+              {/*        console.log(tot)*/}
+              {/*        console.log(busfare)*/}
+              {/*        console.log(length)*/}
+
+              {/*        if (!length || !tot || !busfare) return "0.00";*/}
+
+              {/*        const finaltot = (tot - (busfare * length)) / length;*/}
+              {/*        console.log(finaltot)*/}
+              {/*        return finaltot.toFixed(0); // Always show two decimal places*/}
+              {/*      })()}*/}
+              {/*      {" x "} {ticketData?.seats?.length ?? 0}*/}
+              {/*    </span>*/}
+              {/*  </div>*/}
+              {/*</div>*/}
             </div>
             <div className="w-full flex font-medium text-lg mt-3 justify-center items-center">
               <span>Amount : </span>
