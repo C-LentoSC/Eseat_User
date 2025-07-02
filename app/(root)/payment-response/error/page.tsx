@@ -48,7 +48,7 @@ export default async function Page({ searchParams }: { searchParams: Record<stri
                     <span className="text-[100px] text-white">!</span>
                 </div>
                 <span className="text-[30px] font-medium">Payment Unsuccessful.</span>
-                <RetryButton link={ticketData?.retryUrl}/>
+                <RetryButton link={ticketData?.paymentUrl}/>
             </div>
         );
     } catch (error) {
