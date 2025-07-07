@@ -18,6 +18,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import toast from "react-hot-toast";
 import { Popper } from "@mui/material";
 import LoadingAnimation from "@/components/ui/Loading";
+import {useState} from "react";
 
 interface FilmOptionType {
   name: string;
@@ -59,6 +60,9 @@ export default function TravelBooking({
 
   const [open, setOpen] = React.useState(false);
   const [openload, setOpenLoad] = React.useState(false);
+
+  const [open1, setOpen1] = useState<boolean>(false);
+  const [open2, setOpen2] = useState<boolean>(false);
 
   React.useEffect(() => {
     const token = localStorage.getItem("token");
@@ -197,6 +201,9 @@ export default function TravelBooking({
                             {...defaultProps}
                             id="disable-close-on-select"
                             disableCloseOnSelect
+                            open={open1}
+                            onOpen={()=>setOpen1(true)}
+                            onClose={()=>setOpen1(false)}
                             PopperComponent={(props) => (
                               <Popper
                                 {...props}
@@ -221,6 +228,7 @@ export default function TravelBooking({
                             onChange={(_: any, value: any) => {
                               setFrom(value?.name || "");
                               setEndCities(value?.ends || []);
+                              setOpen1(false);
                             }}
                             renderInput={(params) => (
                               <TextField
@@ -278,6 +286,9 @@ export default function TravelBooking({
                             {...defaultProps1}
                             id="disable-close-on-select"
                             disableCloseOnSelect
+                            open={open2}
+                            onOpen={()=>setOpen2(true)}
+                            onClose={()=>setOpen2(false)}
                             PopperComponent={(props) => (
                               <Popper
                                 {...props}
@@ -290,7 +301,7 @@ export default function TravelBooking({
                               />
                             )}
                             value={citises.find((city) => city.name === to)}
-                            onChange={(_, value) => setTo(value?.name || "")}
+                            onChange={(_, value) => {setTo(value?.name || "");setOpen2(false)}}
                             renderInput={(params) => (
                               <TextField
                                 {...params}

@@ -192,6 +192,9 @@ export default function BookingPage({
 
   const [isModalOpen, setModalOpen] = useState(false);
 
+  const [open1, setOpen1] = useState<boolean>(false);
+  const [open2, setOpen2] = useState<boolean>(false);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -1295,14 +1298,14 @@ export default function BookingPage({
                 </div>
                 <div className="w-full">
                   <span>
-  Rs{" "}
+                    Rs{" "}
                     {(() => {
                       return (
-                          ticketData?.seats?.reduce((sum: any, seat: { bank_charges: any; }) => sum + (seat.bank_charges || 0), 0) ||
-                          0
+                        ticketData?.seats?.reduce((sum: any, seat: { bank_charges: any; }) => sum + (seat.bank_charges || 0), 0) ||
+                        0
                       );
                     })().toFixed(2)}
-</span>
+                  </span>
                 </div>
               </div>
               {/*<div className="mb-3 flex">*/}
@@ -1343,7 +1346,9 @@ export default function BookingPage({
               <span>V-Code : </span>
               <span className="ml-2">
                 {ticketData?.vCode ? ticketData?.vCode : "N/A"}
+                
               </span>
+              
             </div>
             <div
               className="w-full flex flex-col font-normal text-base mt-2 text-center justify-center items-center">
@@ -1495,6 +1500,9 @@ export default function BookingPage({
                               {...defaultProps}
                               id="disable-close-on-select"
                               disableCloseOnSelect
+                              open={open1}
+                              onOpen={()=>setOpen1(true)}
+                              onClose={()=>setOpen1(false)}
                               PopperComponent={(props) => (
                                 <Popper
                                   {...props}
@@ -1518,6 +1526,7 @@ export default function BookingPage({
                               onChange={(_: any, value: any) => {
                                 setFrom(value?.name || "");
                                 setEndCities(value?.ends || []);
+                                setOpen1(false);
                               }}
                               renderInput={(params) => (
                                 <TextField
@@ -1577,6 +1586,9 @@ export default function BookingPage({
                               {...defaultProps1}
                               id="disable-close-on-select"
                               disableCloseOnSelect
+                              open={open2}
+                              onOpen={()=>setOpen2(true)}
+                              onClose={()=>setOpen2(false)}
                               PopperComponent={(props) => (
                                 <Popper
                                   {...props}
@@ -1589,7 +1601,7 @@ export default function BookingPage({
                                 />
                               )}
                               value={citises.find((city) => city.name === to)}
-                              onChange={(_, value) => setTo(value?.name || "")}
+                              onChange={(_, value) => {setTo(value?.name || "");setOpen2(false)}}
                               renderInput={(params) => (
                                 <TextField
                                   {...params}

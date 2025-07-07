@@ -34,7 +34,7 @@ const passengerOptions: OptionType[] = Array.from({ length: 54 }, (_, i) => ({
 
 export function WelcomeSection() {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [date, setDate] = useState<Date | undefined>(new Date() || undefined);
 
   const [citises, setCities] = useState<any[]>([]);
   const [endcitises, setEndCities] = useState<any[]>([]);
@@ -45,6 +45,8 @@ export function WelcomeSection() {
   const [passenger, setPassenger] = useState<string>("1");
 
   const [open, setOpen] = useState<boolean>(false);
+  const [open1, setOpen1] = useState<boolean>(false);
+  const [open2, setOpen2] = useState<boolean>(false);
   const [openload, setOpenLoad] = useState(false);
 
   useEffect(() => {
@@ -155,6 +157,9 @@ export function WelcomeSection() {
                       {...defaultProps}
                       id="disable-close-on-select"
                       disableCloseOnSelect
+                      open={open1}
+                      onOpen={()=>setOpen1(true)}
+                      onClose={()=>setOpen1(false)}
                       PopperComponent={(props) => (
                         <Popper
                           {...props}
@@ -177,6 +182,7 @@ export function WelcomeSection() {
                       onChange={(_: any, value: any) => {
                         setFrom(value?.name || "");
                         setEndCities(value?.ends || []);
+                        setOpen1(false);
                       }}
 
                       renderInput={(params) => (
@@ -214,6 +220,9 @@ export function WelcomeSection() {
                       {...defaultProps1}
                       id="disable-close-on-select"
                       disableCloseOnSelect
+                      open={open2}
+                      onOpen={()=>setOpen2(true)}
+                      onClose={()=>setOpen2(false)}
                       PopperComponent={(props) => (
                         <Popper
                           {...props}
@@ -225,7 +234,7 @@ export function WelcomeSection() {
                           }}
                         />
                       )}
-                      onChange={(_, value) => setTo(value?.name || "")}
+                      onChange={(_, value) => {setTo(value?.name || "");setOpen2(false)}}
                       renderInput={(params) => (
                         <TextField
                           {...params}
