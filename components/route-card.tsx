@@ -45,7 +45,7 @@ export function RouteCard({ route, className, setModelOpen, setconductorMobile, 
     },
     {
       icon: <img src="/assets/depot.svg" alt="location" className="w-4 h-4" />,
-      text: route.depot ? route.depot : "N/A",
+      text: route?.depot?.nam ? route?.depot?.name : "N/A",
     },
   ];
 

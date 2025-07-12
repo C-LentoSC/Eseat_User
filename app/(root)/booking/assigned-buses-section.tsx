@@ -11,15 +11,58 @@ import Modal from "@/components/model";
 import { Label } from "@/components/ui/label";
 import toast from "react-hot-toast";
 
+interface Region {
+  id: number;
+  name: string;
+  rm_name: string;
+  mobile: string;
+  email: string;
+  description: string;
+  is_active: boolean;
+}
+
+interface Depot {
+  id: number;
+  region_id: number;
+  name: string;
+  ds_name: string;
+  mobile: string;
+  mobile2: string;
+  email: string;
+  description: string;
+  is_active: boolean;
+  region: Region;
+}
+
+interface RouteDetail {
+  id: number;
+  starting: string;
+  end: string;
+  fare: number;
+}
+
 interface Route {
-  id: string;
-  schedule_number: string;
-  route: string;
-  dateTime: string;
-  code: string;
-  number: string;
-  depot: string;
+  agentCounter: boolean;
+  autoClose: boolean;
+  auto_active_date: null | string;
+  conductorNo: string;
+  dateTime: string; // Format: "2025-08-31 | 08:30 PM"
+  dateTimeIso: string; // ISO format: "2025-08-31T15:00:00.000000Z"
+  depot: Depot;
+  hasClosePermission: boolean;
+  id: number;
+  isScheduleClosed: boolean;
+  is_active: boolean;
   main_image: string;
+  manualClose: boolean;
+  number: string;
+  onlineActive: boolean;
+  otherImages: any[]; // Can be refined if needed
+  route: string;
+  route_details: RouteDetail[];
+  scheduleId: number;
+  schedule_number: string;
+  type: string;
 }
 
 export function AssignedBusesSection() {
@@ -94,7 +137,7 @@ export function AssignedBusesSection() {
       if (storedOrder.length > 0) {
         const orderedRoutes = storedOrder
           .map((id: string) =>
-            fetchedRoutes.find((route: Route) => route.id === id)
+            fetchedRoutes.find((route: any) => route.id === id)
           )
           .filter(Boolean);
         setRoutes(orderedRoutes);
@@ -116,7 +159,7 @@ export function AssignedBusesSection() {
       const storedOrder = JSON.parse(localStorage.getItem("busOrder") || "[]");
       if (storedOrder.length > 0) {
         const orderedRoutes = storedOrder
-          .map((id: string) => routes.find((route: Route) => route.id === id))
+          .map((id: string) => routes.find((route: any) => route.id === id))
           .filter(Boolean);
         setFilteredRoutes(orderedRoutes);
       } else {
