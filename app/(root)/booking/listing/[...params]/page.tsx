@@ -1799,7 +1799,7 @@ export default function BookingPage({
             }}
             departure={{
               time: alldata?.start_time,
-              name: alldata.from?.name,
+              name: alldata?.from?.name,
             }}
             booking={{
               startDate: alldata?.start_date,
@@ -1809,7 +1809,7 @@ export default function BookingPage({
             busType={alldata?.bus?.type}
             depotName={alldata?.bus?.depot?.name}
             price={alldata?.routeDetails?.bus_fare}
-            duration={alldata?.duration.toFixed(0)}
+            duration={alldata?.duration}
             availableSeats={alldata.allSeats?.length}
             fasility={alldata?.bus?.facilities}
             boardingDropping={alldata?.fareBrake}

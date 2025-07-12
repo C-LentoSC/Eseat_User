@@ -46,8 +46,8 @@ interface Route {
   autoClose: boolean;
   auto_active_date: null | string;
   conductorNo: string;
-  dateTime: string; // Format: "2025-08-31 | 08:30 PM"
-  dateTimeIso: string; // ISO format: "2025-08-31T15:00:00.000000Z"
+  dateTime: string;
+  dateTimeIso: string;
   depot: Depot;
   hasClosePermission: boolean;
   id: number;
@@ -57,7 +57,7 @@ interface Route {
   manualClose: boolean;
   number: string;
   onlineActive: boolean;
-  otherImages: any[]; // Can be refined if needed
+  otherImages: any[];
   route: string;
   route_details: RouteDetail[];
   scheduleId: number;

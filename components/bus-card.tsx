@@ -309,7 +309,7 @@ interface BusCardProps {
   busType: string;
   depotName: string;
   price: number;
-  duration: string;
+  duration: any;
   availableSeats: number;
   schedule_number: string;
   fasility: Facility[];

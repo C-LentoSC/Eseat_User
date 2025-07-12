@@ -62,7 +62,7 @@ const TripSelection = ({
             </div>
             <div className="bg-white ml-1">
               <div className="text-sm text-gray-600">
-                {hours.toFixed(0)} Hours
+                {hours}
               </div>
             </div>
           </div>
@@ -88,7 +88,7 @@ const TripSelection = ({
       <div className="flex items-center gap-6 flex-wrap lg:flex-nowrap bg-blue-50 p-3 rounded-lg mt-2">
         <div className="flex items-center gap-2">
           <Clock className="w-4 h-4 text-blue-600" />
-          <span className="text-sm">{hours.toFixed(0)} Hours</span>
+          <span className="text-sm">{hours}</span>
         </div>
         <div className="flex items-center gap-2">
           <Users className="w-4 h-4 text-blue-600" />
