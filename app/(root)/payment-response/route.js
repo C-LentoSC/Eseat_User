@@ -38,7 +38,7 @@ export async function POST(request) {
     const { ciphertext, iv } = await encrypt(jsonData, key);
 
     // Redirect to appropriate page with encrypted data and IV
-    if (jsonData?.bookingStatus?.name === "Paid") {
+    if (jsonData?.paymentStatus?.name === "Paid") {
         const url = new URL("/payment-response/print", request.url);
         url.searchParams.set("id", encodeURIComponent(keyB64));
         url.searchParams.set("data", encodeURIComponent(ciphertext));
