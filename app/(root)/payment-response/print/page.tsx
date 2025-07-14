@@ -52,6 +52,7 @@ function PrintPage({searchParams}: any) {
 
                 const keyBuffer = base64ToArrayBuffer(id);
                 const decryptedData = await decrypt(data, ivArray, keyBuffer);
+                console.log("data : ", decryptedData);
                 setTicketData(decryptedData);
             } catch (error) {
                 console.error('Decryption failed:', error);
@@ -141,7 +142,7 @@ function PrintPage({searchParams}: any) {
         if (!ticketData) return;
 
         const timer = setTimeout(() => {
-            if (ticketData?.bookingStatus?.name === "Paid") {
+            if (ticketData?.paymentStatus?.name === "Paid") {
                 printTicket();
             } else {
                 toast.error("Something went wrong.");

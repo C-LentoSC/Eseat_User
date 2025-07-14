@@ -574,6 +574,8 @@ export default function BookingPage({
     setconvenienceFee(Number(totalCost));
   }, [selectedSeats1]);
 
+  console.log(halfticket);
+
   const printTicket = async () => {
     // console.log("id : ", sheduleId);
     // console.log("name : ", pname);
@@ -1842,17 +1844,19 @@ export default function BookingPage({
                       <RadioGroupItem
                         value="full"
                         id="full"
-                        onChange={() => sethalfticket(false)}
+                        onClick={()=>sethalfticket(false)}
+                        // onChange={() => sethalfticket(false)}
                       />
-                      <Label htmlFor="full">Full Ticket</Label>
+                      <Label>Full Ticket</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem
                         value="half"
                         id="half"
-                        onChange={() => sethalfticket(true)}
+                        onClick={()=>sethalfticket(true)}
+                        // onChange={() => sethalfticket(true)}
                       />
-                      <Label htmlFor="half">Half Ticket</Label>
+                      <Label>Half Ticket</Label>
                     </div>
                   </RadioGroup>
                 </div>
