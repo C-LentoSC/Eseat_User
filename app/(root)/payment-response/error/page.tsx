@@ -35,12 +35,14 @@ function base64ToArrayBuffer(base64: string): ArrayBuffer {
 
 export default async function Page({ searchParams }: { searchParams: Record<string, string> }) {
     try {
-        const id = decodeURIComponent(searchParams.id);
-        const data = decodeURIComponent(searchParams.data);
-        const ivArray = JSON.parse(decodeURIComponent(decodeURIComponent(searchParams.iv)));
+        const ticketData = JSON.parse(searchParams.data || '{}');
 
-        const keyBuffer = base64ToArrayBuffer(id);
-        const ticketData = await decrypt(data, ivArray, keyBuffer);
+        // const id = decodeURIComponent(searchParams.id);
+        // const data = decodeURIComponent(searchParams.data);
+        // const ivArray = JSON.parse(decodeURIComponent(decodeURIComponent(searchParams.iv)));
+        //
+        // const keyBuffer = base64ToArrayBuffer(id);
+        // const ticketData = await decrypt(data, ivArray, keyBuffer);
 
         return (
             <div className="w-full bg-[#F0FBFE] flex justify-center items-center p-10 flex-col py-32 gap-5">

@@ -48,9 +48,10 @@ export async function POST(request) {
         return NextResponse.redirect(url, 303);
     } else {
         const url = new URL("/payment-response/error", request.url);
-        url.searchParams.set("id", encodeURIComponent(keyB64));
-        url.searchParams.set("data", encodeURIComponent(ciphertext));
-        url.searchParams.set("iv", encodeURIComponent(JSON.stringify(iv)));
+        url.searchParams.set("data", JSON.stringify(jsonData));
+        // url.searchParams.set("id", encodeURIComponent(keyB64));
+        // url.searchParams.set("data", encodeURIComponent(ciphertext));
+        // url.searchParams.set("iv", encodeURIComponent(JSON.stringify(iv)));
         return NextResponse.redirect(url, 303);
     }
 }
