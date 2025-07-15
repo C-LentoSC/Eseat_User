@@ -37,6 +37,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { Popper } from "@mui/material";
 import { useAppStore } from "@/util/store";
 import Modal from "@/components/model";
+import copy from "clipboard-copy";
 
 interface FilmOptionType {
   name: string;
@@ -624,15 +625,9 @@ export default function BookingPage({
             //     toast.error('Copy failed');
             //     console.error(err);
             //   });
-            navigator.permissions.query({ name: "clipboard-write" }).then(result => {
-              if (result.state === "granted" || result.state === "prompt") {
-                navigator.clipboard.writeText(res?.data?.paymentUrl)
-                    .then(() => toast.success('Payment Url Copy to Clipboard!'))
-                    .catch(err => console.error(err));
-              } else {
-                toast.error('Clipboard access denied.');
-              }
-            });
+            await copy(res?.data?.paymentUrl);
+            toast.success('Payment Url Copy to Clipboard!');
+
           } else {
             toast.error("Somthing went wrong.");
           }
