@@ -40,9 +40,11 @@ export async function POST(request) {
     // Redirect to appropriate page with encrypted data and IV
     if (jsonData?.paymentStatus?.name === "Paid") {
         const url = new URL("/payment-response/print", request.url);
-        url.searchParams.set("id", encodeURIComponent(keyB64));
-        url.searchParams.set("data", encodeURIComponent(ciphertext));
-        url.searchParams.set("iv", encodeURIComponent(JSON.stringify(iv)));
+        url.searchParams.set("data", JSON.stringify(jsonData));
+
+        // url.searchParams.set("id", encodeURIComponent(keyB64));
+        // url.searchParams.set("data", encodeURIComponent(ciphertext));
+        // url.searchParams.set("iv", encodeURIComponent(JSON.stringify(iv)));
         return NextResponse.redirect(url, 303);
     } else {
         const url = new URL("/payment-response/error", request.url);

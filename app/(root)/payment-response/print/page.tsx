@@ -39,29 +39,30 @@ async function decrypt(ciphertextBase64: string, ivArray: number[], keyBuffer: A
 
 
 function PrintPage({searchParams}: any) {
-    const [ticketData, setTicketData] = useState<any>(null);
+    const ticketData = JSON.parse(searchParams.data || '{}');
+    // const [ticketData, setTicketData] = useState<any>(null);
     const [convenienceFee, setconvenienceFee] = useState(0);
 
     // Perform decryption once on load
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const id = decodeURIComponent(searchParams.id);
-                const data = decodeURIComponent(searchParams.data);
-                const ivArray = JSON.parse(decodeURIComponent(decodeURIComponent(searchParams.iv)));
-
-                const keyBuffer = base64ToArrayBuffer(id);
-                const decryptedData = await decrypt(data, ivArray, keyBuffer);
-                console.log("data : ", decryptedData);
-                setTicketData(decryptedData);
-            } catch (error) {
-                console.error('Decryption failed:', error);
-                toast.error("Failed to load ticket.");
-            }
-        };
-
-        fetchData();
-    }, [searchParams]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const id = decodeURIComponent(searchParams.id);
+    //             const data = decodeURIComponent(searchParams.data);
+    //             const ivArray = JSON.parse(decodeURIComponent(decodeURIComponent(searchParams.iv)));
+    //
+    //             const keyBuffer = base64ToArrayBuffer(id);
+    //             const decryptedData = await decrypt(data, ivArray, keyBuffer);
+    //             console.log("data : ", decryptedData);
+    //             setTicketData(decryptedData);
+    //         } catch (error) {
+    //             console.error('Decryption failed:', error);
+    //             toast.error("Failed to load ticket.");
+    //         }
+    //     };
+    //
+    //     fetchData();
+    // }, [searchParams]);
 
     const manager = new PrintIframeManager();
 

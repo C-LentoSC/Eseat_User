@@ -616,14 +616,23 @@ export default function BookingPage({
         if (getMode() == "HGH") {
           setisLoading1(false);
           if (res?.data?.paymentUrl) {
-            navigator.clipboard.writeText(res?.data?.paymentUrl)
-              .then(() => {
-                toast.success('Payment Url Copy to Clipboard!');
-              })
-              .catch((err) => {
-                toast.error('Copy failed');
-                console.error(err);
-              });
+            // navigator.clipboard.writeText(res?.data?.paymentUrl)
+            //   .then(() => {
+            //     toast.success('Payment Url Copy to Clipboard!');
+            //   })
+            //   .catch((err) => {
+            //     toast.error('Copy failed');
+            //     console.error(err);
+            //   });
+            navigator.permissions.query({ name: "clipboard-write" }).then(result => {
+              if (result.state === "granted" || result.state === "prompt") {
+                navigator.clipboard.writeText(res?.data?.paymentUrl)
+                    .then(() => toast.success('Payment Url Copy to Clipboard!'))
+                    .catch(err => console.error(err));
+              } else {
+                toast.error('Clipboard access denied.');
+              }
+            });
           } else {
             toast.error("Somthing went wrong.");
           }
