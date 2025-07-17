@@ -35,7 +35,7 @@ export async function POST(request) {
     const keyB64 = await exportKey(key);
 
     // Encrypt the data
-    const { ciphertext, iv } = await encrypt(jsonData, key);
+    // const { ciphertext, iv } = await encrypt(jsonData, key);
 
     // Redirect to appropriate page with encrypted data and IV
     if (jsonData?.paymentStatus?.name === "Paid") {
