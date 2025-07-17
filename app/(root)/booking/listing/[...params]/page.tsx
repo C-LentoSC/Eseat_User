@@ -38,6 +38,7 @@ import {Popper} from "@mui/material";
 import {useAppStore} from "@/util/store";
 import Modal from "@/components/model";
 import copy from "clipboard-copy";
+import {PrintIframeManager} from "@/components/PrintIframeManager";
 
 interface FilmOptionType {
     name: string;
@@ -223,6 +224,10 @@ export default function BookingPage({
     }, []);
 
     useEffect(() => {
+        loadPageData();
+    }, [sheduleId]);
+
+    const loadPageData = async () => {
         setisLoading(true);
 
         if (!isNaN(Number(sheduleId))) {
@@ -290,7 +295,7 @@ export default function BookingPage({
         } else {
             window.history.back();
         }
-    }, [sheduleId]);
+    };
 
     const [seats, setSeats] = useState<SeatData[]>(
         Array(seatcount)
@@ -321,6 +326,10 @@ export default function BookingPage({
     );
 
     useEffect(() => {
+        loadSeat();
+    }, [seatcount]);
+
+    const loadSeat = async () => {
         setSeats(
             Array(seatcount)
                 // Array(54)
@@ -348,7 +357,7 @@ export default function BookingPage({
                     };
                 })
         );
-    }, [seatcount]);
+    };
 
     // console.log(seats);
 
@@ -577,7 +586,7 @@ export default function BookingPage({
         const totalCost = calTotal();
         // console.log(totalCost);
         setconvenienceFee(Number(totalCost));
-    }, [selectedSeats1 , halfticket]);
+    }, [selectedSeats1, halfticket]);
 
 
     const printTicket = async () => {
@@ -622,6 +631,9 @@ export default function BookingPage({
                         //   });
                         await copy(res?.data?.paymentUrl);
                         toast.success('Payment Url Copy to Clipboard!');
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
 
                     } else {
                         toast.error("Somthing went wrong.");
@@ -662,6 +674,7 @@ export default function BookingPage({
                             iframe.style.height = "0";
                             iframe.style.border = "none";
 
+
                             document.body.appendChild(iframe);
 
                             const doc = iframe.contentWindow?.document;
@@ -691,16 +704,32 @@ export default function BookingPage({
     `);
                                 doc.close();
 
-                                iframe.onload = () => {
-                                    iframe.contentWindow?.focus();
-                                    iframe.contentWindow?.print();
+                                const win = iframe.contentWindow;
 
-                                    // Clean up after printing
-                                    setTimeout(() => {
-                                        document.body.removeChild(iframe);
-                                    }, 1000);
-                                };
+                                if (win) {
+                                    win.focus(); // required for some browsers
+
+                                    // Detect print end using matchMedia
+                                    const mediaQueryList = win.matchMedia("print");
+
+                                    const handleMatchChange = (mql: MediaQueryListEvent) => {
+                                        if (!mql.matches) {
+                                            // Print dialog was closed
+                                            setTimeout(() => {
+                                                document.body.removeChild(iframe);
+                                                window.location.reload();
+                                            }, 500); // small delay to allow cleanup
+                                        }
+                                    };
+
+                                    mediaQueryList.addEventListener("change", handleMatchChange);
+
+                                    // Trigger print
+                                    win.print();
+                                }
+
                             }
+
                         }
 
 
