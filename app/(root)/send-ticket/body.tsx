@@ -4,6 +4,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import LoadingAnimation from "@/components/ui/Loading";
 
 const SendTicket: React.FC = () => {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -11,6 +12,7 @@ const SendTicket: React.FC = () => {
   const [refNo, setrefNo] = React.useState<string>("");
   const [mobile, setMobile] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
+  const [loading , setLoading]=useState<boolean>(false)
 
   const [value, setValue] = React.useState<string>("mTicket");
   const [valuest, setValueSt] = React.useState<boolean>(true);
@@ -18,16 +20,12 @@ const SendTicket: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     if (!termsAccepted) {
+      setLoading(false);
       toast.error("Please agree to terms and conditions.");
       return;
     } else {
-      // if(value == "mTicket"){
-      //   alert("mobile : "+ mobile);
-      // }else{
-      //   alert("Email : "+ email);
-      // }
-
       try {
         const res = await axios.post(
           `${BASE_URL}send-ticket`,
@@ -45,15 +43,15 @@ const SendTicket: React.FC = () => {
           }
         );
 
-        console.log(res);
-
         if (res?.data?.status == "ok") {
+          setLoading(false);
           toast.success("Ticket sent successfully");
           setTimeout(() => {
             window.location.reload();
           }, 1000);
         }
       } catch (error: any) {
+        setLoading(false);
         console.log(error);
         toast.error(error?.response?.data?.message);
       }
@@ -70,6 +68,13 @@ const SendTicket: React.FC = () => {
 
   return (
     <div className="w-full snd_bg bg-contain lg:bg-cover bg-no-repeat flex flex-col justify-between">
+
+      {loading && (
+          <div className={`top-0 bottom-0 left-0 right-0 flex justify-center items-center fixed w-full z-50 bg-black/60`}>
+            <LoadingAnimation/>
+          </div>
+      )}
+
       {/* Main Container */}
       <div className=" flex flex-col justify-center items-center w-full h-screen z-10 text-center">
         <form

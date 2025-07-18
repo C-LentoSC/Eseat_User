@@ -121,6 +121,7 @@ export function HeroSection() {
             console.error(error);
             toast.error(error?.response?.data?.message);
             setIsloading(false);
+            setModalOpen(false);
         }
     }
 
@@ -148,14 +149,21 @@ export function HeroSection() {
                     },
                 });
 
+            console.log(res?.data)
+
             if (res?.data?.verified) {
                 setIsloading1(false);
                 setModalOpen(false);
+                setIsloading(false);
                 localStorage.setItem("token", token);
                 window.location.href = "/booking";
 
             } else {
                 localStorage.removeItem("token");
+                setModalOpen(false);
+                setIsloading1(false);
+                setIsloading(false);
+                toast.error(res?.data?.message);
             }
 
         } catch (error: any) {
@@ -163,6 +171,8 @@ export function HeroSection() {
             toast.error(error?.response?.data?.message);
             setIsloading1(false);
             localStorage.removeItem("token");
+            setModalOpen(false);
+            setIsloading(false);
         }
 
     };

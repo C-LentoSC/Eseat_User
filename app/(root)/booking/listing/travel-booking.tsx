@@ -108,8 +108,8 @@ export default function TravelBooking({
   };
 
   const defaultProps1 = {
-    options: endcitises.length > 0 ? endcitises : endCities,
-    getOptionLabel: (option: FilmOptionType) => option.name,
+    options: endcitises?.length > 0 ? endcitises : endCities?.length > 0 ? endcitises : [],
+    getOptionLabel: (option: FilmOptionType) => option?.name,
   };
 
 

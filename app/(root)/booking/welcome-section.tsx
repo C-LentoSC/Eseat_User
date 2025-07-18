@@ -81,7 +81,7 @@ export function WelcomeSection() {
   };
 
   const defaultProps1 = {
-    options: endcitises,
+    options: endcitises?.length > 0 ? endcitises : [],
     getOptionLabel: (option: FilmOptionType) => option.name,
   };
 

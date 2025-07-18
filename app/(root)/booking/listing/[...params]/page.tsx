@@ -590,6 +590,7 @@ export default function BookingPage({
 
 
     const printTicket = async () => {
+        setisLoading1(true);
         try {
             const res = await axios.post(
                 `${BASE_URL}book-new-seat`,
@@ -615,7 +616,6 @@ export default function BookingPage({
             );
 
             if (res.data?.status === "ok") {
-                setisLoading1(true);
                 setTicketData(res.data);
 
                 if (getMode() == "HGH") {
@@ -750,6 +750,7 @@ export default function BookingPage({
 
             }
         } catch (error: any) {
+            setisLoading1(false);
             console.error(error);
             toast.error(
                 error.response.data.message.charAt(0).toUpperCase() +
@@ -902,7 +903,7 @@ export default function BookingPage({
         getOptionLabel: (option: FilmOptionType) => option.name,
     };
     const defaultProps1 = {
-        options: endcitises.length > 0 ? endcitises : allcityend,
+        options: endcitises?.length > 0 ? endcitises : allcityend?.length > 0 ? allcityend : [],
         getOptionLabel: (option: FilmOptionType) => option.name,
     };
 
