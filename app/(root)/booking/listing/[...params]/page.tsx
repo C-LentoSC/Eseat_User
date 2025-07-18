@@ -903,7 +903,7 @@ export default function BookingPage({
         getOptionLabel: (option: FilmOptionType) => option.name,
     };
     const defaultProps1 = {
-        options: endcitises?.length > 0 ? endcitises : Array.isArray(endCities) ? endCities : Object.values(endCities),
+        options: endcitises?.length > 0 ? endcitises : Array.isArray(allcityend) ? allcityend : Object.values(allcityend),
         getOptionLabel: (option: FilmOptionType) => option.name,
     };
 
