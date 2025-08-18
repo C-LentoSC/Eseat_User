@@ -53,7 +53,9 @@ export default function Header() {
                 console.error(error);
             }
         };
-        getData();
+        if(token){
+            getData();
+        }
     }, []);
 
     useEffect(() => {
