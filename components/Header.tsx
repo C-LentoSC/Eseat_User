@@ -48,6 +48,8 @@ export default function Header() {
                 setMobile(res?.data?.manager_mobile || 0);
 
             } catch (error) {
+                localStorage.removeItem("token");
+                window.location.href = "/";
                 console.error(error);
             }
         };
