@@ -88,7 +88,7 @@ function Seat({
       aria-label={`Seat ${number} - ${status}`}
     >
       <SeatIcon isVisible={isVisible} />
-      <span className="absolute left-1/3 bottom-2 md:bottom-4 -translate-x-1/2 text-[10px] md:text-xs font-medium text-white">
+      <span className="absolute left-2/4 lg:left-1/3 bottom-2 md:bottom-4 -translate-x-2/3 lg:-translate-x-1/2 text-[10px] md:text-xs font-medium text-white">
         {parseFloat(String(number)) ? number : ""}
       </span>
     </div>
@@ -666,7 +666,7 @@ export function BusSeatLayoutSM({ seats, onSeatClick }: BusSeatLayoutProps) {
   return (
     <>
       {/* Legend */}
-      <div className="flex flex-wrap items-center justify-center gap-10 md:gap-4 mb-4 md:mb-6 text-xs md:text-sm">
+      <div className="flex flex-wrap items-center justify-start pl-8 gap-10 md:gap-4 mb-4 md:mb-6 text-xs md:text-sm">
         <div className="space-y-2">
           <div className="flex items-center gap-1 md:gap-2">
             <div className="w-3 h-3 md:w-4 md:h-4 bg-gray-500 rounded" />
@@ -689,8 +689,8 @@ export function BusSeatLayoutSM({ seats, onSeatClick }: BusSeatLayoutProps) {
         </div>
       </div>
 
-      <div className="flex flex-col justify-center">
-        <div className="grid  h-full p-2">
+      <div className="flex flex-col justify-center md:w-[55%]">
+        <div className="grid h-full p-2">
           <div className="w-full flex items-center justify-end">
             <img
               src="/assets/stering.svg"
@@ -699,7 +699,7 @@ export function BusSeatLayoutSM({ seats, onSeatClick }: BusSeatLayoutProps) {
             />
           </div>
         </div>
-        <div className={`grid grid-flow-col-dense  h-full p-2`}>
+        <div className={`grid grid-flow-col-dense h-full p-2`}>
           {/* top seats bar */}
           <div className="grid grid-flow-row-dense">
             {Array.from({ length: column + 1 }, (_, index) => (

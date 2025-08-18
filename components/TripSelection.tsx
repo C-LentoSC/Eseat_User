@@ -29,7 +29,7 @@ const TripSelection = ({
   bookedSeats,
 }: Traveldata) => {
   return (
-    <div className="max-w-md border rounded-lg p-4 bg-white mb-4">
+    <div className=" md:w-full border rounded-lg p-4 bg-white mb-4">
       <div className="border-b pb-4">
         <div className="flex items-center justify-between">
           <img src="/logos/sltb.svg" alt="SLTB" className="h-8" />

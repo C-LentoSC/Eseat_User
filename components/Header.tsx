@@ -100,20 +100,20 @@ export default function Header() {
 
                 <nav className="flex items-center gap-4 md:gap-6">
                     <div className="hidden gap-4 md:flex">
-                        <Button
-                            variant="link"
-                            size="sm"
-                            className="text-myColor2 font-medium text-[14px]"
-                        >
-                            Sinhala
-                        </Button>
-                        <Button
-                            variant="link"
-                            size="sm"
-                            className="text-myColor2 font-medium text-[14px]"
-                        >
-                            Help
-                        </Button>
+                        {/*<Button*/}
+                        {/*    variant="link"*/}
+                        {/*    size="sm"*/}
+                        {/*    className="text-myColor2 font-medium text-[14px]"*/}
+                        {/*>*/}
+                        {/*    Sinhala*/}
+                        {/*</Button>*/}
+                        {/*<Button*/}
+                        {/*    variant="link"*/}
+                        {/*    size="sm"*/}
+                        {/*    className="text-myColor2 font-medium text-[14px]"*/}
+                        {/*>*/}
+                        {/*    Help*/}
+                        {/*</Button>*/}
                         {namest ? (
                             <>
                                 <Button
@@ -192,105 +192,106 @@ export default function Header() {
 
                     {/* Mobile Menu Items */}
                     <div className="flex md:hidden">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => {
-                                setst(!st);
-                            }}
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="h-6 w-6"
-                            >
-                                <line x1="4" x2="20" y1="12" y2="12"/>
-                                <line x1="4" x2="20" y1="6" y2="6"/>
-                                <line x1="4" x2="20" y1="18" y2="18"/>
-                            </svg>
-                        </Button>
+                        {/*<Button*/}
+                        {/*    variant="ghost"*/}
+                        {/*    size="icon"*/}
+                        {/*    onClick={() => {*/}
+                        {/*        setst(!st);*/}
+                        {/*    }}*/}
+                        {/*>*/}
+                        {/*    <svg*/}
+                        {/*        xmlns="http://www.w3.org/2000/svg"*/}
+                        {/*        width="24"*/}
+                        {/*        height="24"*/}
+                        {/*        viewBox="0 0 24 24"*/}
+                        {/*        fill="none"*/}
+                        {/*        stroke="currentColor"*/}
+                        {/*        strokeWidth="2"*/}
+                        {/*        strokeLinecap="round"*/}
+                        {/*        strokeLinejoin="round"*/}
+                        {/*        className="h-6 w-6"*/}
+                        {/*    >*/}
+                        {/*        <line x1="4" x2="20" y1="12" y2="12"/>*/}
+                        {/*        <line x1="4" x2="20" y1="6" y2="6"/>*/}
+                        {/*        <line x1="4" x2="20" y1="18" y2="18"/>*/}
+                        {/*    </svg>*/}
+                        {/*</Button>*/}
+                        {namest ? (
+                            <>
+                                <Button
+                                    variant="link"
+                                    size="sm"
+                                    className="text-myColor2 hover:no-underline font-medium text-[14px]"
+                                >
+                                    <img
+                                        src="/assets/auser.jpg"
+                                        alt=""
+                                        className="w-7 h-7 rounded-full"
+                                    />
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="text-[14px] bg-transparent border-none shadow-none hover:bg-transparent hover:text-gray-500 px-0"
+                                            >
+                                                {name ? name : "__"}
+                                                <ChevronDown className="ml-2 h-4 w-4"/>
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent
+                                            className="bg-white rounded-lg w-[150px] p-1 border border-[#dd3170]">
+                                            <div className="space-y-2">
+                                                <div
+                                                    className="text-sm cursor-pointer hover:bg-[#dd3170] p-1 rounded-lg hover:text-white"
+                                                    onClick={() => {
+                                                        localStorage.removeItem("token");
+                                                    }}
+                                                >
+                                                    Log out
+                                                </div>
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Button
+                                    variant="link"
+                                    size="sm"
+                                    className="text-myColor2 font-medium text-[14px]"
+                                >
+                                    Sign In
+                                </Button>
+                            </>
+                        )}
                     </div>
                 </nav>
             </div>
-            {st && (
-                <>
-                    <div className="w-full p-5 bg-white">
-                        <div className="gap-4 flex justify-between">
-                            <Button
-                                variant="link"
-                                size="sm"
-                                className="text-myColor2 font-medium text-[14px]"
-                            >
-                                Sinhala
-                            </Button>
-                            <Button
-                                variant="link"
-                                size="sm"
-                                className="text-myColor2 font-medium text-[14px]"
-                            >
-                                Help
-                            </Button>
-                            {namest ? (
-                                <>
-                                    <Button
-                                        variant="link"
-                                        size="sm"
-                                        className="text-myColor2 hover:no-underline font-medium text-[14px]"
-                                    >
-                                        <img
-                                            src="/assets/auser.jpg"
-                                            alt=""
-                                            className="w-7 h-7 rounded-full"
-                                        />
-                                        <Popover>
-                                            <PopoverTrigger asChild>
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    className="text-[14px] bg-transparent border-none shadow-none hover:bg-transparent hover:text-gray-500 px-0"
-                                                >
-                                                    {name ? name : "__"}
-                                                    <ChevronDown className="ml-2 h-4 w-4"/>
-                                                </Button>
-                                            </PopoverTrigger>
-                                            <PopoverContent
-                                                className="bg-white rounded-lg w-[150px] p-1 border border-[#dd3170]">
-                                                <div className="space-y-2">
-                                                    <div
-                                                        className="text-sm cursor-pointer hover:bg-[#dd3170] p-1 rounded-lg hover:text-white"
-                                                        onClick={() => {
-                                                            localStorage.removeItem("token");
-                                                        }}
-                                                    >
-                                                        Log out
-                                                    </div>
-                                                </div>
-                                            </PopoverContent>
-                                        </Popover>
-                                    </Button>
-                                </>
-                            ) : (
-                                <>
-                                    <Button
-                                        variant="link"
-                                        size="sm"
-                                        className="text-myColor2 font-medium text-[14px]"
-                                    >
-                                        Sign In
-                                    </Button>
-                                </>
-                            )}
-                        </div>
-                    </div>
-                </>
-            )}
+            {/*{st && (*/}
+            {/*    <>*/}
+            {/*        <div className="w-full p-5 bg-white">*/}
+            {/*            <div className="gap-4 flex justify-between">*/}
+            {/*                <Button*/}
+            {/*                    variant="link"*/}
+            {/*                    size="sm"*/}
+            {/*                    className="text-myColor2 font-medium text-[14px]"*/}
+            {/*                >*/}
+            {/*                    Sinhala*/}
+            {/*                </Button>*/}
+            {/*                <Button*/}
+            {/*                    variant="link"*/}
+            {/*                    size="sm"*/}
+            {/*                    className="text-myColor2 font-medium text-[14px]"*/}
+            {/*                >*/}
+            {/*                    Help*/}
+            {/*                </Button>*/}
+            {/*                */}
+            {/*            </div>*/}
+            {/*        </div>*/}
+            {/*    </>*/}
+            {/*)}*/}
         </header>
     );
 }

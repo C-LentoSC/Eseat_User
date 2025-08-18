@@ -350,9 +350,9 @@ export function BusCard({
   const [selectedBusImage, setSelectedBusImage] = useState<string>(image);
 
   return (
-    <div className="flex flex-col md:flex-row bg-bgMyColor6 rounded-lg overflow-hidden border">
+    <div className="flex flex-col md:flex-col lg:flex-row bg-bgMyColor6 rounded-lg overflow-hidden border">
       {/* Bus Image */}
-      <div className="w-full md:w-72 h-auto relative">
+      <div className="w-full lg:w-56  h-[50vh] lg:h-auto relative">
         <div className="w-full absolute top-0 flex justify-end items-center z-40 p-1">
           <img
             src="/assets/fullicon.svg"
@@ -367,7 +367,7 @@ export function BusCard({
           src={selectedBusImage ? selectedBusImage : image}
           alt="Bus"
           fill
-          className="object-cover"
+          className="object-cover md:object-contain lg:object-cover md:object-center object-left lg:object-left"
         />
         <div className="p-2 absolute bottom-0 justify-center items-end right-1 flex gap-2 left-1">
           {subImages?.length > 0 && (
@@ -452,7 +452,7 @@ export function BusCard({
 
       {/* Content */}
       <div className="flex-1 p-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-4 gap-8">
           {/* Arrival Section */}
           <div>
             <p className="text-sm text-gray-500 mb-1">Pickup</p>
@@ -507,6 +507,32 @@ export function BusCard({
 
             <p className="text-gray-600 lg:mt-14 mt-10 pt-2">Depot Name</p>
             <p className="text-xl">{depotName}</p>
+          </div>
+          <div className="p-2 flex flex-col hidden md:block lg:hidden justify-center items-center border-l">
+            <div className="text-right">
+              <p className="text-3xl font-bold text-gray-900">
+                Rs {price ? price : "N/A"}
+              </p>
+              <div className="flex items-center justify-center gap-2 text-sm text-gray-500 mt-2">
+                <Clock className="w-4 h-4" />
+                <span>{duration} Hours</span>
+              </div>
+              <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
+                <Users className="w-4 h-4" />
+                <span>{availableSeats} Seats Available</span>
+              </div>
+            </div>
+            {bookbtnst && (
+                <>
+                  <Button className="w-full mt-4" asChild>
+                    <Link
+                        href={`/booking/listing/${id}/${from}/${to}/${date}/${passenger}`}
+                    >
+                      Book Now
+                    </Link>
+                  </Button>
+                </>
+            )}
           </div>
         </div>
 
@@ -614,7 +640,7 @@ export function BusCard({
       </div>
 
       {/* Price Section */}
-      <div className="md:w-64 p-6 flex flex-col justify-center items-center border-l">
+      <div className="lg:w-64 p-6 flex flex-col justify-center items-center border-l">
         <div className="text-right">
           <p className="text-3xl font-bold text-gray-900">
             Rs {price ? price : "N/A"}

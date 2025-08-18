@@ -133,8 +133,8 @@ const CancelTickets = () => {
                     <div className="w-full flex">
                       Account Number :{" "}
                       <input
-                        type="text"
-                        className="bg-transparent outline-none"
+                        type="number"
+                        className="bg-transparent outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         placeholder=""
                         value={accountNumber}
                         onChange={(e) => setaccountNumber(e.target.value)}
@@ -163,8 +163,8 @@ const CancelTickets = () => {
                     <div className="w-full flex">
                       Phone Number :{" "}
                       <input
-                        type="text"
-                        className="bg-transparent outline-none"
+                        type="tel"
+                        className="bg-transparent outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                         placeholder=""
                         value={mobile}
                         onChange={(e) => setMobile(e.target.value)}

@@ -128,12 +128,12 @@ const SendTicket: React.FC = () => {
                   {/*  +94*/}
                   {/*</span>*/}
                   <input
-                    type="text"
+                    type="tel"
                     id="mobile"
                     placeholder="Enter Mobile Number"
                     value={mobile}
                     onChange={(e) => setMobile(e.target.value)}
-                    className="block w-full px-10 py-3 text-sm font-medium font-sans border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 placeholder-[#a4b1bd] bg-[#eff1f3]"
+                    className="block w-full px-10 py-3 text-sm font-medium font-sans border-gray-300 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 placeholder-[#a4b1bd] bg-[#eff1f3] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                   />
                 </div>
                 <p className="text-sm font-medium font-sans text-[#a4b1bd] mt-1">

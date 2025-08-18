@@ -141,10 +141,10 @@ export function WelcomeSection() {
 
         {openload ? (
           <>
-            <div className="flex flex-col md:flex-row md:items-end justify-center">
-              <div className="flex flex-col gap-10 md:flex-row md:items-end lg:items-center bg-white p-6 rounded-[9px]">
-                <div className="flex flex-col lg:flex-row gap-5 lg:items-center lg:border-e-2 border-[#a4b1bd] h-full">
-                  <div className="text-left w-full lg:w-40">
+            <div className="flex flex-col md:w-full md:flex-row md:items-end justify-center">
+              <div className="flex flex-col gap-10 md:flex-col md:w-full lg:flex-row md:items-end lg:items-center bg-white p-6 rounded-[9px]">
+                <div className="flex flex-col md:flex-row md:w-full lg:flex-row gap-5 lg:items-center lg:border-e-2 border-[#a4b1bd] h-full">
+                  <div className="text-left w-full">
                     <label className="text-sm font-medium text-gray-500">
                       From / සිට / ஒரு
                     </label>
@@ -207,7 +207,7 @@ export function WelcomeSection() {
                     <ArrowLeftRight className="h-4 w-4 text-white" />
                   </Button>
 
-                  <div className="text-left ml-0 pr-2 w-full lg:w-40">
+                  <div className="text-left ml-0 lg:pr-2 w-full">
                     <label className="text-sm font-medium text-gray-500">
                       To / දක්වා /வரை
                     </label>
@@ -251,49 +251,50 @@ export function WelcomeSection() {
                   </div>
                 </div>
 
-                <div className="flex flex-col lg:border-e-2 border-[#a4b1bd] h-full">
-                  <label className="text-sm font-medium text-gray-500">
-                    Date / දිනය / தேதி
-                  </label>
-                  <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full md:w-[200px] justify-start mt-0 pt-2 px-0 text-left font-normal bg-transparent border-0 shadow-none hover:bg-transparent hover:text-gray-400",
-                          !date && "text-gray-400 text-md font-normal"
-                        )}
-                      >
-                        {date ? format(date, "EEE, MMM dd") : "Select date"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={(selectedDate) => {
-                          if (
-                            selectedDate &&
-                            format(selectedDate, "yyyy-MM-dd") <
-                            format(new Date(), "yyyy-MM-dd")
-                          ) {
-                            toast.error("You can't Select Previous Date");
-                          } else {
-                            setDate(selectedDate);
-                            setOpen(false);
-                          }
-                        }}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-                <div className="flex gap-5 items-center h-full">
-                  <div className="text-left">
+                <div className={`w-full flex flex-col gap-5 md:flex-row items-center`}>
+                  <div className="flex w-full flex-col lg:border-e-2 border-[#a4b1bd] h-full">
                     <label className="text-sm font-medium text-gray-500">
-                      Passengers / මගීන් /பயணிகள்
+                      Date / දිනය / தேதி
                     </label>
-                    {/* <select
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                            variant="outline"
+                            className={cn(
+                                "w-full md:w-[200px] justify-start mt-0 pt-2 px-0 text-left font-normal bg-transparent border-0 shadow-none hover:bg-transparent hover:text-gray-400",
+                                !date && "text-gray-400 text-md font-normal"
+                            )}
+                        >
+                          {date ? format(date, "EEE, MMM dd") : "Select date"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                            mode="single"
+                            selected={date}
+                            onSelect={(selectedDate) => {
+                              if (
+                                  selectedDate &&
+                                  format(selectedDate, "yyyy-MM-dd") <
+                                  format(new Date(), "yyyy-MM-dd")
+                              ) {
+                                toast.error("You can't Select Previous Date");
+                              } else {
+                                setDate(selectedDate);
+                                setOpen(false);
+                              }
+                            }}
+                            initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <div className="flex w-full gap-5 items-center h-full">
+                    <div className="text-left w-full">
+                      <label className="text-sm font-medium text-gray-500">
+                        Passengers / මගීන් /பயணிகள்
+                      </label>
+                      {/* <select
                   className="flex w-full p-2 px-0 bg-transparent text-base transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                   onChange={(e) => setPassenger(e.target.value)}
                   value={passenger}
@@ -304,44 +305,45 @@ export function WelcomeSection() {
                     </option>
                   ))}
                 </select> */}
-                    <Autocomplete
-                      id="disable-close-on-select"
-                      disableCloseOnSelect
-                      options={passengerOptions}
-                      getOptionLabel={(option) => option.name}
-                      value={
-                        passengerOptions.find(
-                          (opt) => opt.value === parseInt(passenger)
-                        ) || null
-                      }
-                      onChange={(_, value) =>
-                        setPassenger((value?.value || 1).toString())
-                      }
-                      PopperComponent={(props) => (
-                        <Popper
-                          {...props}
-                          sx={{
-                            "& .MuiAutocomplete-listbox": {
-                              scrollbarWidth: "none", // Firefox
-                              "&::-webkit-scrollbar": { display: "none" }, // Chrome, Safari
-                            },
-                          }}
-                        />
-                      )}
-                      className="w-40"
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          placeholder="Select Passenger"
-                          variant="standard"
-                          className="bg-transparent border-0 shadow-none text-black placeholder-current:text-black px-0 w-full outline-none focus:ring-0"
-                          InputProps={{
-                            ...params.InputProps,
-                            disableUnderline: true,
-                          }}
-                        />
-                      )}
-                    />
+                      <Autocomplete
+                          id="disable-close-on-select"
+                          disableCloseOnSelect
+                          options={passengerOptions}
+                          getOptionLabel={(option) => option.name}
+                          value={
+                              passengerOptions.find(
+                                  (opt) => opt.value === parseInt(passenger)
+                              ) || null
+                          }
+                          onChange={(_, value) =>
+                              setPassenger((value?.value || 1).toString())
+                          }
+                          PopperComponent={(props) => (
+                              <Popper
+                                  {...props}
+                                  sx={{
+                                    "& .MuiAutocomplete-listbox": {
+                                      scrollbarWidth: "none", // Firefox
+                                      "&::-webkit-scrollbar": { display: "none" }, // Chrome, Safari
+                                    },
+                                  }}
+                              />
+                          )}
+                          className="w-full"
+                          renderInput={(params) => (
+                              <TextField
+                                  {...params}
+                                  placeholder="Select Passenger"
+                                  variant="standard"
+                                  className="bg-transparent border-0 shadow-none text-black placeholder-current:text-black px-0 w-full outline-none focus:ring-0"
+                                  InputProps={{
+                                    ...params.InputProps,
+                                    disableUnderline: true,
+                                  }}
+                              />
+                          )}
+                      />
+                    </div>
                   </div>
                 </div>
 

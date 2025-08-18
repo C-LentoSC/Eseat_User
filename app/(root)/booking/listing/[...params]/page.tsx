@@ -1692,8 +1692,8 @@ export default function BookingPage({
                                                         </PopoverContent>
                                                     </Popover>
                                                 </div>
-                                                <div className="flex gap-5 items-center h-full">
-                                                    <div className="text-left">
+                                                <div className="flex gap-5 w-full items-center h-full">
+                                                    <div className="text-left w-full">
                                                         <label className="text-sm font-medium text-gray-500">
                                                             Passengers / මගීන් /பயணிகள்
                                                         </label>
@@ -1763,7 +1763,7 @@ export default function BookingPage({
                                                                     }}
                                                                 />
                                                             )}
-                                                            className="w-40"
+                                                            className="lg:w-40 w-full"
                                                             renderInput={(params) => (
                                                                 <TextField
                                                                     {...params}
@@ -1846,7 +1846,15 @@ export default function BookingPage({
                         depotName={alldata?.bus?.depot?.name}
                         price={alldata?.routeDetails?.bus_fare}
                         duration={alldata?.duration}
-                        availableSeats={alldata.allSeats?.length}
+                        availableSeats={
+                            alldata.allSeats?.filter(
+                                (seat: any) =>
+                                    !seat.isBlocked &&
+                                    !seat.isBooked &&
+                                    seat.is_active &&
+                                    !seat.isProcessing
+                            ).length ?? 0
+                        }
                         fasility={alldata?.bus?.facilities}
                         boardingDropping={alldata?.fareBrake}
                         bookbtnst={false}
@@ -1860,7 +1868,7 @@ export default function BookingPage({
                     />
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="md:col-span-2 space-y-6 p-10">
                         <div className="hidden lg:block">
                             <BusSeatLayout seats={seats} onSeatClick={handleSeatClick}/>
