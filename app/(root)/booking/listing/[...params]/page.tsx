@@ -197,7 +197,7 @@ export default function BookingPage({
 
   const [open, setOpen] = React.useState(false);
 
-  const [isModalOpen, setModalOpen] = useState(false);
+
 
   const [open1, setOpen1] = useState<boolean>(false);
   const [open2, setOpen2] = useState<boolean>(false);
@@ -750,15 +750,7 @@ export default function BookingPage({
             // }, 1000);
           }, 1000);
 
-        } else if (getMode() == "Private") {
-          setisLoading1(false);
-          if (res?.data?.paymentUrl) {
-            window.location.replace(res?.data?.paymentUrl);
-          } else {
-            toast.error("Somthing went wrong.");
-          }
-        }
-        else {
+        } else {
           setisLoading1(false);
           if (res?.data?.paymentUrl) {
             window.location.replace(res?.data?.paymentUrl);
@@ -1326,18 +1318,18 @@ export default function BookingPage({
             </div>
             <div
               className="w-full mt-2 flex flex-col justify-center gap-2 border-t-2 border-b-2 border-dashed border-black">
-              {/*<div className="mt-2  flex">*/}
-              {/*  <div className="w-48">*/}
-              {/*    <span>Bus Fare</span>*/}
-              {/*  </div>*/}
-              {/*  <div className="w-full">*/}
-              {/*    <span>*/}
-              {/*      Rs {ticketData?.busFare ? ticketData?.busFare : 0.0} x{" "}*/}
-              {/*      {ticketData?.seats?.length}*/}
-              {/*    </span>*/}
-              {/*  </div>*/}
-              {/*</div>*/}
-              <div className="mt-2 w-full flex">
+              <div className="mt-2  flex">
+                <div className="w-48">
+                  <span>Bus Fare</span>
+                </div>
+                <div className="w-full">
+                  <span>
+                    Rs {ticketData?.busFare ? ticketData?.busFare : 0.0} x{" "}
+                    {ticketData?.seats?.length}
+                  </span>
+                </div>
+              </div>
+              {/* <div className="mt-2 w-full flex">
                 <div className="w-48">
                   <span className="text-gray-500">Convenience Fee</span>
                 </div>
@@ -1346,7 +1338,7 @@ export default function BookingPage({
                     Rs {convenienceFee ? convenienceFee : 0.0}
                   </span>
                 </div>
-              </div>
+              </div> */}
               <div className="mt-2 w-full flex">
                 <div className="w-48">
                   <span className="text-gray-500">Bank Charges</span>
