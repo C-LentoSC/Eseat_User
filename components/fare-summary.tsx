@@ -33,10 +33,10 @@ export function FareSummary({
           <span className="text-gray-600">Base Fare</span>
           <span>Rs {baseFare.toFixed(2)}</span>
         </div> */}
-        <div className="flex justify-between border-t pt-2">
+        {/* <div className="flex justify-between border-t pt-2">
           <span className="text-gray-600">Convenience Fee</span>
           <span>Rs {convenienceFee.toFixed(2)}</span>
-        </div>
+        </div> */}
         {/* <div className="flex justify-between">
           <span className="text-gray-600">Bank Charges</span>
           <span>Rs {bankCharges.toFixed(2)}</span>

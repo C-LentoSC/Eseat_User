@@ -11,6 +11,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAppStore } from "@/util/store";
 
 interface NavItem {
   title: string;
@@ -34,6 +35,11 @@ const navItems: NavItem[] = [
     href: "/bus-report",
     icon: Bus,
   },
+  {
+    title: "History",
+    href: "/history",
+    icon: FileBarChart,
+  },
   // {
   //   title: "CB Report",
   //   href: "/cb-report",
@@ -54,6 +60,8 @@ const navItems: NavItem[] = [
 export function NavBar() {
   const pathname = usePathname();
 
+  const { getMode } = useAppStore();
+
   return (
     <nav className="bg-[#F0FBFE] w-full border-b">
       <div className="my-container">
@@ -64,7 +72,10 @@ export function NavBar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex items-center min-w-[80px] gap-2 group"
+                className={cn("flex items-center min-w-[80px] gap-2 group",
+                  getMode() === "Private" ? item.title === "Counter Report" ? "hidden" : "" : "flex",
+                  getMode() === "Private" ? item.title === "Bus Report" ? "hidden" : "" : "flex",
+                )}
               >
                 <div
                   className={cn(

@@ -103,8 +103,8 @@ function PrintPage({searchParams}: any) {
 
         manager.writeContent(htmlContent);
         manager.triggerPrint(() => {
-            // console.log("Print job completed or canceled.");
-            window.location.replace('/booking');
+            console.log("Print job completed or canceled.");
+            // window.location.replace('/booking');
         });
     };
 

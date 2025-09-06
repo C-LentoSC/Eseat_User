@@ -39,6 +39,7 @@ import { useAppStore } from "@/util/store";
 import Modal from "@/components/model";
 import copy from "clipboard-copy";
 import { PrintIframeManager } from "@/components/PrintIframeManager";
+import { get } from "http";
 
 interface FilmOptionType {
   name: string;
@@ -138,7 +139,7 @@ export default function BookingPage({
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const sheduleId = params?.params?.[0] || "";
 
-  const { getMode } = useAppStore();
+  const { getMode, getFee } = useAppStore();
 
   const [alldata, setAlldata] = useState<Alldata | null>(null);
   const [ticketData, setTicketData] = useState<any>({});
@@ -558,7 +559,7 @@ export default function BookingPage({
         const hghCharge = seat.service_charge_hgh || 0;
         const discountRate = seat.discount || 0;
         const vatRate = seat.vat || 0;
-        const bankChargeRate = seat.bank_charges || 0;
+        const bankChargeRate = getMode() == "CTB" ? 0 : seat.bank_charges || 0;
         const serviceCharge1 = seat.service_charge01 || 0;
         const serviceCharge2 = seat.service_charge02 || 0;
 
@@ -580,11 +581,14 @@ export default function BookingPage({
         // Final Total for the current seat
         const finalTotal =
           afterBankChargePrice + serviceCharge1 + serviceCharge2;
-        totalCost += finalTotal; // Accumulate the total cost for all selected seats
+
+        totalCost = totalCost + finalTotal + parseFloat(getFee().toString()); // Accumulate the total cost for all selected seats
       });
 
+      const to = parseFloat(totalCost.toString());
+
       // Return the total cost for all seats
-      return totalCost.toFixed(2);
+      return to.toFixed(2);
     };
 
     const totalCost = calTotal();
@@ -746,7 +750,8 @@ export default function BookingPage({
             // }, 1000);
           }, 1000);
 
-        } else {
+        }
+        else {
           setisLoading1(false);
           if (res?.data?.paymentUrl) {
             window.location.replace(res?.data?.paymentUrl);
@@ -807,7 +812,7 @@ export default function BookingPage({
         const hghCharge = seat.service_charge_hgh || 0;
         const discountRate = seat.discount || 0;
         const vatRate = seat.vat || 0;
-        const bankChargeRate = seat.bank_charges || 0;
+        const bankChargeRate = getMode() == "CTB" ? 0 : seat.bank_charges || 0;
         const serviceCharge1 = seat.service_charge01 || 0;
         const serviceCharge2 = seat.service_charge02 || 0;
 
@@ -827,13 +832,15 @@ export default function BookingPage({
         const afterBankChargePrice = afterVatPrice + bankCharge;
 
         // Final Total for the current seat
-        const finalTotal =
-          afterBankChargePrice + serviceCharge1 + serviceCharge2;
-        totalCost += finalTotal; // Accumulate the total cost for all selected seats
+        const finalTotal = afterBankChargePrice + serviceCharge1 + serviceCharge2;
+
+        totalCost = totalCost + finalTotal + parseFloat(getFee().toString()); // Accumulate the total cost for all selected seats
       });
 
+      const to = parseFloat(totalCost.toString());
+
       // console.log(totalCost);
-      setconvenienceFee(totalCost);
+      setconvenienceFee(parseFloat(to.toString()));
     } else {
       const data = e.split("|");
 
@@ -865,7 +872,7 @@ export default function BookingPage({
         const hghCharge = seat.service_charge_hgh || 0;
         const discountRate = seat.discount || 0;
         const vatRate = seat.vat || 0;
-        const bankChargeRate = seat.bank_charges || 0;
+        const bankChargeRate = getMode() == "CTB" ? 0 : seat.bank_charges || 0;
         const serviceCharge1 = seat.service_charge01 || 0;
         const serviceCharge2 = seat.service_charge02 || 0;
 
@@ -887,11 +894,14 @@ export default function BookingPage({
         // Final Total for the current seat
         const finalTotal =
           afterBankChargePrice + serviceCharge1 + serviceCharge2;
+
         totalCost += finalTotal; // Accumulate the total cost for all selected seats
       });
 
+      const to = parseFloat(totalCost.toString()) + parseFloat(getFee().toString());
+
       // console.log(totalCost);
-      setconvenienceFee(totalCost);
+      setconvenienceFee(to);
     }
   };
 
@@ -1886,79 +1896,6 @@ export default function BookingPage({
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 border p-5 rounded-lg bg-slate-50">
               <div>
-                <div className="space-y-4">
-                  <Label>Ticket Type</Label>
-                  <RadioGroup defaultValue="full" className="flex gap-4">
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="full"
-                        id="full"
-                        onClick={() => sethalfticket(false)}
-                      // onChange={() => sethalfticket(false)}
-                      />
-                      <Label>Full Ticket</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="half"
-                        id="half"
-                        onClick={() => sethalfticket(true)}
-                      // onChange={() => sethalfticket(true)}
-                      />
-                      <Label>Half Ticket</Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-              </div>
-              {getMode() === "CTB" && (
-                <>
-                  <div>
-                    <div className="space-y-4">
-                      <Label>Pay type</Label>
-                      <RadioGroup defaultValue="Pass" className="flex gap-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem
-                            value="Pass"
-                            id="Pass"
-                            onClick={() => {
-                              setSLTBPass(false);
-                              setWarrant(false);
-                              setPass(true);
-                            }}
-                          />
-                          <Label>Pass</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem
-                            value="isSLTBPass"
-                            id="isSLTBPass"
-                            onClick={() => {
-                              setSLTBPass(true);
-                              setWarrant(false);
-                              setPass(false);
-                            }}
-                          // onChange={() => sethalfticket(false)}
-                          />
-                          <Label>SLTB Pass</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem
-                            value="Warrant"
-                            id="Warrant"
-                            onClick={() => {
-                              setSLTBPass(false);
-                              setWarrant(true);
-                              setPass(false);
-                            }}
-                          />
-                          <Label>Warrant</Label>
-                        </div>
-                      </RadioGroup>
-                    </div>
-                  </div>
-                </>
-              )}
-              <div>
                 <Label>Boarding / Dropping Points</Label>
                 {/* <Select onValueChange={(e) => setboardingdata(e)}>
                   <SelectTrigger>
@@ -2061,6 +1998,84 @@ export default function BookingPage({
                   </SelectContent>
                 </Select>
               </div> */}
+              {getMode() !== "Private" && (
+                <>
+                  <div>
+                    <div className="space-y-4">
+                      <Label>Ticket Type</Label>
+                      <RadioGroup defaultValue="full" className="flex gap-4">
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="full"
+                            id="full"
+                            onClick={() => sethalfticket(false)}
+                          // onChange={() => sethalfticket(false)}
+                          />
+                          <Label>Full Ticket</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="half"
+                            id="half"
+                            onClick={() => sethalfticket(true)}
+                          // onChange={() => sethalfticket(true)}
+                          />
+                          <Label>Half Ticket</Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
+                  </div>
+                </>
+              )}
+              {getMode() === "CTB" && (
+                <>
+                  <div>
+                    <div className="space-y-4">
+                      <Label>Pay type</Label>
+                      <RadioGroup defaultValue="Pass" className="flex gap-4">
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="Pass"
+                            id="Pass"
+                            onClick={() => {
+                              setSLTBPass(false);
+                              setWarrant(false);
+                              setPass(true);
+                            }}
+                          />
+                          <Label>Pass</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="isSLTBPass"
+                            id="isSLTBPass"
+                            onClick={() => {
+                              setSLTBPass(true);
+                              setWarrant(false);
+                              setPass(false);
+                            }}
+                          // onChange={() => sethalfticket(false)}
+                          />
+                          <Label>SLTB Pass</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="Warrant"
+                            id="Warrant"
+                            onClick={() => {
+                              setSLTBPass(false);
+                              setWarrant(true);
+                              setPass(false);
+                            }}
+                          />
+                          <Label>Warrant</Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
+                  </div>
+                </>
+              )}
+
             </div>
             {/* <div className="grid grid-cols-1 gap-4 border p-5 rounded-lg bg-slate-50">
               <div className="space-y-4">

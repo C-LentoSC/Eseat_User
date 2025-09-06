@@ -1,13 +1,13 @@
 "use client";
 // import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@radix-ui/react-popover";
 import axios from "axios";
-import {ChevronDown} from "lucide-react";
+import { ChevronDown } from "lucide-react";
 // import {
 //   DropdownMenu,
 //   DropdownMenuContent,
@@ -17,14 +17,14 @@ import {ChevronDown} from "lucide-react";
 // import { Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import {useEffect, useState} from "react";
-import {useAppStore} from "@/util/store";
+import { useEffect, useState } from "react";
+import { useAppStore } from "@/util/store";
 
 export default function Header() {
     const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
     const [currentPath, setCurrentPath] = useState("");
-    const {setMode , setMobile} = useAppStore();
+    const { setMode, setMobile, setFee } = useAppStore();
 
     const [name, setName] = useState<string>("");
     const [namest, setNamest] = useState<boolean>(false);
@@ -45,6 +45,7 @@ export default function Header() {
 
                 setName(res?.data?.name || "");
                 setMode(res?.data?.type || "");
+                setFee(res?.data?.booking_fee || 0);
                 setMobile(res?.data?.manager_mobile || 0);
 
             } catch (error) {
@@ -53,7 +54,7 @@ export default function Header() {
                 console.error(error);
             }
         };
-        if(token){
+        if (token) {
             getData();
         }
     }, []);
@@ -138,7 +139,7 @@ export default function Header() {
                                                 className="text-[14px] bg-transparent border-none shadow-none hover:bg-transparent hover:text-gray-500 px-0"
                                             >
                                                 {name ? name : "__"}
-                                                <ChevronDown className="ml-2 h-4 w-4"/>
+                                                <ChevronDown className="ml-2 h-4 w-4" />
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent
@@ -240,7 +241,7 @@ export default function Header() {
                                                 className="text-[14px] bg-transparent border-none shadow-none hover:bg-transparent hover:text-gray-500 px-0"
                                             >
                                                 {name ? name : "__"}
-                                                <ChevronDown className="ml-2 h-4 w-4"/>
+                                                <ChevronDown className="ml-2 h-4 w-4" />
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent
