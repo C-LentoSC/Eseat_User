@@ -585,10 +585,10 @@ export default function BookingPage({
         totalCost = totalCost + finalTotal + parseFloat(getFee().toString()); // Accumulate the total cost for all selected seats
       });
 
-      const to = parseFloat(totalCost.toString());
+      const top = parseFloat(totalCost.toString());
 
       // Return the total cost for all seats
-      return to.toFixed(2);
+      return top.toFixed(2);
     };
 
     const totalCost = calTotal();
@@ -750,6 +750,13 @@ export default function BookingPage({
             // }, 1000);
           }, 1000);
 
+        } else if (getMode() == "Private") {
+          setisLoading1(false);
+          if (res?.data?.paymentUrl) {
+            window.location.replace(res?.data?.paymentUrl);
+          } else {
+            toast.error("Somthing went wrong.");
+          }
         }
         else {
           setisLoading1(false);
@@ -837,10 +844,10 @@ export default function BookingPage({
         totalCost = totalCost + finalTotal + parseFloat(getFee().toString()); // Accumulate the total cost for all selected seats
       });
 
-      const to = parseFloat(totalCost.toString());
+      const top = parseFloat(totalCost.toString());
 
       // console.log(totalCost);
-      setconvenienceFee(parseFloat(to.toString()));
+      setconvenienceFee(parseFloat(top.toString()));
     } else {
       const data = e.split("|");
 
@@ -898,10 +905,10 @@ export default function BookingPage({
         totalCost += finalTotal; // Accumulate the total cost for all selected seats
       });
 
-      const to = parseFloat(totalCost.toString()) + parseFloat(getFee().toString());
+      const top = parseFloat(totalCost.toString()) + parseFloat(getFee().toString());
 
       // console.log(totalCost);
-      setconvenienceFee(to);
+      setconvenienceFee(top);
     }
   };
 
