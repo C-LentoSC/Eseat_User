@@ -15,6 +15,8 @@ const CancelTickets = () => {
   const [mobile, setMobile] = React.useState<string>("");
   const [note, setNote] = React.useState<string>("");
 
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -40,6 +42,11 @@ const CancelTickets = () => {
 
     if (mobile == "") {
       toast.error("Please Enter Mobile.");
+      return;
+    }
+
+    if (!termsAccepted) {
+      toast.error("Please Agree to terms and condition.");
       return;
     }
 
@@ -193,6 +200,20 @@ const CancelTickets = () => {
                 <p className="text-sm font-medium font-sans text-[#a4b1bd] mt-1">
                   Eseat requires you to fill these to cancel ticket.
                 </p>
+              </div>
+
+              <div className="mb-6">
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={termsAccepted}
+                    onChange={(e) => setTermsAccepted(e.target.checked)}
+                    className="form-checkbox border-[#a4b1bd] text-myColor8 focus:ring-myColor8 p-2"
+                  />
+                  <span className="text-sm text-[#a4b1bd]">
+                    I Agree to all Terms & Conditions.
+                  </span>
+                </label>
               </div>
 
               {/* Submit Button */}

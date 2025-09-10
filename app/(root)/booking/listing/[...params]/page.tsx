@@ -599,6 +599,31 @@ export default function BookingPage({
 
   const printTicket = async () => {
     setisLoading1(true);
+
+    if (!pname) {
+      setisLoading1(false);
+      toast.error("Please Enter Name");
+      return;
+    }
+
+    if (!pemail) {
+      setisLoading1(false);
+      toast.error("Please Enter Email");
+      return;
+    }
+
+    if (!pmobile) {
+      setisLoading1(false);
+      toast.error("Please Enter MObile");
+      return;
+    }
+
+    if (!pnic) {
+      setisLoading1(false);
+      toast.error("Please Enter NIC");
+      return;
+    }
+
     try {
       const res = await axios.post(
         `${BASE_URL}book-new-seat`,
