@@ -2032,36 +2032,85 @@ export default function BookingPage({
                   </SelectContent>
                 </Select>
               </div> */}
-              {getMode() !== "Private" && (
-                <>
-                  <div>
-                    <div className="space-y-4">
+
+              <>
+                <div>
+                  <div className="space-y-4">
+                    {getMode() !== "Private" && (
                       <Label>Ticket Type</Label>
-                      <RadioGroup defaultValue="full" className="flex gap-4">
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem
-                            value="full"
-                            id="full"
-                            onClick={() => sethalfticket(false)}
-                          // onChange={() => sethalfticket(false)}
-                          />
-                          <Label>Full Ticket</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem
-                            value="half"
-                            id="half"
-                            onClick={() => sethalfticket(true)}
-                          // onChange={() => sethalfticket(true)}
-                          />
-                          <Label>Half Ticket</Label>
-                        </div>
-                      </RadioGroup>
-                    </div>
+                    )}
+                    {getMode() === "CTB" && (
+                      <Label>Ticket Type</Label>
+                    )}
+                    <RadioGroup defaultValue="full" className="flex flex-wrap gap-4">
+                      {getMode() !== "Private" && (
+                        <>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem
+                              value="full"
+                              id="full"
+                              onClick={() => sethalfticket(false)}
+                            // onChange={() => sethalfticket(false)}
+                            />
+                            <Label>Full Ticket</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem
+                              value="half"
+                              id="half"
+                              onClick={() => sethalfticket(true)}
+                            // onChange={() => sethalfticket(true)}
+                            />
+                            <Label>Half Ticket</Label>
+                          </div>
+                        </>
+                      )}
+                      {getMode() === "CTB" && (
+                        <>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem
+                              value="Pass"
+                              id="Pass"
+                              onClick={() => {
+                                setSLTBPass(false);
+                                setWarrant(false);
+                                setPass(true);
+                              }}
+                            />
+                            <Label>Pass</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem
+                              value="isSLTBPass"
+                              id="isSLTBPass"
+                              onClick={() => {
+                                setSLTBPass(true);
+                                setWarrant(false);
+                                setPass(false);
+                              }}
+                            // onChange={() => sethalfticket(false)}
+                            />
+                            <Label>SLTB Pass</Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem
+                              value="Warrant"
+                              id="Warrant"
+                              onClick={() => {
+                                setSLTBPass(false);
+                                setWarrant(true);
+                                setPass(false);
+                              }}
+                            />
+                            <Label>Warrant</Label>
+                          </div>
+                        </>
+                      )}
+                    </RadioGroup>
                   </div>
-                </>
-              )}
-              {getMode() === "CTB" && (
+                </div>
+              </>
+              {/* {getMode() === "CTB" && (
                 <>
                   <div>
                     <div className="space-y-4">
@@ -2108,7 +2157,7 @@ export default function BookingPage({
                     </div>
                   </div>
                 </>
-              )}
+              )} */}
 
             </div>
             {/* <div className="grid grid-cols-1 gap-4 border p-5 rounded-lg bg-slate-50">

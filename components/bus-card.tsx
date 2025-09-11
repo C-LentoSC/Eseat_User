@@ -350,7 +350,7 @@ export function BusCard({
   const [selectedBusImage, setSelectedBusImage] = useState<string>(image);
 
   return (
-    <div className="flex flex-col md:flex-col lg:flex-row bg-bgMyColor6 rounded-lg overflow-hidden border">
+    <div className={`flex flex-col md:flex-col lg:flex-row bg-bgMyColor6 rounded-lg overflow-hidden border`}>
       {/* Bus Image */}
       <div className="w-full lg:w-56  h-[50vh] lg:h-auto relative">
         <div className="w-full absolute top-0 flex justify-end items-center z-40 p-1">
@@ -373,9 +373,8 @@ export function BusCard({
           {subImages?.length > 0 && (
             <>
               <div
-                className={`w-[20%] border border-gray-500 ${
-                  selectedBusImage == image ? "h-16" : ""
-                }`}
+                className={`w-[20%] border border-gray-500 ${selectedBusImage == image ? "h-16" : ""
+                  }`}
               >
                 <img
                   src={image}
@@ -393,9 +392,8 @@ export function BusCard({
             subImages.map((item, index) => (
               <div
                 key={index}
-                className={`w-[20%] border border-gray-500 ${
-                  selectedBusImage === item ? "h-16" : ""
-                }`}
+                className={`w-[20%] border border-gray-500 ${selectedBusImage === item ? "h-16" : ""
+                  }`}
               >
                 <img
                   src={item}
@@ -523,15 +521,15 @@ export function BusCard({
               </div>
             </div>
             {bookbtnst && (
-                <>
-                  <Button className="w-full mt-4" asChild>
-                    <Link
-                        href={`/booking/listing/${id}/${from}/${to}/${date}/${passenger}`}
-                    >
-                      Book Now
-                    </Link>
-                  </Button>
-                </>
+              <>
+                <Button className="w-full mt-4" asChild>
+                  <Link
+                    href={`/booking/listing/${id}/${from}/${to}/${date}/${passenger}`}
+                  >
+                    Book Now
+                  </Link>
+                </Button>
+              </>
             )}
           </div>
         </div>

@@ -32,8 +32,8 @@ const sortOptions: SortOption[] = [
 export function SearchResults({ alldata, isloading, from, to, date, passenger }: any) {
   const [activeSort, setActiveSort] = useState("departure");
 
-  console.warn(Array.isArray(alldata));
-  console.warn(alldata);
+  // console.warn(Array.isArray(alldata));
+  // console.warn(alldata);
 
   return (
     <div className="w-full my-container">
