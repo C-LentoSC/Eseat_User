@@ -525,30 +525,12 @@ function PrintPage({ searchParams }: any) {
                                         </span>
                                     </div>
                                 </div>
-                                {isPrivate && (
-                                    <>
-                                        {withfee1 && (
-                                            <>
-                                                <div className="flex">
-                                                    <div className="w-48">
-                                                        <span>Booking Fee</span>
-                                                    </div>
-                                                    <div className="w-full">
-                                                        <span>
-                                                            Rs{" "}{ticketData?.booking_fee ?? 0}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </>
-                                        )}
-                                    </>
-                                )}
                             </div>
                             <div className="w-full flex font-medium text-lg mt-3 justify-center items-center">
                                 <span>Amount : </span>
                                 <span className="ml-2">
                                     {" "}
-                                    Rs.{ticketData?.total ? parseFloat(ticketData.total) + parseFloat(withfee1 ? ticketData?.booking_fee ?? 0 : 0) : 0.0}
+                                    Rs.{ticketData?.total ? parseFloat(ticketData.total) : 0.0}
                                 </span>
                             </div>
                             <div className="w-full flex font-medium text-base mt-2 justify-center items-center">
