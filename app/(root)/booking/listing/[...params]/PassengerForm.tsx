@@ -21,7 +21,7 @@ const PassengerForm = ({
             placeholder="Supun Perera"
             className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             required
-            onChange={(e)=>setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
           />
           <label className="block text-sm font-medium">Passenger Name</label>
         </div>
@@ -32,7 +32,7 @@ const PassengerForm = ({
             placeholder="+94 000000000"
             className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             required
-            onChange={(e)=>setMobile(e.target.value)}
+            onChange={(e) => setMobile(e.target.value)}
           />
           <label className="block text-sm font-medium">
             Passenger Mobile Number
@@ -45,7 +45,7 @@ const PassengerForm = ({
             placeholder="xxxxxxxxxxx"
             className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             required
-            onChange={(e)=>setNic(e.target.value)}
+            onChange={(e) => setNic(e.target.value)}
           />
           <label className="block text-sm font-medium">
             Passenger NIC Number.
@@ -58,7 +58,7 @@ const PassengerForm = ({
             placeholder="example@gmail.com"
             className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             required
-            onChange={(e)=>setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <label className="block text-sm font-medium">
             Passenger Email Address.

@@ -126,7 +126,7 @@ export function WelcomeSection() {
   };
 
   return (
-    <div className="w-full bg-[#F0FBFE] basic_search_bg py-20">
+    <div className="w-full bg-[#F0FBFE] mb-5 basic_search_bg py-20">
       <div className="my-container">
         {/* <h1 className="text-3xl font-medium text-myColor2 mb-4">
           Hi, {name ? name : "__"}
@@ -158,8 +158,8 @@ export function WelcomeSection() {
                       id="disable-close-on-select"
                       disableCloseOnSelect
                       open={open1}
-                      onOpen={()=>setOpen1(true)}
-                      onClose={()=>setOpen1(false)}
+                      onOpen={() => setOpen1(true)}
+                      onClose={() => setOpen1(false)}
                       PopperComponent={(props) => (
                         <Popper
                           {...props}
@@ -221,8 +221,8 @@ export function WelcomeSection() {
                       id="disable-close-on-select"
                       disableCloseOnSelect
                       open={open2}
-                      onOpen={()=>setOpen2(true)}
-                      onClose={()=>setOpen2(false)}
+                      onOpen={() => setOpen2(true)}
+                      onClose={() => setOpen2(false)}
                       PopperComponent={(props) => (
                         <Popper
                           {...props}
@@ -234,7 +234,7 @@ export function WelcomeSection() {
                           }}
                         />
                       )}
-                      onChange={(_, value) => {setTo(value?.name || "");setOpen2(false)}}
+                      onChange={(_, value) => { setTo(value?.name || ""); setOpen2(false) }}
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -259,32 +259,32 @@ export function WelcomeSection() {
                     <Popover open={open} onOpenChange={setOpen}>
                       <PopoverTrigger asChild>
                         <Button
-                            variant="outline"
-                            className={cn(
-                                "w-full md:w-[200px] justify-start mt-0 pt-2 px-0 text-left font-normal bg-transparent border-0 shadow-none hover:bg-transparent hover:text-gray-400",
-                                !date && "text-gray-400 text-md font-normal"
-                            )}
+                          variant="outline"
+                          className={cn(
+                            "w-full md:w-[200px] justify-start mt-0 pt-2 px-0 text-left font-normal bg-transparent border-0 shadow-none hover:bg-transparent hover:text-gray-400",
+                            !date && "text-gray-400 text-md font-normal"
+                          )}
                         >
                           {date ? format(date, "EEE, MMM dd") : "Select date"}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
-                            mode="single"
-                            selected={date}
-                            onSelect={(selectedDate) => {
-                              if (
-                                  selectedDate &&
-                                  format(selectedDate, "yyyy-MM-dd") <
-                                  format(new Date(), "yyyy-MM-dd")
-                              ) {
-                                toast.error("You can't Select Previous Date");
-                              } else {
-                                setDate(selectedDate);
-                                setOpen(false);
-                              }
-                            }}
-                            initialFocus
+                          mode="single"
+                          selected={date}
+                          onSelect={(selectedDate) => {
+                            if (
+                              selectedDate &&
+                              format(selectedDate, "yyyy-MM-dd") <
+                              format(new Date(), "yyyy-MM-dd")
+                            ) {
+                              toast.error("You can't Select Previous Date");
+                            } else {
+                              setDate(selectedDate);
+                              setOpen(false);
+                            }
+                          }}
+                          initialFocus
                         />
                       </PopoverContent>
                     </Popover>
@@ -306,42 +306,42 @@ export function WelcomeSection() {
                   ))}
                 </select> */}
                       <Autocomplete
-                          id="disable-close-on-select"
-                          disableCloseOnSelect
-                          options={passengerOptions}
-                          getOptionLabel={(option) => option.name}
-                          value={
-                              passengerOptions.find(
-                                  (opt) => opt.value === parseInt(passenger)
-                              ) || null
-                          }
-                          onChange={(_, value) =>
-                              setPassenger((value?.value || 1).toString())
-                          }
-                          PopperComponent={(props) => (
-                              <Popper
-                                  {...props}
-                                  sx={{
-                                    "& .MuiAutocomplete-listbox": {
-                                      scrollbarWidth: "none", // Firefox
-                                      "&::-webkit-scrollbar": { display: "none" }, // Chrome, Safari
-                                    },
-                                  }}
-                              />
-                          )}
-                          className="w-full"
-                          renderInput={(params) => (
-                              <TextField
-                                  {...params}
-                                  placeholder="Select Passenger"
-                                  variant="standard"
-                                  className="bg-transparent border-0 shadow-none text-black placeholder-current:text-black px-0 w-full outline-none focus:ring-0"
-                                  InputProps={{
-                                    ...params.InputProps,
-                                    disableUnderline: true,
-                                  }}
-                              />
-                          )}
+                        id="disable-close-on-select"
+                        disableCloseOnSelect
+                        options={passengerOptions}
+                        getOptionLabel={(option) => option.name}
+                        value={
+                          passengerOptions.find(
+                            (opt) => opt.value === parseInt(passenger)
+                          ) || null
+                        }
+                        onChange={(_, value) =>
+                          setPassenger((value?.value || 1).toString())
+                        }
+                        PopperComponent={(props) => (
+                          <Popper
+                            {...props}
+                            sx={{
+                              "& .MuiAutocomplete-listbox": {
+                                scrollbarWidth: "none", // Firefox
+                                "&::-webkit-scrollbar": { display: "none" }, // Chrome, Safari
+                              },
+                            }}
+                          />
+                        )}
+                        className="w-full"
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            placeholder="Select Passenger"
+                            variant="standard"
+                            className="bg-transparent border-0 shadow-none text-black placeholder-current:text-black px-0 w-full outline-none focus:ring-0"
+                            InputProps={{
+                              ...params.InputProps,
+                              disableUnderline: true,
+                            }}
+                          />
+                        )}
                       />
                     </div>
                   </div>

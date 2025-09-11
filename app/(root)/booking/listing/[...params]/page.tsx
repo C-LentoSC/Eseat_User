@@ -1910,7 +1910,17 @@ export default function BookingPage({
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="md:col-span-2 space-y-6 p-10">
+          <div className="md:col-span-2 space-y-6">
+            <PassengerForm
+              name={pname}
+              mobile={pmobile}
+              nic={pnic}
+              email={pemail}
+              setName={setpname}
+              setMobile={setpmobile}
+              setNic={setpnic}
+              setEmail={setpemail}
+            />
             <div className="hidden lg:block">
               <BusSeatLayout seats={seats} onSeatClick={handleSeatClick} />
             </div>
@@ -2169,16 +2179,6 @@ export default function BookingPage({
               </div>
             </div> */}
 
-            <PassengerForm
-              name={pname}
-              mobile={pmobile}
-              nic={pnic}
-              email={pemail}
-              setName={setpname}
-              setMobile={setpmobile}
-              setNic={setpnic}
-              setEmail={setpemail}
-            />
           </div>
 
           <div>

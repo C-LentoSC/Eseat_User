@@ -29,7 +29,7 @@ const sortOptions: SortOption[] = [
   { id: "rate", label: "Rate", icon: <DollarSign className="w-4 h-4" /> },
 ];
 
-export function SearchResults({ alldata, isloading , from, to , date, passenger }: any) {
+export function SearchResults({ alldata, isloading, from, to, date, passenger }: any) {
   const [activeSort, setActiveSort] = useState("departure");
 
   console.warn(Array.isArray(alldata));
@@ -51,21 +51,27 @@ export function SearchResults({ alldata, isloading , from, to , date, passenger 
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-3 lg:mt-0">
             <span className="text-sm text-gray-500 text-nowrap">Sort By:</span>
             <div className="flex flex-wrap gap-4">
-              {sortOptions.map((option) => (
-                <Button
-                  key={option.id}
-                  variant="ghost"
-                  className={`flex items-center gap-2 ${
-                    activeSort === option.id
-                      ? "text-primary bg-pink-50"
-                      : "text-gray-600 hover:text-white"
-                  }`}
-                  onClick={() => setActiveSort(option.id)}
-                >
-                  {option.icon}
-                  {option.label}
-                </Button>
-              ))}
+              <select name="" id="">
+                {sortOptions.map((opt, index) => (
+                  <option
+                    key={index}
+                    onChange={() => setActiveSort(opt.id)}
+                    className={`flex items-center p-3 outline-none gap-2`} value={`${opt.id}`}>{opt.icon}{opt.label}</option>
+                  // <Button
+                  //   key={option.id}
+                  //   variant="ghost"
+                  //   className={`flex items-center gap-2 ${
+                  //     activeSort === option.id
+                  //       ? "text-primary bg-pink-50"
+                  //       : "text-gray-600 hover:text-white"
+                  //   }`}
+                  //   onClick={() => setActiveSort(option.id)}
+                  // >
+                  //   {option.icon}
+                  //   {option.label}
+                  // </Button>
+                ))}
+              </select>
             </div>
           </div>
         </div>
@@ -132,7 +138,7 @@ export function SearchResults({ alldata, isloading , from, to , date, passenger 
                     }
                   )
                   .map((data: any) => (
-                    
+
                     <BusCard
                       key={data.id}
                       id={data.id}

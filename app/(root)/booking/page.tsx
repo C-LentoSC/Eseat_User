@@ -5,8 +5,8 @@ import { AssignedBusesSection } from "./assigned-buses-section";
 const MainPage = () => {
   return (
     <>
-      <WelcomeSection />
       <AssignedBusesSection />
+      <WelcomeSection />
     </>
   );
 };
