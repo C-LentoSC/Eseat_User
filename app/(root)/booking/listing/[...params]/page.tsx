@@ -582,7 +582,8 @@ export default function BookingPage({
         const finalTotal =
           afterBankChargePrice + serviceCharge1 + serviceCharge2;
 
-        totalCost = totalCost + finalTotal + parseFloat(getFee().toString()); // Accumulate the total cost for all selected seats
+        totalCost = totalCost + finalTotal
+        // + parseFloat(getFee().toString());
       });
 
       const top = parseFloat(totalCost.toString());
@@ -858,7 +859,8 @@ export default function BookingPage({
         // Final Total for the current seat
         const finalTotal = afterBankChargePrice + serviceCharge1 + serviceCharge2;
 
-        totalCost = totalCost + finalTotal + parseFloat(getFee().toString()); // Accumulate the total cost for all selected seats
+        totalCost = totalCost + finalTotal
+        // + parseFloat(getFee().toString()); 
       });
 
       const top = parseFloat(totalCost.toString());
@@ -922,10 +924,10 @@ export default function BookingPage({
         totalCost += finalTotal; // Accumulate the total cost for all selected seats
       });
 
-      const top = parseFloat(totalCost.toString()) + parseFloat(getFee().toString());
+      // const top = parseFloat(totalCost.toString()) + parseFloat(getFee().toString());
 
       // console.log(totalCost);
-      setconvenienceFee(top);
+      setconvenienceFee(parseFloat(totalCost.toString()));
     }
   };
 
