@@ -40,14 +40,14 @@ export function RouteCard({ route, className, setModelOpen, setconductorMobile, 
       ),
       text: route?.schedule_number ? route?.schedule_number : "N/A",
     },
-    {
-      icon: <img src="/assets/number.svg" alt="location" className="w-4 h-4" />,
-      text: route?.number ? route?.number : "N/A",
-    },
-    {
-      icon: <img src="/assets/depot.svg" alt="location" className="w-4 h-4" />,
-      text: route?.depot?.name ? route?.depot?.name : "N/A",
-    },
+    // {
+    //   icon: <img src="/assets/number.svg" alt="location" className="w-4 h-4" />,
+    //   text: route?.number ? route?.number : "N/A",
+    // },
+    // {
+    //   icon: <img src="/assets/depot.svg" alt="location" className="w-4 h-4" />,
+    //   text: route?.depot?.name ? route?.depot?.name : "N/A",
+    // },
   ];
 
 
