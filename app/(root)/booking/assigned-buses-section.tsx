@@ -116,7 +116,7 @@ export function AssignedBusesSection() {
       //   localStorage.setItem("busOrder", JSON.stringify(updatedOrder));
       // }
 
-      const fetchedIds = fetchedRoutes.map((route: Route) => route.id);
+      const fetchedIds = fetchedRoutes.map((route: Route) => route.id && route.scheduleId ? true : false);
 
       // 1. Add missing IDs (in fetched but not in stored)
       const idsToAdd = fetchedIds.filter((id: any) => !storedOrder.includes(id));
@@ -137,7 +137,7 @@ export function AssignedBusesSection() {
       if (storedOrder.length > 0) {
         const orderedRoutes = storedOrder
           .map((id: string) =>
-            fetchedRoutes.find((route: any) => route.id === id && route.dateTime ? true : false)
+            fetchedRoutes.find((route: any) => route.id === id && route.scheduleId ? true : false)
           )
           .filter(Boolean);
         setRoutes(orderedRoutes);
@@ -159,7 +159,7 @@ export function AssignedBusesSection() {
       const storedOrder = JSON.parse(localStorage.getItem("busOrder") || "[]");
       if (storedOrder.length > 0) {
         const orderedRoutes = storedOrder
-          .map((id: string) => routes.find((route: any) => route.id === id && route.dateTime ? true : false))
+          .map((id: string) => routes.find((route: any) => route.id === id && route.scheduleId ? true : false))
           .filter(Boolean);
         setFilteredRoutes(orderedRoutes);
       } else {
@@ -167,7 +167,7 @@ export function AssignedBusesSection() {
       }
     } else {
       const filtered = routes.filter((route) =>
-        route.schedule_number.toLowerCase().includes(searchQuery.toLowerCase()) && route.dateTime ? true : false
+        route.schedule_number.toLowerCase().includes(searchQuery.toLowerCase()) && route.scheduleId ? true : false
       );
       setFilteredRoutes(filtered);
     }
