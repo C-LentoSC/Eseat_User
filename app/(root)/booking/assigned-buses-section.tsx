@@ -320,7 +320,7 @@ export function AssignedBusesSection() {
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e) => handleDrop(e, index)}
                   >
-                    <RouteCard key={index} route={route} setModelOpen={setModalOpen} className={`cursor-move`} setconductorMobile={setconductorMobile} setbusNumber={setbusNumber} />
+                    <RouteCard key={index} route={route} setModelOpen={setModalOpen} className={`cursor-move`} setconductorMobile={setconductorMobile} setbusNumber={setbusNumber} setEnterdNumber={setenteredBusNumber} />
                   </div>
                 ))}
               </div>

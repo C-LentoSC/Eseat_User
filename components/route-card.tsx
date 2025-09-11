@@ -18,7 +18,7 @@ const RouteInfoItem = ({ icon, text, css }: RouteInfoItemProps) => (
   </div>
 );
 
-export function RouteCard({ route, className, setModelOpen, setconductorMobile, setbusNumber }: any) {
+export function RouteCard({ route, className, setModelOpen, setconductorMobile, setbusNumber, setEnterdNumber }: any) {
   const routeInfo = [
     {
       icon: (
@@ -87,6 +87,7 @@ export function RouteCard({ route, className, setModelOpen, setconductorMobile, 
                   <Button className="w-full bg-purple-600 hover:bg-purple-700" onClick={async () => {
                     setconductorMobile(route.conductorNo);
                     setbusNumber(route.scheduleId);
+                    setEnterdNumber(route?.busNo);
                     setModelOpen(true);
                   }}>
                     {route?.isScheduleClosed ? (
