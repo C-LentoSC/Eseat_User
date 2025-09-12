@@ -513,7 +513,7 @@ export function BusCard({
               </p>
               <div className="flex items-center justify-center gap-2 text-sm text-gray-500 mt-2">
                 <Clock className="w-4 h-4" />
-                <span>{duration} Hours</span>
+                <span>{duration}</span>
               </div>
               <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
                 <Users className="w-4 h-4" />
