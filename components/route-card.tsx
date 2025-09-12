@@ -10,11 +10,11 @@ interface RouteInfoItemProps {
 }
 
 const RouteInfoItem = ({ icon, text, css }: RouteInfoItemProps) => (
-  <div className="flex items-center gap-2 text-sm">
+  <div className={`flex items-center gap-2 text-sm`}>
     <div className="bg-bgMyColor7 h-8 w-8 flex items-center justify-center rounded-full overflow-hidden">
       {icon}
     </div>
-    <span className={`font-medium text-myColor2 ${css}`}>{text}</span>
+    <span className={`font-medium ${css}`}>{text}</span>
   </div>
 );
 
@@ -28,7 +28,7 @@ export function RouteCard({ route, className, setModelOpen, setconductorMobile, 
     },
     {
       icon: <img src="/assets/date.svg" alt="location" className="w-4 h-4" />,
-      text: route.dateTime ? route.dateTime : "N/A",
+      text: route.dateTime ? route.dateTime.split("|")?.[1] : "N/A",
     },
     {
       icon: (
@@ -67,7 +67,7 @@ export function RouteCard({ route, className, setModelOpen, setconductorMobile, 
           </div> */}
             <div className="space-y-2.5 p-3">
               {routeInfo.map((info, index) => (
-                <RouteInfoItem key={index} icon={info.icon} text={info.text} css={index == 0 ? `text-[#dd3170]` : ``} />
+                <RouteInfoItem key={index} icon={info.icon} text={info.text} css={index == 0 ? `text-[#dd3170]` : `text-myColor2`} />
               ))}
             </div>
             <div className="w-full px-10 flex-col gap-3 pb-2 absolute top-0 h-full bg-black/25 rounded-lg flex justify-center items-center opacity-0 group-hover:opacity-100 duration-200">

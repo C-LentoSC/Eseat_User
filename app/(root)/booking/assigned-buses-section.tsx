@@ -277,7 +277,7 @@ export function AssignedBusesSection() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div className="flex flex-col gap-3">
           <h2 className="text-2xl font-semibold text-myColor2">
-            Assigned Buses
+            Assigned Buses - {filteredRoutes?.[0]?.dateTime.split("|")?.[0]}
           </h2>
           <div className="flex gap-5">
             <div className="border-[3px] rounded-full border-myColor1 w-32"></div>
