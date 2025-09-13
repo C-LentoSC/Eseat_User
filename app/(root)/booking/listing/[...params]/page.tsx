@@ -128,6 +128,7 @@ interface Alldata {
   routeDetails: {
     bus_fare: number;
     id: number;
+    route_number: number;
   };
 }
 
