@@ -170,7 +170,7 @@ export function SearchResults({ alldata, isloading, from, to, date, passenger }:
                       to={to}
                       date={date}
                       passenger={passenger}
-                      route_id={data.scheduleData?.route_id}
+                      route_id={data.routeDetails?.route_number}
                       subImages={data.otherImages}
                     />
                   ))

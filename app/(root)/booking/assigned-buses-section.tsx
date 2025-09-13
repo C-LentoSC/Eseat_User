@@ -352,7 +352,7 @@ export function AssignedBusesSection() {
             id="cmobile"
             type="number"
             defaultValue={conductorMobile}
-            disabled
+            // disabled
             inputMode="numeric"
             pattern="[0-9]*"
             className="appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none

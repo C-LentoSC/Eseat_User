@@ -1290,11 +1290,11 @@ export default function BookingPage({
             <div className="w-full mt-2 flex justify-center gap-5">
               <div className="w-full text-base">
                 <span className="text-gray-500">Travel From</span>
-                <span className="ml-4">{ticketData?.route?.split("-")[0]}</span>
+                <span className="ml-4">{ticketData?.fromTo?.split("-")[0]}</span>
               </div>
               <div className="w-full text-base">
                 <span className="text-gray-500">Travel To</span>
-                <span className="ml-4">{ticketData?.route?.split("-")[1]}</span>
+                <span className="ml-4">{ticketData?.fromTo?.split("-")[1]}</span>
               </div>
             </div>
             <div className="w-full mt-2 flex justify-center gap-5">
@@ -1312,7 +1312,7 @@ export default function BookingPage({
             <div className="w-full mt-2 flex justify-center gap-5">
               <div className="w-full text-base">
                 <span className="text-gray-500">Payment Type</span>
-                <span className="ml-4">Cash</span>
+                <span className="ml-4 capitalize">{ticketData?.paymentMethod?.name}</span>
               </div>
               <div className="w-full text-base">
                 <span className="text-gray-500">Route</span>
@@ -1906,7 +1906,7 @@ export default function BookingPage({
             date={""}
             passenger={0}
             schedule_number={alldata?.ScheduleNo}
-            route_id={alldata?.routeDetails?.id}
+            route_id={alldata?.routeDetails?.route_number}
             subImages={alldata?.bus?.otherImages}
           />
         )}

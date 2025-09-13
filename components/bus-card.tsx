@@ -551,7 +551,7 @@ export function BusCard({
         </div> */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
           <div>
-            <p className="font-medium">Route - #{route_id}</p>
+            <p className="font-medium">Route - {route_id}</p>
           </div>
           <div>
             <p className="font-medium">{`${departure.name} - ${arrival.name}`}</p>
@@ -645,7 +645,7 @@ export function BusCard({
           </p>
           <div className="flex items-center justify-center gap-2 text-sm text-gray-500 mt-2">
             <Clock className="w-4 h-4" />
-            <span>{duration} Hours</span>
+            <span>{duration}</span>
           </div>
           <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
             <Users className="w-4 h-4" />
